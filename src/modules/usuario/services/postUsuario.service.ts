@@ -1,0 +1,25 @@
+import { Injectable } from "@nestjs/common";
+import { PostUsuarioRepository } from "../repository/postUsuario.repository";
+import { PostUsuarioDataDTO } from "../dtos/postUsuarioData.dto";
+const argon2 = require("argon2");
+
+@Injectable()
+export class PostUsuarioService {
+  constructor(private readonly postUsuarioRepository: PostUsuarioRepository) {}
+
+  async execute(data: PostUsuarioDataDTO, created_by: number) {
+    await this.postUsuarioRepository.postUsuario(
+      { ...data, senha: await this.hash(data.senha) },
+      created_by
+    );
+  }
+
+  async hash(senha: string) {
+    return await argon2.hash(senha, {
+      type: argon2.argon2id,
+      memoryCost: 2 ** 16,
+      timeCost: 3,
+      parallelism: 1,
+    });
+  }
+}
