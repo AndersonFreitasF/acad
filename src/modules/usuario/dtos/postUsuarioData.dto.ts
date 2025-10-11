@@ -1,5 +1,3 @@
-import { RoleEnum } from "src/common/enum/role.enum";
-
 export class PostUsuarioDataDTO {
   nome: string;
 
@@ -7,7 +5,6 @@ export class PostUsuarioDataDTO {
 
   senha: string;
 
-  tipo: RoleEnum;
+  tipo: string;
 
-  perfilAtivo: boolean;
 }

@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 const JWT_SECRET = process.env.JWT_SECRET || "chave_super_secreta";
 
 export interface AuthRequest extends Request {
-  user?: { id: number; tipo: string };
+  user?: { id_usuario: number; tipo: string };
 }
 
 export function autenticarToken(
@@ -17,7 +17,7 @@ export function autenticarToken(
   if (!token) return res.status(401).json({ mensagem: "Token não fornecido" });
 
   try {
-    const user = jwt.verify(token, JWT_SECRET) as { id: number; tipo: string };
+    const user = jwt.verify(token, JWT_SECRET) as { id_usuario: number; tipo: string };
     req.user = user;
     next();
   } catch {

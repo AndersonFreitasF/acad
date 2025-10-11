@@ -3,7 +3,7 @@ import { DatabaseService } from "../../database/services/database.service";
 
 @Injectable()
 export class AuthRepository {
-  private readonly tableName = "usuarios";
+  private readonly tableName = "usuario";
 
   constructor(private readonly db: DatabaseService) {}
 

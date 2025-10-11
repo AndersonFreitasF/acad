@@ -1,4 +1,4 @@
-import { RoleEnum } from "src/common/enum/role.enum";
+
 
 export interface IUsuario {
   id_usuario: number;
@@ -9,7 +9,7 @@ export interface IUsuario {
 
   senha: string;
 
-  tipo: RoleEnum;
+  tipo: string;
 
   perfilAtivo: boolean;
 }

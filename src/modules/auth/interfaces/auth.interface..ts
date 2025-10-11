@@ -1,5 +1,5 @@
 export interface TokenPayload {
-  id: number;
+  id_usuario: number;
   tipo: "ADM" | "PROFESSOR" | "ALUNO";
 }
 

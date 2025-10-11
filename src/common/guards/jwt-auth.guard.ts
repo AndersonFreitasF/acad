@@ -5,36 +5,39 @@ import {
   UnauthorizedException,
 } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
-import { AuthGuard } from "@nestjs/passport";
 import { Request } from "express";
 import { TokenPayload } from "src/modules/auth/interfaces/auth.interface.";
 
 @Injectable()
-export class JwtAuthGuard extends AuthGuard("jwt") implements CanActivate {
+export class JwtAuthGuard implements CanActivate {
+  constructor(private jwtService: JwtService) {}
+
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    const jwt = new JwtService({});
     const request = context.switchToHttp().getRequest();
     const token = this.extractTokenFromHeader(request);
 
     if (!token) {
-      throw new UnauthorizedException();
+      throw new UnauthorizedException("Token não fornecido");
     }
 
     try {
-      const payload = await jwt.verifyAsync<TokenPayload>(token, {
+      const payload = await this.jwtService.verifyAsync<TokenPayload>(token, {
         secret: process.env.JWT_SECRET,
       });
 
       request["user"] = payload;
 
-      const userId = payload.id;
-      const userType = payload.tipo;
 
-      console.log(`Usuário ID: ${userId}, Tipo: ${userType}`);
-    } catch {
-      throw new UnauthorizedException();
+      const userId = payload.id_usuario;
+      const userTipo = payload.tipo;
+      
+
+
+      return true;
+    } catch (error) {
+      console.error("Erro na verificação do token:", error);
+      throw new UnauthorizedException("Token inválido");
     }
-    return true;
   }
 
   private extractTokenFromHeader(request: Request): string | undefined {
