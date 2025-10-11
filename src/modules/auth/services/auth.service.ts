@@ -37,7 +37,7 @@ async login(email: string, senha: string) {
 
   return {
     accessToken,
-    expiresIn: 3600 * 60, 
+    expiresIn: 60 * 60 * 4, 
     user: {
       id_usuario: user.id_usuario,
       email: user.email,
