@@ -1,8 +1,9 @@
 import { Test, TestingModule } from "@nestjs/testing";
-import { GetUsuarioService } from "./getUsuario.service";
+
 import { GetUsuarioRepository } from "../repositories/getUsuario.repository";
 import { InternalServerErrorException } from "@nestjs/common";
 import { describe, it, expect, beforeEach, vi } from "vitest";
+import { GetUsuarioService } from "../services/getUsuario.service";
 
 describe("GetUsuarioService", () => {
   let service: GetUsuarioService;

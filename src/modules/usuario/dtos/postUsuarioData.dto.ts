@@ -12,8 +12,4 @@ export class PostUsuarioDataDTO {
   @IsString()
   @IsNotEmpty()
   senha: string;
-
-  @IsString()
-  @IsNotEmpty()
-  tipo: string;
 }

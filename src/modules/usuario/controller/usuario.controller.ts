@@ -16,7 +16,7 @@ import { PostUsuarioDataDTO } from "../dtos/postUsuarioData.dto";
 import { JwtAuthGuard } from "src/common/guards/jwt-auth.guard";
 import { TokenPayload } from "src/modules/auth/interfaces/auth.interface.";
 import { User } from "src/common/decorators/user.decorator";
-import { GetUsuarioInputDto } from "../dtos/getUsuarioData.dto";
+import { GetUsuarioDataDTO } from "../dtos/getUsuarioData.dto";
 import { GetUsuarioService } from "../services/getUsuario.service";
 import { PutUsuarioDataDTO } from "../dtos/putUsuarioData.dto";
 import { PutUsuarioService } from "../services/putUsuario.service";
@@ -43,7 +43,7 @@ export class UsuarioController {
 
   @Get("/")
   @Roles(Role.ADM)
-  async getUsuario(@Query() data: GetUsuarioInputDto) {
+  async getUsuario(@Query() data: GetUsuarioDataDTO) {
     return await this.getUsuarioService.execute(data);
   }
 

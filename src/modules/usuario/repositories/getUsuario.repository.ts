@@ -1,12 +1,12 @@
 import { Injectable } from "@nestjs/common";
 import { DatabaseService } from "src/modules/database/services/database.service";
-import { GetUsuarioInputDto } from "../dtos/getUsuarioData.dto";
+import { GetUsuarioDataDTO } from "../dtos/getUsuarioData.dto";
 
 @Injectable()
 export class GetUsuarioRepository {
   constructor(private readonly dataBaseService: DatabaseService) {}
 
-  async countUsuarios(data: GetUsuarioInputDto) {
+  async countUsuarios(data: GetUsuarioDataDTO) {
     const sql = `SELECT COUNT(DISTINCT u.id_usuario) as total
     FROM usuario u
     LEFT JOIN usuario_treino ut ON ut.id_usuario = u.id_usuario
@@ -20,7 +20,7 @@ export class GetUsuarioRepository {
     return result?.rows[0]?.total ?? 0;
   }
 
-  async getUsuarios(data: GetUsuarioInputDto) {
+  async getUsuarios(data: GetUsuarioDataDTO) {
     const sql = `
   SELECT 
     u.id_usuario,

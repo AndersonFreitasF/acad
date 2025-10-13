@@ -1,12 +1,12 @@
 import { Injectable, InternalServerErrorException } from "@nestjs/common";
-import { GetUsuarioInputDto } from "../dtos/getUsuarioData.dto";
+import { GetUsuarioDataDTO } from "../dtos/getUsuarioData.dto";
 import { GetUsuarioRepository } from "../repositories/getUsuario.repository";
 
 @Injectable()
 export class GetUsuarioService {
   constructor(private readonly getUsuarioRepository: GetUsuarioRepository) {}
 
-  async execute(data: GetUsuarioInputDto) {
+  async execute(data: GetUsuarioDataDTO) {
     try {
       const TotalUsuarios = await this.getUsuarioRepository.countUsuarios(data);
 

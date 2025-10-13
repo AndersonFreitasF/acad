@@ -16,14 +16,13 @@ export class PostUsuarioRepository {
       created_by,
       created_at
       ) 
-      VALUES($1, $2, $3, $4, $5, NOW())
+      VALUES($1, $2, $3, 'ALUNO' ,$4, NOW())
       `;
 
     const binds = [
       data.nome.toUpperCase(),
       data.email.toUpperCase(),
       data.senha,
-      data.tipo.toUpperCase(),
       created_by,
     ];
     await this.dataBaseService.query(sql, binds);
