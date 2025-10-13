@@ -4,7 +4,7 @@ import {
   InternalServerErrorException,
   NotFoundException,
 } from "@nestjs/common";
-import { PutUsuarioRepository } from "../repository/putUsuario.repository";
+import { PutUsuarioRepository } from "../repositories/putUsuario.repository";
 import { PutUsuarioDataDTO } from "../dtos/putUsuarioData.dto";
 import { Role } from "src/common/enum/role.enum";
 import { TokenPayload } from "src/modules/auth/interfaces/auth.interface.";

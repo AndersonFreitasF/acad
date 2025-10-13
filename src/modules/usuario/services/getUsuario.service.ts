@@ -1,6 +1,6 @@
 import { Injectable, InternalServerErrorException } from "@nestjs/common";
 import { GetUsuarioInputDto } from "../dtos/getUsuarioData.dto";
-import { GetUsuarioRepository } from "../repository/getUsuario.repository";
+import { GetUsuarioRepository } from "../repositories/getUsuario.repository";
 
 @Injectable()
 export class GetUsuarioService {

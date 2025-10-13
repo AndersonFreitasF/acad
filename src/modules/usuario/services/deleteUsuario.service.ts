@@ -7,7 +7,7 @@ import {
 
 import { Role } from "src/common/enum/role.enum";
 import { TokenPayload } from "src/modules/auth/interfaces/auth.interface.";
-import { DeleteUsuarioRepository } from "../repository/deleteUsuario.repository";
+import { DeleteUsuarioRepository } from "../repositories/deleteUsuario.repository";
 
 @Injectable()
 export class DeleteUsuarioService {

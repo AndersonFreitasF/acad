@@ -1,14 +1,14 @@
 import { Module } from "@nestjs/common";
 import { UsuarioController } from "./controllers/usuario.controller";
-import { PostUsuarioRepository } from "./repository/postUsuario.repository";
+import { PostUsuarioRepository } from "./repositories/postUsuario.repository";
 import { PostUsuarioService } from "./services/postUsuario.service";
 import { DatabaseModule } from "../database/database.module";
 import { GetUsuarioService } from "./services/getUsuario.service";
-import { GetUsuarioRepository } from "./repository/getUsuario.repository";
+import { GetUsuarioRepository } from "./repositories/getUsuario.repository";
 import { PutUsuarioService } from "./services/putUsuario.service";
-import { PutUsuarioRepository } from "./repository/putUsuario.repository";
+import { PutUsuarioRepository } from "./repositories/putUsuario.repository";
 import { DeleteUsuarioService } from "./services/deleteUsuario.service";
-import { DeleteUsuarioRepository } from "./repository/deleteUsuario.repository";
+import { DeleteUsuarioRepository } from "./repositories/deleteUsuario.repository";
 
 @Module({
   imports: [DatabaseModule],

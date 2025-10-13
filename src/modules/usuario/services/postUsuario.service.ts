@@ -1,5 +1,5 @@
 import { Injectable, InternalServerErrorException } from "@nestjs/common";
-import { PostUsuarioRepository } from "../repository/postUsuario.repository";
+import { PostUsuarioRepository } from "../repositories/postUsuario.repository";
 import { PostUsuarioDataDTO } from "../dtos/postUsuarioData.dto";
 const argon2 = require("argon2");
 
