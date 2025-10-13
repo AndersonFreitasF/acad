@@ -1,0 +1,132 @@
+{
+	"info": {
+		"_postman_id": "b200cbdd-99ae-42ee-abf7-fdd4f66a9885",
+		"name": "Training",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "37241109"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/auth/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Usuario",
+			"item": [
+				{
+					"name": "Get Usuario",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/usuario",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"usuario"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Post Usuario",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/usuario",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"usuario"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Put Usuario",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/usuario/update/:id",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"usuario",
+								"update",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "New Request",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/usuario/delete/:id",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"usuario",
+								"delete",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
