@@ -5,14 +5,12 @@ import {
 } from "@nestjs/common";
 import { PutUsuarioRepository } from "../repository/putUsuario.repository";
 import { PutUsuarioDataDTO } from "../dtos/putUsuarioData.dto";
-import { hash } from "crypto";
-import { async } from "rxjs";
 import { Role } from "src/common/enum/role.enum";
 import { TokenPayload } from "src/modules/auth/interfaces/auth.interface.";
 const argon2 = require("argon2");
 
 @Injectable()
-export class putUsuarioService {
+export class PutUsuarioService {
   constructor(private readonly putUsuarioRepository: PutUsuarioRepository) {}
 
   async execute(
@@ -20,8 +18,9 @@ export class putUsuarioService {
     user: TokenPayload,
     id_usuario: number
   ) {
-    const existing = await this.putUsuarioRepository.findUsuario(id_usuario);
-    if (!existing) {
+    const usuarioExiste =
+      await this.putUsuarioRepository.findUsuario(id_usuario);
+    if (!usuarioExiste) {
       throw new NotFoundException("Usuário não encontrado");
     }
 

@@ -8,6 +8,6 @@ export class AuthRepository {
   constructor(private readonly db: DatabaseService) {}
 
   async findByEmail(email: string) {
-    return this.db.findOne(this.tableName, { email });
+    return this.db.findOne(this.tableName, { email, deleted_at: null });
   }
 }

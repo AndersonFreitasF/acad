@@ -1,7 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { DatabaseService } from "src/modules/database/services/database.service";
 import { PutUsuarioDataDTO } from "../dtos/putUsuarioData.dto";
-import { log } from "util";
 
 @Injectable()
 export class PutUsuarioRepository {
