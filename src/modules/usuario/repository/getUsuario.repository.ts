@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { DatabaseService } from "src/modules/database/services/database.service";
-import { GetUsuarioInputDto } from "../dtos/getUsuarioInput.dto";
+import { GetUsuarioInputDto } from "../dtos/getUsuarioData.dto";
 
 @Injectable()
 export class GetUsuarioRepository {

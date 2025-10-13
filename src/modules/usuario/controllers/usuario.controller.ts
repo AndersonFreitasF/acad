@@ -15,7 +15,7 @@ import { PostUsuarioDataDTO } from "../dtos/postUsuarioData.dto";
 import { JwtAuthGuard } from "src/common/guards/jwt-auth.guard";
 import { TokenPayload } from "src/modules/auth/interfaces/auth.interface.";
 import { User } from "src/common/decorators/user.decorator";
-import { GetUsuarioInputDto } from "../dtos/getUsuarioInput.dto";
+import { GetUsuarioInputDto } from "../dtos/getUsuarioData.dto";
 import { GetUsuarioService } from "../services/getUsuario.service";
 import { PutUsuarioDataDTO } from "../dtos/putUsuarioData.dto";
 import { putUsuarioService } from "../services/putUsuario.service";
