@@ -35,7 +35,7 @@ export class DatabaseService
     });
 
     this.pool.on("error", (err) => {
-      console.error("Unexpected error on idle client", err);
+      console.error("Erro inesperado no cliente ocioso", err);
     });
   }
 
@@ -54,11 +54,11 @@ export class DatabaseService
       const result = await client.query(
         "SELECT NOW() as current_time, current_database() as database_name"
       );
-      console.log("✅ Database connected successfully");
-      console.log("📊 Database:", result.rows[0].database_name);
-      console.log("⏰ Server time:", result.rows[0].current_time);
+      console.log("Database conectada com sucesso!");
+      console.log("Database:", result.rows[0].database_name);
+      console.log("Server time:", result.rows[0].current_time);
     } catch (error) {
-      console.error("❌ Database connection test failed:", error);
+      console.error("Falha ao conectar na database:", error);
       throw error;
     } finally {
       if (client) {
@@ -84,7 +84,7 @@ export class DatabaseService
 
     if (this.pool) {
       await this.pool.end();
-      console.log("✅ Database pool closed");
+      console.log("Database pool fechada");
     }
   }
 
@@ -98,13 +98,13 @@ export class DatabaseService
         client = await this.connect();
       }
 
-      console.log("📝 Executing query:", sql);
-      console.log("🔧 Parameters:", params);
+      console.log("Executando query:", sql);
+      console.log("Parametros:", params);
 
       const result = await client.query(sql, params);
       return result;
     } catch (error) {
-      console.error("❌ Query error:", error);
+      console.error("Erro na query:", error);
       throw error;
     } finally {
       if (!this.isTransaction && client && client !== this.transactionClient) {
@@ -122,17 +122,17 @@ export class DatabaseService
       this.isTransaction = true;
       this.transactionClient = client;
 
-      console.log("🔄 Transaction started");
+      console.log("Transacao iniciada");
 
       const result = await callback(this);
 
       await client.query("COMMIT");
-      console.log("✅ Transaction committed");
+      console.log("Transacao commitada");
 
       return result;
     } catch (error) {
       await client.query("ROLLBACK");
-      console.error("❌ Transaction rolled back:", error);
+      console.error("Transacao deu rollback:", error);
       throw error;
     } finally {
       this.isTransaction = false;
@@ -143,37 +143,37 @@ export class DatabaseService
 
   async beginTransaction(): Promise<void> {
     if (this.isTransaction) {
-      throw new Error("Transaction already in progress");
+      throw new Error("Transacao ja em andamento");
     }
 
     this.transactionClient = await this.pool.connect();
     await this.transactionClient.query("BEGIN");
     this.isTransaction = true;
-    console.log("🔄 Transaction started manually");
+    console.log("Transacao iniciada manualmente");
   }
 
   async commit(): Promise<void> {
     if (!this.isTransaction || !this.transactionClient) {
-      throw new Error("No transaction in progress");
+      throw new Error("Nenhuma transacao em andamento");
     }
 
     await this.transactionClient.query("COMMIT");
     this.transactionClient.release();
     this.transactionClient = null;
     this.isTransaction = false;
-    console.log("✅ Transaction committed manually");
+    console.log("Transacao commitada manualmente");
   }
 
   async rollback(): Promise<void> {
     if (!this.isTransaction || !this.transactionClient) {
-      throw new Error("No transaction in progress");
+      throw new Error("Nenhuma transacao em andamento");
     }
 
     await this.transactionClient.query("ROLLBACK");
     this.transactionClient.release();
     this.transactionClient = null;
     this.isTransaction = false;
-    console.log("🔄 Transaction rolled back manually");
+    console.log("Transacao feita rollback manualmente");
   }
 
   async findOne(
@@ -183,7 +183,7 @@ export class DatabaseService
     const whereKeys = Object.keys(where);
 
     if (whereKeys.length === 0) {
-      throw new Error("WHERE clause is required for findOne");
+      throw new Error("Clausula WHERE e necessaria para findOne");
     }
 
     const whereClause = whereKeys
@@ -254,7 +254,7 @@ export class DatabaseService
     where: Record<string, any>
   ): Promise<any[]> {
     if (Object.keys(where).length === 0) {
-      throw new Error("WHERE clause is required for update");
+      throw new Error("Clausula WHERE e necessaria para update");
     }
 
     const setClause = Object.keys(data)
@@ -274,7 +274,7 @@ export class DatabaseService
 
   async delete(table: string, where: Record<string, any>): Promise<any[]> {
     if (Object.keys(where).length === 0) {
-      throw new Error("WHERE clause is required for delete");
+      throw new Error("Clausula WHERE e necessaria para delete");
     }
 
     const whereKeys = Object.keys(where);
@@ -294,33 +294,12 @@ export class DatabaseService
       const result = await this.query("SELECT 1 as health_check");
       return result.rows[0].health_check === 1;
     } catch (error) {
-      console.error("Health check failed:", error);
+      console.error("Health check falhou:", error);
       return false;
     }
   }
 
   private escapeIdentifier(identifier: string): string {
     return `"${identifier}"`;
-  }
-
-  // Método utilitário para criar tabelas (útil para desenvolvimento)
-  async createTableIfNotExists(
-    tableName: string,
-    schema: string
-  ): Promise<void> {
-    const checkTableSql = `
-      SELECT EXISTS (
-        SELECT FROM information_schema.tables 
-        WHERE table_schema = 'public' 
-        AND table_name = $1
-      );
-    `;
-
-    const result = await this.query(checkTableSql, [tableName]);
-
-    if (!result.rows[0].exists) {
-      await this.query(schema);
-      console.log(`✅ Table ${tableName} created`);
-    }
   }
 }
