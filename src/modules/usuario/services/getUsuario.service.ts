@@ -12,10 +12,10 @@ export class GetUsuarioService {
     const DadosUsuario = await this.getUsuarioRepository.getUsuarios(data);
 
     return {
-      dados: DadosUsuario ?? [],
-      total: DadosUsuario?.length ?? 0,
-      pagina: data.page,
-      tamanho: data.size,
+      Usuarios: DadosUsuario ?? [],
+      Total: DadosUsuario?.length ?? 0,
+      Pagina: data.page,
+      Tamanho_Pagina: data.size,
     };
   }
 }

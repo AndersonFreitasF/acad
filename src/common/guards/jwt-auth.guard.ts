@@ -3,17 +3,21 @@ import {
   ExecutionContext,
   Injectable,
   UnauthorizedException,
+  ForbiddenException,
 } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 import { Request } from "express";
 import { TokenPayload } from "src/modules/auth/interfaces/auth.interface.";
+
+import "reflect-metadata";
+import { checkRoles } from "./role.guard";
 
 @Injectable()
 export class JwtAuthGuard implements CanActivate {
   constructor(private jwtService: JwtService) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    const request = context.switchToHttp().getRequest();
+    const request = context.switchToHttp().getRequest<Request>();
     const token = this.extractTokenFromHeader(request);
 
     if (!token) {
@@ -27,14 +31,16 @@ export class JwtAuthGuard implements CanActivate {
 
       request["user"] = payload;
 
+      const handler = context.getHandler();
+      const hasAccess = checkRoles({ user: payload }, handler);
 
-      const userId = payload.id_usuario;
-      const userTipo = payload.tipo;
-      
-
+      if (!hasAccess) {
+        throw new ForbiddenException("Acesso negado: permissão insuficiente");
+      }
 
       return true;
     } catch (error) {
+      if (error instanceof ForbiddenException) throw error;
       console.error("Erro na verificação do token:", error);
       throw new UnauthorizedException("Token inválido");
     }

@@ -7,7 +7,7 @@ import {
 import { ConfigType } from "@nestjs/config";
 import { Pool, PoolClient, QueryResult } from "pg";
 import databaseConfig from "../../../config/database.config";
-import { IDatabase, QueryOptions } from "../interfaces/database.interface";
+import { IDatabase } from "../interfaces/database.interface";
 
 @Injectable()
 export class DatabaseService

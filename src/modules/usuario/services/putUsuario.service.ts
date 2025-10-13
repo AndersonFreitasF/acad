@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { PutUsuarioRepository } from "../repository/putUsuario.repository";
-import { PutUsuarioDataDTO } from "../dtos/putUsuarioInput.dto";
+import { PutUsuarioDataDTO } from "../dtos/putUsuarioData.dto";
 const argon2 = require("argon2");
 
 @Injectable()

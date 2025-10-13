@@ -17,7 +17,7 @@ import { TokenPayload } from "src/modules/auth/interfaces/auth.interface.";
 import { User } from "src/common/decorators/user.decorator";
 import { GetUsuarioInputDto } from "../dtos/getUsuarioInput.dto";
 import { GetUsuarioService } from "../services/getUsuario.service";
-import { PutUsuarioDataDTO } from "../dtos/putUsuarioInput.dto";
+import { PutUsuarioDataDTO } from "../dtos/putUsuarioData.dto";
 import { putUsuarioService } from "../services/putUsuario.service";
 
 @Controller("usuario")

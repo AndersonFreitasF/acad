@@ -1,4 +1,3 @@
-// role.guard.ts
 import "reflect-metadata";
 import { ROLES_KEY } from "../decorators/role.decorator";
 
