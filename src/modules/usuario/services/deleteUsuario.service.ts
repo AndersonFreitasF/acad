@@ -1,6 +1,7 @@
 import {
   ForbiddenException,
   Injectable,
+  InternalServerErrorException,
   NotFoundException,
 } from "@nestjs/common";
 
@@ -15,14 +16,21 @@ export class DeleteUsuarioService {
   ) {}
 
   async execute(user: TokenPayload, id_usuario: number) {
-    const existing = await this.deleteUsuarioRepository.findUsuario(id_usuario);
-    if (!existing) {
-      throw new NotFoundException("Usuário não encontrado");
-    }
+    try {
+      const existing =
+        await this.deleteUsuarioRepository.findUsuario(id_usuario);
+      if (!existing) {
+        throw new NotFoundException("Usuário não encontrado");
+      }
 
-    await this.deleteUsuarioRepository.deleteUsuario(
-      user.id_usuario,
-      id_usuario
-    );
+      await this.deleteUsuarioRepository.deleteUsuario(
+        user.id_usuario,
+        id_usuario
+      );
+    } catch (error) {
+      throw new InternalServerErrorException(
+        "Não foi possivel criar o usuario"
+      );
+    }
   }
 }

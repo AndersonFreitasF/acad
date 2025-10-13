@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, InternalServerErrorException } from "@nestjs/common";
 import { GetUsuarioInputDto } from "../dtos/getUsuarioData.dto";
 import { GetUsuarioRepository } from "../repository/getUsuario.repository";
 
@@ -7,15 +7,21 @@ export class GetUsuarioService {
   constructor(private readonly getUsuarioRepository: GetUsuarioRepository) {}
 
   async execute(data: GetUsuarioInputDto) {
-    const TotalUsuarios = await this.getUsuarioRepository.countUsuarios();
+    try {
+      const TotalUsuarios = await this.getUsuarioRepository.countUsuarios(data);
 
-    const DadosUsuario = await this.getUsuarioRepository.getUsuarios(data);
+      const DadosUsuario = await this.getUsuarioRepository.getUsuarios(data);
 
-    return {
-      Usuarios: DadosUsuario ?? [],
-      Total: TotalUsuarios ?? 0,
-      Pagina: data.page,
-      Tamanho_Pagina: data.size,
-    };
+      return {
+        Usuarios: DadosUsuario ?? [],
+        Total: TotalUsuarios ?? 0,
+        Pagina: data.page,
+        Tamanho_Pagina: data.size,
+      };
+    } catch (error) {
+      throw new InternalServerErrorException(
+        "Não foi possivel criar o usuario"
+      );
+    }
   }
 }

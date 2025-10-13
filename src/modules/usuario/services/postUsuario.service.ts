@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, InternalServerErrorException } from "@nestjs/common";
 import { PostUsuarioRepository } from "../repository/postUsuario.repository";
 import { PostUsuarioDataDTO } from "../dtos/postUsuarioData.dto";
 const argon2 = require("argon2");
@@ -8,10 +8,16 @@ export class PostUsuarioService {
   constructor(private readonly postUsuarioRepository: PostUsuarioRepository) {}
 
   async execute(data: PostUsuarioDataDTO, created_by: number) {
-    await this.postUsuarioRepository.postUsuario(
-      { ...data, senha: await this.hash(data.senha) },
-      created_by
-    );
+    try {
+      await this.postUsuarioRepository.postUsuario(
+        { ...data, senha: await this.hash(data.senha) },
+        created_by
+      );
+    } catch (error) {
+      throw new InternalServerErrorException(
+        "Não foi possivel criar o usuario"
+      );
+    }
   }
 
   async hash(senha: string) {

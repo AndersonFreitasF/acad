@@ -1,6 +1,7 @@
 import {
   ForbiddenException,
   Injectable,
+  InternalServerErrorException,
   NotFoundException,
 } from "@nestjs/common";
 import { PutUsuarioRepository } from "../repository/putUsuario.repository";
@@ -18,22 +19,28 @@ export class PutUsuarioService {
     user: TokenPayload,
     id_usuario: number
   ) {
-    const usuarioExiste =
-      await this.putUsuarioRepository.findUsuario(id_usuario);
-    if (!usuarioExiste) {
-      throw new NotFoundException("Usuário não encontrado");
-    }
+    try {
+      const usuarioExiste =
+        await this.putUsuarioRepository.findUsuario(id_usuario);
+      if (!usuarioExiste) {
+        throw new NotFoundException("Usuário não encontrado");
+      }
 
-    if (user.tipo !== Role.ADM && user.id_usuario !== id_usuario) {
-      throw new ForbiddenException(
-        "Acesso negado: você só pode editar sua própria conta"
+      if (user.tipo !== Role.ADM && user.id_usuario !== id_usuario) {
+        throw new ForbiddenException(
+          "Acesso negado: você só pode editar sua própria conta"
+        );
+      }
+      await this.putUsuarioRepository.putUsuario(
+        { ...data, senha: data.senha ? await this.hash(data.senha) : null },
+        user.id_usuario,
+        id_usuario
+      );
+    } catch (error) {
+      throw new InternalServerErrorException(
+        "Não foi possivel criar o usuario"
       );
     }
-    await this.putUsuarioRepository.putUsuario(
-      { ...data, senha: data.senha ? await this.hash(data.senha) : undefined },
-      user.id_usuario,
-      id_usuario
-    );
   }
 
   async hash(senha: string) {
