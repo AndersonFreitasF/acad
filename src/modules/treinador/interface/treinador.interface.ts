@@ -1,4 +1,6 @@
-export interface ITreinador {
+import { IUsuario } from "src/modules/usuario/interface/usuario.interface";
+
+export class Treinador implements IUsuario {
   id_usuario: number;
 
   nome_usuario: string;

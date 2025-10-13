@@ -9,8 +9,4 @@ export class PaginationDTO {
   @Type(() => Number)
   @IsNumber()
   size: number;
-
-  @Type(() => Number)
-  @IsNumber()
-  total: number;
 }

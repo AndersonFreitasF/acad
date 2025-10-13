@@ -1,5 +1,5 @@
 import { Module } from "@nestjs/common";
-import { UsuarioController } from "./controllers/usuario.controller";
+import { UsuarioController } from "./controller/usuario.controller";
 import { PostUsuarioRepository } from "./repositories/postUsuario.repository";
 import { PostUsuarioService } from "./services/postUsuario.service";
 import { DatabaseModule } from "../database/database.module";
