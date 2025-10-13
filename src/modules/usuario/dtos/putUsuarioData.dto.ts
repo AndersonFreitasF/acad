@@ -4,6 +4,4 @@ export class PutUsuarioDataDTO {
   email?: string;
 
   senha?: string;
-
-  tipo?: string;
 }

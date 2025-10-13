@@ -21,9 +21,9 @@ export class PostUsuarioRepository {
 
     const binds = [
       data.nome.toUpperCase(),
-      data.email,
+      data.email.toUpperCase,
       data.senha,
-      data.tipo,
+      data.tipo.toUpperCase,
       created_by,
     ];
     await this.dataBaseService.query(sql, binds);

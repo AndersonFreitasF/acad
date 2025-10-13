@@ -45,16 +45,12 @@ export class UsuarioController {
   }
 
   @Put("/update/:id")
-  @Roles(Role.ALUNO)
+  @Roles(Role.ALUNO, Role.ADM)
   async putUsuario(
     @Param("id") id_usuario: number,
     @Body() data: PutUsuarioDataDTO,
     @User() user: TokenPayload
   ) {
-    return await this.putUsuarioServie.execute(
-      data,
-      user.id_usuario,
-      id_usuario
-    );
+    return await this.putUsuarioServie.execute(data, user, id_usuario);
   }
 }
