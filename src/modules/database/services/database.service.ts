@@ -186,12 +186,22 @@ export class DatabaseService
       throw new Error("Clausula WHERE e necessaria para findOne");
     }
 
-    const whereClause = whereKeys
-      .map((key, index) => `${key} = $${index + 1}`)
-      .join(" AND ");
-    const values = Object.values(where);
+    const conditions: string[] = [];
+    const values: any[] = [];
+    let paramIndex = 1;
 
-    const sql = `SELECT * FROM ${this.escapeIdentifier(table)} WHERE ${whereClause} LIMIT 1`;
+    for (const key of whereKeys) {
+      const value = where[key];
+      if (value === null) {
+        conditions.push(`${key} IS NULL`);
+      } else {
+        conditions.push(`${key} = $${paramIndex}`);
+        values.push(value);
+        paramIndex++;
+      }
+    }
+
+    const sql = `SELECT * FROM ${this.escapeIdentifier(table)} WHERE ${conditions.join(" AND ")} LIMIT 1`;
     const result = await this.query(sql, values);
 
     return result.rows[0] || null;

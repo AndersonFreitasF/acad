@@ -28,7 +28,7 @@ export class UsuarioController {
   constructor(
     private readonly postUsuarioService: PostUsuarioService,
     private readonly getUsuarioService: GetUsuarioService,
-    private readonly putUsuarioServie: PutUsuarioService,
+    private readonly putUsuarioService: PutUsuarioService,
     private readonly deleteUsuarioService: DeleteUsuarioService
   ) {}
 
@@ -54,7 +54,7 @@ export class UsuarioController {
     @Body() data: PutUsuarioDataDTO,
     @User() user: TokenPayload
   ) {
-    return await this.putUsuarioServie.execute(data, user, id_usuario);
+    return await this.putUsuarioService.execute(data, user, id_usuario);
   }
 
   @Delete("/delete/:id")
