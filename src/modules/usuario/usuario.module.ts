@@ -5,8 +5,10 @@ import { PostUsuarioService } from "./services/postUsuario.service";
 import { DatabaseModule } from "../database/database.module";
 import { GetUsuarioService } from "./services/getUsuario.service";
 import { GetUsuarioRepository } from "./repository/getUsuario.repository";
-import { putUsuarioService } from "./services/putUsuario.service";
+import { PutUsuarioService } from "./services/putUsuario.service";
 import { PutUsuarioRepository } from "./repository/putUsuario.repository";
+import { DeleteUsuarioService } from "./services/deleteUsuario.service";
+import { DeleteUsuarioRepository } from "./repository/deleteUsuario.repository";
 
 @Module({
   imports: [DatabaseModule],
@@ -14,10 +16,12 @@ import { PutUsuarioRepository } from "./repository/putUsuario.repository";
   providers: [
     PostUsuarioRepository,
     PostUsuarioService,
-    GetUsuarioService,
     GetUsuarioRepository,
-    putUsuarioService,
+    GetUsuarioService,
     PutUsuarioRepository,
+    PutUsuarioService,
+    DeleteUsuarioRepository,
+    DeleteUsuarioService,
   ],
 })
 export class UsuarioModule {}

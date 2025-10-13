@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   Post,
@@ -18,7 +19,8 @@ import { User } from "src/common/decorators/user.decorator";
 import { GetUsuarioInputDto } from "../dtos/getUsuarioData.dto";
 import { GetUsuarioService } from "../services/getUsuario.service";
 import { PutUsuarioDataDTO } from "../dtos/putUsuarioData.dto";
-import { putUsuarioService } from "../services/putUsuario.service";
+import { PutUsuarioService } from "../services/putUsuario.service";
+import { DeleteUsuarioService } from "../services/deleteUsuario.service";
 
 @Controller("usuario")
 @UseGuards(JwtAuthGuard)
@@ -26,7 +28,8 @@ export class UsuarioController {
   constructor(
     private readonly postUsuarioService: PostUsuarioService,
     private readonly getUsuarioService: GetUsuarioService,
-    private readonly putUsuarioServie: putUsuarioService
+    private readonly putUsuarioServie: PutUsuarioService,
+    private readonly deleteUsuarioService: DeleteUsuarioService
   ) {}
 
   @Post("/")
@@ -52,5 +55,14 @@ export class UsuarioController {
     @User() user: TokenPayload
   ) {
     return await this.putUsuarioServie.execute(data, user, id_usuario);
+  }
+
+  @Delete("/delete/:id")
+  @Roles(Role.ADM)
+  async deleteUsuario(
+    @Param("id") id_usuario: number,
+    @User() user: TokenPayload
+  ) {
+    return await this.deleteUsuarioService.execute(user, id_usuario);
   }
 }
