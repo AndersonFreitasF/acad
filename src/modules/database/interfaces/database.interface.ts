@@ -15,17 +15,5 @@ export interface IDatabase {
   commit(): Promise<void>;
   rollback(): Promise<void>;
   findOne(table: string, where?: Record<string, any>): Promise<any | null>;
-  findMany(
-    table: string,
-    where?: Record<string, any>,
-    options?: QueryOptions
-  ): Promise<any[]>;
-  insert(table: string, data: Record<string, any>): Promise<any>;
-  update(
-    table: string,
-    data: Record<string, any>,
-    where: Record<string, any>
-  ): Promise<any[]>;
-  delete(table: string, where: Record<string, any>): Promise<any[]>;
   healthCheck(): Promise<boolean>;
 }
