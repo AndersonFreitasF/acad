@@ -1,15 +1,15 @@
 import { Injectable } from "@nestjs/common";
 import { DatabaseService } from "src/modules/database/services/database.service";
-import { GetTreinadorDataDTO } from "../dtos/getTreinadorData.dto";
+import { GetProfessorDataDTO } from "../dtos/getProfessorData.dto";
 
 @Injectable()
-export class GetTreinadorRepository {
+export class GetProfessorRepository {
   constructor(private readonly dataBaseService: DatabaseService) {}
 
-  async countTreinadores(data: GetTreinadorDataDTO) {
+  async countProfessores(data: GetProfessorDataDTO) {
     const sql = `SELECT COUNT(DISTINCT u.id_usuario) as total
         FROM usuario u
-        LEFT JOIN treinador_treino tt ON tt.id_treinador = u.id_usuario
+        LEFT JOIN Professor_treino tt ON tt.id_professor = u.id_usuario
         LEFT JOIN treino t ON t.id_treino = tt.id_treino
             WHERE u.tipo = 'PROFESSOR'
             AND u.deleted_by IS NULL
@@ -20,7 +20,7 @@ export class GetTreinadorRepository {
     return result?.rows[0]?.total ?? 0;
   }
 
-  async getTreinadores(data: GetTreinadorDataDTO) {
+  async getProfessores(data: GetProfessorDataDTO) {
     const sql = `
     SELECT 
         u.id_usuario,
@@ -28,7 +28,7 @@ export class GetTreinadorRepository {
         u.email, 
         ARRAY_AGG(t.id_treino) AS treinos
     FROM usuario u
-    LEFT JOIN treinador_treino tt ON tt.id_treinador = u.id_usuario
+    LEFT JOIN professor_treino tt ON tt.id_professor = u.id_usuario
     LEFT JOIN treino t ON t.id_treino = tt.id_treino
     WHERE u.tipo = 'PROFESSOR'
         AND u.deleted_by IS NULL

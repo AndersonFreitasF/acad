@@ -1,6 +1,6 @@
 import { IUsuario } from "src/modules/usuario/interface/usuario.interface";
 
-export class Treinador implements IUsuario {
+export class Professor implements IUsuario {
   id_usuario: number;
 
   nome_usuario: string;
