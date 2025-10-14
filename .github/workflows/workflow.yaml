@@ -5,13 +5,20 @@ on: push
 jobs:
   integracao-continua:
     runs-on: ubuntu-latest
-
+    container:
+      image: node: 22
+      env:
+        NODE_ENV: development
+      ports:
+        - 80
+      volumes:
+        - my_docker_volume:/volume_mount
+      options: --cpus 1
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v4
       - name: Executando o Node.js
-        uses: actions/setup-node@v6
-        with:
-          node-version: 22.x
+        uses: actions/setup-node@v5
+        with: node-version:22
       - name: rodando install, build e test
         run: |
           npm i
