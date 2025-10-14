@@ -24,8 +24,6 @@ lerna-debug.log*
 .vscode/
 .idea/
 
-Dockerfile
-docker-compose.yml
-.dockerignore
+
 
 
