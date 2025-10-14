@@ -1,0 +1,19 @@
+name: CI
+
+on: push
+
+jobs:
+  integracao-continua:
+    runs-on: fedora-latest
+
+    steps:
+      - uses: actions/checkout@v5
+      - name: Executando o Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 22.x
+      - name: rodando install, build e test
+        run: |
+          npm i
+          npm run build
+          npm run test
