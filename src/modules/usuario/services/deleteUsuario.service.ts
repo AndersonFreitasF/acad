@@ -17,6 +17,11 @@ export class DeleteUsuarioService {
 
   async execute(user: TokenPayload, id_usuario: number) {
     try {
+      if (user.tipo !== Role.ADM && user.id_usuario !== id_usuario) {
+        throw new ForbiddenException(
+          "Acesso negado: você só pode apagar sua própria conta"
+        );
+      }
       const existing =
         await this.deleteUsuarioRepository.findUsuario(id_usuario);
       if (!existing) {
