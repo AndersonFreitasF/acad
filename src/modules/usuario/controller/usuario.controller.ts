@@ -58,7 +58,7 @@ export class UsuarioController {
   }
 
   @Delete("/delete/:id")
-  @Roles(Role.ADM)
+  @Roles(Role.ADM, Role.ALUNO)
   async deleteUsuario(
     @Param("id") id_usuario: number,
     @User() user: TokenPayload

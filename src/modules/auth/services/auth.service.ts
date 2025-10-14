@@ -12,11 +12,9 @@ export class AuthService {
   ) {}
 
   async validateUser(email: string, senha: string) {
-    const user = await this.authRepository.findByEmail(email);
+    const user = await this.authRepository.findByEmail(email.toUpperCase());
 
-    
     if (!user) throw new UnauthorizedException("Usuário não encontrado");
-
 
     const senhaCorreta = await argon2.verify(user.senha, senha);
     if (!senhaCorreta) throw new UnauthorizedException("Senha incorreta");
@@ -24,25 +22,24 @@ export class AuthService {
     return user;
   }
 
+  async login(email: string, senha: string) {
+    const user = await this.validateUser(email, senha);
 
-async login(email: string, senha: string) {
-  const user = await this.validateUser(email, senha);
-  
-  const payload: TokenPayload = {
-    id_usuario: user.id_usuario,       
-    tipo: user.tipo,  
-  };
-
-  const accessToken = this.jwtService.sign(payload);
-
-  return {
-    accessToken,
-    expiresIn: 60 * 60 * 4, 
-    user: {
+    const payload: TokenPayload = {
       id_usuario: user.id_usuario,
-      email: user.email,
       tipo: user.tipo,
-    }
-  };
-}
+    };
+
+    const accessToken = this.jwtService.sign(payload);
+
+    return {
+      accessToken,
+      expiresIn: 60 * 60 * 4,
+      user: {
+        id_usuario: user.id_usuario,
+        email: user.email,
+        tipo: user.tipo,
+      },
+    };
+  }
 }

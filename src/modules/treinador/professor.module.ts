@@ -5,6 +5,10 @@ import { ProfessorController } from "./controller/professor.controller";
 import { GetProfessorService } from "./services/getProfessor.service";
 import { PostProfessorRepository } from "./repositories/postProfessor.repository";
 import { PostProfessorService } from "./services/postProfessor.service";
+import { PutProfessorRepository } from "./repositories/putProfessor.repository";
+import { PutProfessorService } from "./services/putProfessor.service";
+import { DeleteProfessorRepository } from "./repositories/deleteProfessor.repository";
+import { DeleteProfessorService } from "./services/deleteProfessor.service";
 
 @Module({
   imports: [DatabaseModule],
@@ -14,10 +18,10 @@ import { PostProfessorService } from "./services/postProfessor.service";
     PostProfessorService,
     GetProfessorRepository,
     GetProfessorService,
-    //PutProfessorRepository,
-    //PutProfessorService,
-    //DeleteProfessorRepository,
-    //DeleteProfessorService,
+    PutProfessorRepository,
+    PutProfessorService,
+    DeleteProfessorRepository,
+    DeleteProfessorService,
   ],
 })
 export class ProfessorModule {}

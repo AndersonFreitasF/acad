@@ -20,17 +20,17 @@ export class PutUsuarioService {
     id_usuario: number
   ) {
     try {
+      if (user.tipo !== Role.ADM && user.id_usuario !== id_usuario) {
+        throw new ForbiddenException(
+          "Acesso negado: você só pode editar sua própria conta"
+        );
+      }
       const usuarioExiste =
         await this.putUsuarioRepository.findUsuario(id_usuario);
       if (!usuarioExiste) {
         throw new NotFoundException("Usuário não encontrado");
       }
 
-      if (user.tipo !== Role.ADM && user.id_usuario !== id_usuario) {
-        throw new ForbiddenException(
-          "Acesso negado: você só pode editar sua própria conta"
-        );
-      }
       await this.putUsuarioRepository.putUsuario(
         { ...data, senha: data.senha ? await this.hash(data.senha) : null },
         user.id_usuario,
