@@ -14,11 +14,13 @@ jobs:
       volumes:
         - my_docker_volume:/volume_mount
       options: --cpus 1
+    
     steps:
       - uses: actions/checkout@v4
       - name: Executando o Node.js
         uses: actions/setup-node@v5
-        with:node-version: 22
+        with: 
+          node-version: 22
       - name: rodando install, build e test
         run: |
           npm i
