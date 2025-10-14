@@ -4,7 +4,7 @@ on: push
 
 jobs:
   integracao-continua:
-    runs-on: fedora-latest
+    runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v5
