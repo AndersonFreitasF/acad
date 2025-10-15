@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, vi } from "vitest";
+import { describe, it, expect, beforeEach, vi, MockedObject } from "vitest";
 import { DeleteUsuarioService } from "../services/deleteUsuario.service";
 import { DeleteUsuarioRepository } from "../repositories/deleteUsuario.repository";
 import {
@@ -6,25 +6,23 @@ import {
   InternalServerErrorException,
   ForbiddenException,
 } from "@nestjs/common";
-import { Role } from "src/common/enum/role.enum";
 import { TokenPayload } from "src/modules/auth/interfaces/auth.interface.";
 
 describe("DeleteUsuarioService", () => {
   let service: DeleteUsuarioService;
-  let repository: DeleteUsuarioRepository;
-
-  const mockRepository = {
-    findUsuario: vi.fn(),
-    deleteUsuario: vi.fn(),
-  };
+  let mockRepository: MockedObject<DeleteUsuarioRepository>;
 
   const mockAdminUser: TokenPayload = { id_usuario: 1, tipo: "ADM" };
   const mockRegularUser: TokenPayload = { id_usuario: 2, tipo: "ALUNO" };
   const targetUserId = 2;
 
   beforeEach(() => {
-    repository = mockRepository as unknown as DeleteUsuarioRepository;
-    service = new DeleteUsuarioService(repository);
+    mockRepository = {
+      findUsuario: vi.fn(),
+      deleteUsuario: vi.fn(),
+    } as MockedObject<DeleteUsuarioRepository>;
+
+    service = new DeleteUsuarioService(mockRepository);
     vi.clearAllMocks();
   });
 

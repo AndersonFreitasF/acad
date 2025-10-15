@@ -33,8 +33,13 @@ export class DeleteProfessorService {
         id_usuario
       );
     } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw error;
+      } else if (error instanceof ForbiddenException) {
+        throw error;
+      }
       throw new InternalServerErrorException(
-        "Não foi possivel criar o usuario"
+        "Não foi possível deletar o professor"
       );
     }
   }

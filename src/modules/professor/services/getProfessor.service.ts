@@ -24,7 +24,7 @@ export class GetProfessorService {
       };
     } catch (error) {
       throw new InternalServerErrorException(
-        "Não foi possivel criar o usuario"
+        "Não foi possível buscar os professores"
       );
     }
   }

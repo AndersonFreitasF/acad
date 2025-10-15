@@ -1,15 +1,15 @@
 import { describe, it, expect, beforeEach, vi, MockedObject } from "vitest";
-import { PostUsuarioService } from "../services/postUsuario.service";
-import { PostUsuarioRepository } from "../repositories/postUsuario.repository";
+import { PostProfessorService } from "../services/postProfessor.service";
+import { PostProfessorRepository } from "../repositories/postProfessor.repository";
 import { InternalServerErrorException } from "@nestjs/common";
 
-describe("PostUsuarioService", () => {
-  let service: PostUsuarioService;
-  let mockRepository: MockedObject<PostUsuarioRepository>;
+describe("PostProfessorService", () => {
+  let service: PostProfessorService;
+  let mockRepository: MockedObject<PostProfessorRepository>;
 
   const mockData = {
-    nome: "Anderson",
-    email: "anderson@example.com",
+    nome: "Professor Silva",
+    email: "professor@example.com",
     senha: "123456",
   };
 
@@ -18,13 +18,13 @@ describe("PostUsuarioService", () => {
   beforeEach(() => {
     mockRepository = {
       postUsuario: vi.fn(),
-    } as MockedObject<PostUsuarioRepository>;
+    } as MockedObject<PostProfessorRepository>;
 
-    service = new PostUsuarioService(mockRepository);
+    service = new PostProfessorService(mockRepository);
     vi.clearAllMocks();
   });
 
-  it("deve criar um usuário com sucesso", async () => {
+  it("deve criar um professor com sucesso", async () => {
     const hashedSenha = "hashed_password";
     vi.spyOn(service, "hash").mockResolvedValue(hashedSenha);
 

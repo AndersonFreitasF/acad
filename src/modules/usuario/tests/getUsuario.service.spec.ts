@@ -1,16 +1,11 @@
-import { describe, it, expect, beforeEach, vi } from "vitest";
+import { describe, it, expect, beforeEach, vi, MockedObject } from "vitest";
 import { GetUsuarioService } from "../services/getUsuario.service";
 import { GetUsuarioRepository } from "../repositories/getUsuario.repository";
 import { InternalServerErrorException } from "@nestjs/common";
 
 describe("GetUsuarioService", () => {
   let service: GetUsuarioService;
-  let repository: GetUsuarioRepository;
-
-  const mockRepository = {
-    countUsuarios: vi.fn(),
-    getUsuarios: vi.fn(),
-  };
+  let mockRepository: MockedObject<GetUsuarioRepository>;
 
   const mockInput = {
     page: 1,
@@ -18,8 +13,12 @@ describe("GetUsuarioService", () => {
   };
 
   beforeEach(() => {
-    repository = mockRepository as unknown as GetUsuarioRepository;
-    service = new GetUsuarioService(repository);
+    mockRepository = {
+      countUsuarios: vi.fn(),
+      getUsuarios: vi.fn(),
+    } as MockedObject<GetUsuarioRepository>;
+
+    service = new GetUsuarioService(mockRepository);
     vi.clearAllMocks();
   });
 

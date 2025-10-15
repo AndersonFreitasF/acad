@@ -17,7 +17,7 @@ export class PostProfessorService {
       );
     } catch (error) {
       throw new InternalServerErrorException(
-        "Não foi possivel criar o usuario"
+        "Não foi possível criar o professor"
       );
     }
   }
