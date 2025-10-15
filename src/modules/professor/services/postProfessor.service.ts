@@ -1,17 +1,21 @@
-import { Injectable, InternalServerErrorException } from "@nestjs/common";
+import { Inject, Injectable, InternalServerErrorException } from "@nestjs/common";
 import { PostProfessorDataDTO } from "../dtos/postProfessorData.dto";
-import { PostProfessorRepository } from "../repositories/postProfessor.repository";
+import {
+  ProfessorRepositoryPort,
+  ProfessorRepositoryPortToken,
+} from "../application/ports/professor-repository.port";
 const argon2 = require("argon2");
 
 @Injectable()
 export class PostProfessorService {
   constructor(
-    private readonly postProfessorRepository: PostProfessorRepository
+    @Inject(ProfessorRepositoryPortToken)
+    private readonly repo: ProfessorRepositoryPort
   ) {}
 
   async execute(data: PostProfessorDataDTO, created_by: number) {
     try {
-      await this.postProfessorRepository.postUsuario(
+      await this.repo.postUsuario(
         { ...data, senha: await this.hash(data.senha) },
         created_by
       );

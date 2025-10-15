@@ -1,5 +1,6 @@
 import {
   ForbiddenException,
+  Inject,
   Injectable,
   InternalServerErrorException,
   NotFoundException,
@@ -7,12 +8,16 @@ import {
 
 import { Role } from "src/common/enum/role.enum";
 import { TokenPayload } from "src/modules/auth/interfaces/auth.interface.";
-import { DeleteProfessorRepository } from "../repositories/deleteProfessor.repository";
+import {
+  ProfessorRepositoryPort,
+  ProfessorRepositoryPortToken,
+} from "../application/ports/professor-repository.port";
 
 @Injectable()
 export class DeleteProfessorService {
   constructor(
-    private readonly deleteProfessorRepository: DeleteProfessorRepository
+    @Inject(ProfessorRepositoryPortToken)
+    private readonly repo: ProfessorRepositoryPort
   ) {}
 
   async execute(user: TokenPayload, id_usuario: number) {
@@ -22,13 +27,12 @@ export class DeleteProfessorService {
           "Acesso negado: você só pode apagar sua própria conta"
         );
       }
-      const existing =
-        await this.deleteProfessorRepository.findUsuario(id_usuario);
+      const existing = await this.repo.findUsuario(id_usuario);
       if (!existing) {
         throw new NotFoundException("Usuário não encontrado");
       }
 
-      await this.deleteProfessorRepository.deleteProfessor(
+      await this.repo.deleteProfessor(
         user.id_usuario,
         id_usuario
       );
