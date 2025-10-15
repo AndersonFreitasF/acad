@@ -4,8 +4,10 @@ import { DeleteUsuarioRepository } from "../repositories/deleteUsuario.repositor
 import {
   NotFoundException,
   InternalServerErrorException,
+  ForbiddenException,
 } from "@nestjs/common";
 import { Role } from "src/common/enum/role.enum";
+import { TokenPayload } from "src/modules/auth/interfaces/auth.interface.";
 
 describe("DeleteUsuarioService", () => {
   let service: DeleteUsuarioService;
@@ -16,7 +18,8 @@ describe("DeleteUsuarioService", () => {
     deleteUsuario: vi.fn(),
   };
 
-  const mockUser = { id_usuario: 1, tipo: Role.ADM };
+  const mockAdminUser: TokenPayload = { id_usuario: 1, tipo: "ADM" };
+  const mockRegularUser: TokenPayload = { id_usuario: 2, tipo: "ALUNO" };
   const targetUserId = 2;
 
   beforeEach(() => {
@@ -25,33 +28,58 @@ describe("DeleteUsuarioService", () => {
     vi.clearAllMocks();
   });
 
-  it("deve deletar o usuário quando ele existe", async () => {
-    mockRepository.findUsuario.mockResolvedValue({ id_usuario: targetUserId });
+  it("deve deletar o usuário quando ele existe e o usuário é admin", async () => {
+    mockRepository.findUsuario.mockResolvedValue(true);
     mockRepository.deleteUsuario.mockResolvedValue(true);
 
-    await service.execute(mockUser, targetUserId);
+    await service.execute(mockAdminUser, targetUserId);
 
     expect(mockRepository.findUsuario).toHaveBeenCalledWith(targetUserId);
     expect(mockRepository.deleteUsuario).toHaveBeenCalledWith(
-      mockUser.id_usuario,
+      mockAdminUser.id_usuario,
       targetUserId
     );
   });
 
-  it("deve lançar NotFoundException se o usuário não existir", async () => {
-    mockRepository.findUsuario.mockResolvedValue(null);
+  it("deve permitir que um usuário delete sua própria conta", async () => {
+    mockRepository.findUsuario.mockResolvedValue(true);
+    mockRepository.deleteUsuario.mockResolvedValue(true);
 
-    await expect(service.execute(mockUser, targetUserId)).rejects.toThrow(
+    await service.execute(mockRegularUser, mockRegularUser.id_usuario);
+
+    expect(mockRepository.findUsuario).toHaveBeenCalledWith(mockRegularUser.id_usuario);
+    expect(mockRepository.deleteUsuario).toHaveBeenCalledWith(
+      mockRegularUser.id_usuario,
+      mockRegularUser.id_usuario
+    );
+  });
+
+  it("deve lançar ForbiddenException quando usuário tenta deletar conta de outro", async () => {
+    const differentUserId = 3;
+
+    await expect(service.execute(mockRegularUser, differentUserId)).rejects.toThrow(
+      ForbiddenException
+    );
+
+    expect(mockRepository.findUsuario).not.toHaveBeenCalled();
+    expect(mockRepository.deleteUsuario).not.toHaveBeenCalled();
+  });
+
+  it("deve lançar NotFoundException se o usuário não existir", async () => {
+    mockRepository.findUsuario.mockResolvedValue(false);
+
+    await expect(service.execute(mockAdminUser, targetUserId)).rejects.toThrow(
       NotFoundException
     );
 
+    expect(mockRepository.findUsuario).toHaveBeenCalledWith(targetUserId);
     expect(mockRepository.deleteUsuario).not.toHaveBeenCalled();
   });
 
   it("deve lançar InternalServerErrorException se ocorrer um erro", async () => {
     mockRepository.findUsuario.mockRejectedValue(new Error("DB error"));
 
-    await expect(service.execute(mockUser, targetUserId)).rejects.toThrow(
+    await expect(service.execute(mockAdminUser, targetUserId)).rejects.toThrow(
       InternalServerErrorException
     );
 

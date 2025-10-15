@@ -6,7 +6,7 @@ import {
   ForbiddenException,
   InternalServerErrorException,
 } from "@nestjs/common";
-import { Role } from "src/common/enum/role.enum";
+import { TokenPayload } from "src/modules/auth/interfaces/auth.interface.";
 
 describe("PutUsuarioService", () => {
   let service: PutUsuarioService;
@@ -25,9 +25,9 @@ describe("PutUsuarioService", () => {
 
   const targetUserId = 2;
 
-  const adminUser = { id_usuario: 1, tipo: Role.ADM };
-  const regularUser = { id_usuario: 2, tipo: Role.ALUNO };
-  const otherUser = { id_usuario: 3, tipo: Role.ALUNO };
+  const adminUser: TokenPayload = { id_usuario: 1, tipo: "ADM" };
+  const regularUser: TokenPayload = { id_usuario: 2, tipo: "ALUNO" };
+  const otherUser: TokenPayload = { id_usuario: 3, tipo: "ALUNO" };
 
   beforeEach(() => {
     repository = mockRepository as unknown as PutUsuarioRepository;
@@ -37,7 +37,7 @@ describe("PutUsuarioService", () => {
 
   it("deve atualizar o usuário quando ADM", async () => {
     vi.spyOn(service, "hash").mockResolvedValue("hashed_password");
-    mockRepository.findUsuario.mockResolvedValue({ id_usuario: targetUserId });
+    mockRepository.findUsuario.mockResolvedValue(true);
 
     await service.execute(mockData, adminUser, targetUserId);
 
@@ -51,7 +51,7 @@ describe("PutUsuarioService", () => {
 
   it("deve atualizar o próprio usuário se não for ADM", async () => {
     vi.spyOn(service, "hash").mockResolvedValue("hashed_password");
-    mockRepository.findUsuario.mockResolvedValue({ id_usuario: targetUserId });
+    mockRepository.findUsuario.mockResolvedValue(true);
 
     await service.execute(mockData, regularUser, targetUserId);
 
@@ -64,7 +64,7 @@ describe("PutUsuarioService", () => {
   });
 
   it("deve lançar NotFoundException se o usuário não existir", async () => {
-    mockRepository.findUsuario.mockResolvedValue(null);
+    mockRepository.findUsuario.mockResolvedValue(false);
 
     await expect(
       service.execute(mockData, adminUser, targetUserId)
@@ -74,12 +74,11 @@ describe("PutUsuarioService", () => {
   });
 
   it("deve lançar ForbiddenException se usuário tentar editar outro e não for ADM", async () => {
-    mockRepository.findUsuario.mockResolvedValue({ id_usuario: targetUserId });
-
     await expect(
       service.execute(mockData, otherUser, targetUserId)
     ).rejects.toThrow(ForbiddenException);
 
+    expect(mockRepository.findUsuario).not.toHaveBeenCalled();
     expect(mockRepository.putUsuario).not.toHaveBeenCalled();
   });
 

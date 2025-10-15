@@ -1,28 +1,32 @@
 name: CI
 
-on: push
+
+on:
+  push:
+    branches: [ main ]
 
 jobs:
-  integracao-continua:
+  test:
+
     runs-on: ubuntu-latest
-    container:
-      image: node:22
-      env:
-        NODE_ENV: development
-      ports:
-        - 80
-      volumes:
-        - my_docker_volume:/volume_mount
-      options: --cpus 1
     
     steps:
-      - uses: actions/checkout@v4
-      - name: Executando o Node.js
+
+      - name: Get code
+        uses: actions/checkout@v4
+      
+
+      - name: Setup Node.js
         uses: actions/setup-node@v5
         with: 
           node-version: 22
-      - name: rodando install, build e test
-        run: |
-          npm i
-          npm run build
-          npm run test
+  
+      - name: Install packages
+        run: npm install
+      
+    
+      - name: Build project
+        run: npm run build
+  
+      - name: Run tests
+        run: npm run test

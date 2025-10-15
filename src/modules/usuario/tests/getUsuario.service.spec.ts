@@ -1,9 +1,7 @@
-import { Test, TestingModule } from "@nestjs/testing";
-
-import { GetUsuarioRepository } from "../repositories/getUsuario.repository";
-import { InternalServerErrorException } from "@nestjs/common";
 import { describe, it, expect, beforeEach, vi } from "vitest";
 import { GetUsuarioService } from "../services/getUsuario.service";
+import { GetUsuarioRepository } from "../repositories/getUsuario.repository";
+import { InternalServerErrorException } from "@nestjs/common";
 
 describe("GetUsuarioService", () => {
   let service: GetUsuarioService;
@@ -19,20 +17,9 @@ describe("GetUsuarioService", () => {
     size: 10,
   };
 
-  beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
-      providers: [
-        GetUsuarioService,
-        {
-          provide: GetUsuarioRepository,
-          useValue: mockRepository,
-        },
-      ],
-    }).compile();
-
-    service = module.get<GetUsuarioService>(GetUsuarioService);
-    repository = module.get<GetUsuarioRepository>(GetUsuarioRepository);
-
+  beforeEach(() => {
+    repository = mockRepository as unknown as GetUsuarioRepository;
+    service = new GetUsuarioService(repository);
     vi.clearAllMocks();
   });
 
@@ -54,8 +41,8 @@ describe("GetUsuarioService", () => {
       Tamanho_Pagina: 10,
     });
 
-    expect(repository.countUsuarios).toHaveBeenCalledWith(mockInput);
-    expect(repository.getUsuarios).toHaveBeenCalledWith(mockInput);
+    expect(mockRepository.countUsuarios).toHaveBeenCalledWith(mockInput);
+    expect(mockRepository.getUsuarios).toHaveBeenCalledWith(mockInput);
   });
 
   it("deve retornar array vazio e total 0 se repositório retornar undefined", async () => {
