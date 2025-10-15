@@ -1,21 +1,16 @@
-import { describe, it, expect, beforeEach, vi } from "vitest";
+import { describe, it, expect, beforeEach, vi, Mock } from "vitest";
 import { PutUsuarioService } from "../services/putUsuario.service";
-import { PutUsuarioRepository } from "../repositories/putUsuario.repository";
 import {
   NotFoundException,
   ForbiddenException,
   InternalServerErrorException,
 } from "@nestjs/common";
 import { TokenPayload } from "src/modules/auth/interfaces/auth.interface.";
+import { UsuarioRepositoryPort } from "../application/ports/usuario-repository.port";
 
 describe("PutUsuarioService", () => {
   let service: PutUsuarioService;
-  let repository: PutUsuarioRepository;
-
-  const mockRepository = {
-    findUsuario: vi.fn(),
-    putUsuario: vi.fn(),
-  };
+  let mockRepository: Record<keyof UsuarioRepositoryPort, Mock>;
 
   const mockData = {
     nome: "Anderson",
@@ -30,8 +25,16 @@ describe("PutUsuarioService", () => {
   const otherUser: TokenPayload = { id_usuario: 3, tipo: "ALUNO" };
 
   beforeEach(() => {
-    repository = mockRepository as unknown as PutUsuarioRepository;
-    service = new PutUsuarioService(repository);
+    mockRepository = {
+      countUsuarios: vi.fn(),
+      getUsuarios: vi.fn(),
+      postUsuario: vi.fn(),
+      findUsuario: vi.fn(),
+      putUsuario: vi.fn(),
+      deleteUsuario: vi.fn(),
+    };
+    
+    service = new PutUsuarioService(mockRepository as UsuarioRepositoryPort);
     vi.clearAllMocks();
   });
 
