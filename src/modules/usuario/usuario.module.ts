@@ -9,8 +9,9 @@ import { PutUsuarioService } from "./services/putUsuario.service";
 import { PutUsuarioRepository } from "./repositories/putUsuario.repository";
 import { DeleteUsuarioService } from "./services/deleteUsuario.service";
 import { DeleteUsuarioRepository } from "./repositories/deleteUsuario.repository";
-import { UsuarioRepositoryAdapter } from "./infrastructure/repositories/usuario.repository.adapter";
+
 import { UsuarioRepositoryPortToken } from "./application/ports/usuario-repository.port";
+import { UsuarioRepositoryAdapter } from "./adapters/repositories/usuario.repository.adapter";
 
 @Module({
   imports: [DatabaseModule],

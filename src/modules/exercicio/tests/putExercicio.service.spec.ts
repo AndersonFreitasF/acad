@@ -1,6 +1,9 @@
 import { describe, it, expect, beforeEach, vi, Mock } from "vitest";
 import { PutExercicioService } from "../services/putExercicio.service";
-import { InternalServerErrorException, NotFoundException } from "@nestjs/common";
+import {
+  InternalServerErrorException,
+  NotFoundException,
+} from "@nestjs/common";
 import { ExercicioRepositoryPort } from "../application/ports/exercicio-repository.port";
 import { TokenPayload } from "src/modules/auth/interfaces/auth.interface.";
 
@@ -16,8 +19,6 @@ describe("PutExercicioService", () => {
   const mockUser: TokenPayload = {
     id_usuario: 1,
     tipo: "PROFESSOR",
-    iat: 1234567890,
-    exp: 1234567890,
   };
 
   beforeEach(() => {
@@ -30,7 +31,9 @@ describe("PutExercicioService", () => {
       deleteExercicio: vi.fn(),
     };
 
-    service = new PutExercicioService(mockRepository as ExercicioRepositoryPort);
+    service = new PutExercicioService(
+      mockRepository as ExercicioRepositoryPort
+    );
     vi.clearAllMocks();
   });
 

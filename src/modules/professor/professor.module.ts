@@ -9,9 +9,9 @@ import { GetProfessorService } from "./services/getProfessor.service";
 import { PostProfessorService } from "./services/postProfessor.service";
 import { PutProfessorService } from "./services/putProfessor.service";
 import { DeleteProfessorService } from "./services/deleteProfessor.service";
-import { ProfessorRepositoryAdapter } from "./infrastructure/repositories/professor.repository.adapter";
-import { ProfessorRepositoryPortToken } from "./application/ports/professor-repository.port";
 
+import { ProfessorRepositoryPortToken } from "./application/ports/professor-repository.port";
+import { ProfessorRepositoryAdapter } from "./adapters/repositories/professor.repository.adapter";
 
 @Module({
   imports: [DatabaseModule],
