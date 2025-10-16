@@ -1,5 +1,6 @@
 import {
   ForbiddenException,
+  Inject,
   Injectable,
   InternalServerErrorException,
   NotFoundException,
@@ -7,12 +8,16 @@ import {
 
 import { Role } from "src/common/enum/role.enum";
 import { TokenPayload } from "src/modules/auth/interfaces/auth.interface.";
-import { DeleteUsuarioRepository } from "../repositories/deleteUsuario.repository";
+import {
+  UsuarioRepositoryPort,
+  UsuarioRepositoryPortToken,
+} from "../application/ports/usuario-repository.port";
 
 @Injectable()
 export class DeleteUsuarioService {
   constructor(
-    private readonly deleteUsuarioRepository: DeleteUsuarioRepository
+    @Inject(UsuarioRepositoryPortToken)
+    private readonly repo: UsuarioRepositoryPort
   ) {}
 
   async execute(user: TokenPayload, id_usuario: number) {
@@ -23,13 +28,12 @@ export class DeleteUsuarioService {
       );
     }
 
-      const existing =
-        await this.deleteUsuarioRepository.findUsuario(id_usuario);
+      const existing = await this.repo.findUsuario(id_usuario);
       if (!existing) {
         throw new NotFoundException("Usuário não encontrado");
       }
 
-      await this.deleteUsuarioRepository.deleteUsuario(
+      await this.repo.deleteUsuario(
         user.id_usuario,
         id_usuario
       );

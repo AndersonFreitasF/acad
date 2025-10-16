@@ -1,16 +1,22 @@
-import { Injectable, InternalServerErrorException } from "@nestjs/common";
+import { Inject, Injectable, InternalServerErrorException } from "@nestjs/common";
 import { GetUsuarioDataDTO } from "../dtos/getUsuarioData.dto";
-import { GetUsuarioRepository } from "../repositories/getUsuario.repository";
+import {
+  UsuarioRepositoryPort,
+  UsuarioRepositoryPortToken,
+} from "../application/ports/usuario-repository.port";
 
 @Injectable()
 export class GetUsuarioService {
-  constructor(private readonly getUsuarioRepository: GetUsuarioRepository) {}
+  constructor(
+    @Inject(UsuarioRepositoryPortToken)
+    private readonly repo: UsuarioRepositoryPort
+  ) {}
 
   async execute(data: GetUsuarioDataDTO) {
     try {
-      const TotalUsuarios = await this.getUsuarioRepository.countUsuarios(data);
+      const TotalUsuarios = await this.repo.countUsuarios(data);
 
-      const DadosUsuario = await this.getUsuarioRepository.getUsuarios(data);
+      const DadosUsuario = await this.repo.getUsuarios(data);
 
       return {
         Usuarios: DadosUsuario ?? [],

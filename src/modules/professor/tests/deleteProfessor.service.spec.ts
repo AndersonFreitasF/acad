@@ -1,16 +1,16 @@
-import { describe, it, expect, beforeEach, vi, MockedObject } from "vitest";
+import { describe, it, expect, beforeEach, vi, Mock } from "vitest";
 import { DeleteProfessorService } from "../services/deleteProfessor.service";
-import { DeleteProfessorRepository } from "../repositories/deleteProfessor.repository";
 import {
   NotFoundException,
   InternalServerErrorException,
   ForbiddenException,
 } from "@nestjs/common";
 import { TokenPayload } from "src/modules/auth/interfaces/auth.interface.";
+import { ProfessorRepositoryPort } from "../application/ports/professor-repository.port";
 
 describe("DeleteProfessorService", () => {
   let service: DeleteProfessorService;
-  let mockRepository: MockedObject<DeleteProfessorRepository>;
+  let mockRepository: Record<keyof ProfessorRepositoryPort, Mock>;
 
   const mockAdminUser: TokenPayload = { id_usuario: 1, tipo: "ADM" };
   const mockRegularUser: TokenPayload = { id_usuario: 2, tipo: "PROFESSOR" };
@@ -18,11 +18,15 @@ describe("DeleteProfessorService", () => {
 
   beforeEach(() => {
     mockRepository = {
+      countProfessores: vi.fn(),
+      getProfessores: vi.fn(),
+      postUsuario: vi.fn(),
       findUsuario: vi.fn(),
+      putProfessor: vi.fn(),
       deleteProfessor: vi.fn(),
-    } as MockedObject<DeleteProfessorRepository>;
+    };
 
-    service = new DeleteProfessorService(mockRepository);
+    service = new DeleteProfessorService(mockRepository as ProfessorRepositoryPort);
     vi.clearAllMocks();
   });
 

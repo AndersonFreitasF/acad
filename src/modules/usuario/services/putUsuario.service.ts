@@ -1,18 +1,25 @@
 import {
   ForbiddenException,
+  Inject,
   Injectable,
   InternalServerErrorException,
   NotFoundException,
 } from "@nestjs/common";
-import { PutUsuarioRepository } from "../repositories/putUsuario.repository";
 import { PutUsuarioDataDTO } from "../dtos/putUsuarioData.dto";
 import { Role } from "src/common/enum/role.enum";
 import { TokenPayload } from "src/modules/auth/interfaces/auth.interface.";
+import {
+  UsuarioRepositoryPort,
+  UsuarioRepositoryPortToken,
+} from "../application/ports/usuario-repository.port";
 const argon2 = require("argon2");
 
 @Injectable()
 export class PutUsuarioService {
-  constructor(private readonly putUsuarioRepository: PutUsuarioRepository) {}
+  constructor(
+    @Inject(UsuarioRepositoryPortToken)
+    private readonly repo: UsuarioRepositoryPort
+  ) {}
 
   async execute(
     data: PutUsuarioDataDTO,
@@ -25,13 +32,12 @@ export class PutUsuarioService {
           "Acesso negado: você só pode editar sua própria conta"
         );
       }
-      const usuarioExiste =
-        await this.putUsuarioRepository.findUsuario(id_usuario);
+      const usuarioExiste = await this.repo.findUsuario(id_usuario);
       if (!usuarioExiste) {
         throw new NotFoundException("Usuário não encontrado");
       }
 
-      await this.putUsuarioRepository.putUsuario(
+      await this.repo.putUsuario(
         { ...data, senha: data.senha ? await this.hash(data.senha) : null },
         user.id_usuario,
         id_usuario

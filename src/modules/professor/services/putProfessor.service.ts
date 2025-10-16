@@ -1,5 +1,6 @@
 import {
   ForbiddenException,
+  Inject,
   Injectable,
   InternalServerErrorException,
   NotFoundException,
@@ -8,13 +9,17 @@ import {
 import { Role } from "src/common/enum/role.enum";
 import { TokenPayload } from "src/modules/auth/interfaces/auth.interface.";
 import { PutProfessorDataDTO } from "../dtos/putProfessorData.dto";
-import { PutProfessorRepository } from "../repositories/putProfessor.repository";
+import {
+  ProfessorRepositoryPort,
+  ProfessorRepositoryPortToken,
+} from "../application/ports/professor-repository.port";
 const argon2 = require("argon2");
 
 @Injectable()
 export class PutProfessorService {
   constructor(
-    private readonly putProfessorRepository: PutProfessorRepository
+    @Inject(ProfessorRepositoryPortToken)
+    private readonly repo: ProfessorRepositoryPort
   ) {}
 
   async execute(
@@ -28,13 +33,12 @@ export class PutProfessorService {
           "Acesso negado: você só pode editar sua própria conta"
         );
       }
-      const usuarioExiste =
-        await this.putProfessorRepository.findUsuario(id_usuario);
+      const usuarioExiste = await this.repo.findUsuario(id_usuario);
       if (!usuarioExiste) {
         throw new NotFoundException("Usuário não encontrado");
       }
 
-      await this.putProfessorRepository.putProfessor(
+      await this.repo.putProfessor(
         { ...data, senha: data.senha ? await this.hash(data.senha) : null },
         user.id_usuario,
         id_usuario

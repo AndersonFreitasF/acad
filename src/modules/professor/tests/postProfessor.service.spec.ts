@@ -1,11 +1,11 @@
-import { describe, it, expect, beforeEach, vi, MockedObject } from "vitest";
+import { describe, it, expect, beforeEach, vi, Mock } from "vitest";
 import { PostProfessorService } from "../services/postProfessor.service";
-import { PostProfessorRepository } from "../repositories/postProfessor.repository";
 import { InternalServerErrorException } from "@nestjs/common";
+import { ProfessorRepositoryPort } from "../application/ports/professor-repository.port";
 
 describe("PostProfessorService", () => {
   let service: PostProfessorService;
-  let mockRepository: MockedObject<PostProfessorRepository>;
+  let mockRepository: Record<keyof ProfessorRepositoryPort, Mock>;
 
   const mockData = {
     nome: "Professor Silva",
@@ -17,10 +17,15 @@ describe("PostProfessorService", () => {
 
   beforeEach(() => {
     mockRepository = {
+      countProfessores: vi.fn(),
+      getProfessores: vi.fn(),
       postUsuario: vi.fn(),
-    } as MockedObject<PostProfessorRepository>;
+      findUsuario: vi.fn(),
+      putProfessor: vi.fn(),
+      deleteProfessor: vi.fn(),
+    };
 
-    service = new PostProfessorService(mockRepository);
+    service = new PostProfessorService(mockRepository as ProfessorRepositoryPort);
     vi.clearAllMocks();
   });
 

@@ -1,11 +1,11 @@
-import { describe, it, expect, beforeEach, vi, MockedObject } from "vitest";
+import { describe, it, expect, beforeEach, vi, Mock } from "vitest";
 import { GetUsuarioService } from "../services/getUsuario.service";
-import { GetUsuarioRepository } from "../repositories/getUsuario.repository";
 import { InternalServerErrorException } from "@nestjs/common";
+import { UsuarioRepositoryPort } from "../application/ports/usuario-repository.port";
 
 describe("GetUsuarioService", () => {
   let service: GetUsuarioService;
-  let mockRepository: MockedObject<GetUsuarioRepository>;
+  let mockRepository: Record<keyof UsuarioRepositoryPort, Mock>;
 
   const mockInput = {
     page: 1,
@@ -16,9 +16,13 @@ describe("GetUsuarioService", () => {
     mockRepository = {
       countUsuarios: vi.fn(),
       getUsuarios: vi.fn(),
-    } as MockedObject<GetUsuarioRepository>;
+      postUsuario: vi.fn(),
+      findUsuario: vi.fn(),
+      putUsuario: vi.fn(),
+      deleteUsuario: vi.fn(),
+    };
 
-    service = new GetUsuarioService(mockRepository);
+    service = new GetUsuarioService(mockRepository as UsuarioRepositoryPort);
     vi.clearAllMocks();
   });
 
