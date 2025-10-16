@@ -1,5 +1,4 @@
 import { Injectable } from "@nestjs/common";
-
 import { DatabaseService } from "src/modules/database/services/database.service";
 import { PostExercicioDataDTO } from "../dtos/postExercicioData.dto";
 
@@ -8,13 +7,13 @@ export class PostExercicioRepository {
   constructor(private readonly dataBaseService: DatabaseService) {}
 
   async postExercicio(data: PostExercicioDataDTO, created_by: number) {
-    const sql = `INSERT INTO usuario(
+    const sql = `INSERT INTO exercicio(
       nome,
       descricao,
       created_by,
       created_at
       ) 
-      VALUES($1, $2, $3 NOW())
+      VALUES($1, $2, $3, NOW())
       `;
 
     const binds = [

@@ -21,7 +21,7 @@ export class PostExercicioService {
       await this.repo.postExercicio(data, created_by);
     } catch (error) {
       throw new InternalServerErrorException(
-        "Não foi possível criar o professor"
+        "Não foi possível criar o exercício"
       );
     }
   }

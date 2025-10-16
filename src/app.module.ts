@@ -4,6 +4,7 @@ import { DatabaseModule } from "./modules/database/database.module";
 import { UsuarioModule } from "./modules/usuario/usuario.module";
 import { AuthModule } from "./modules/auth/auth.module";
 import { ProfessorModule } from "./modules/professor/professor.module";
+import { ExercicioModule } from "./modules/exercicio/exercicio.module";
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { ProfessorModule } from "./modules/professor/professor.module";
     UsuarioModule,
     AuthModule,
     ProfessorModule,
+    ExercicioModule,
   ],
 })
 export class AppModule {}
