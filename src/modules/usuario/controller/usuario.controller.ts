@@ -14,7 +14,7 @@ import { Roles } from "src/common/decorators/role.decorator";
 import { Role } from "src/common/enum/role.enum";
 import { PostUsuarioDataDTO } from "../dtos/postUsuarioData.dto";
 import { JwtAuthGuard } from "src/common/guards/jwt-auth.guard";
-import { TokenPayload } from "src/modules/auth/interfaces/auth.interface.";
+import { TokenPayload } from "src/modules/auth/interfaces/auth.interface";
 import { User } from "src/common/decorators/user.decorator";
 import { GetUsuarioDataDTO } from "../dtos/getUsuarioData.dto";
 import { GetUsuarioService } from "../services/getUsuario.service";

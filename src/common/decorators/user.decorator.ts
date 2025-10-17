@@ -3,7 +3,7 @@ import {
   ExecutionContext,
   UnauthorizedException,
 } from "@nestjs/common";
-import { TokenPayload } from "src/modules/auth/interfaces/auth.interface.";
+import { TokenPayload } from "src/modules/auth/interfaces/auth.interface";
 
 export const User = createParamDecorator(
   (data: keyof TokenPayload | undefined, ctx: ExecutionContext) => {

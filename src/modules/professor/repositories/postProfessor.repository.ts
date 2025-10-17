@@ -7,7 +7,7 @@ import { PostProfessorDataDTO } from "../dtos/postProfessorData.dto";
 export class PostProfessorRepository {
   constructor(private readonly dataBaseService: DatabaseService) {}
 
-  async postUsuario(data: PostProfessorDataDTO, created_by: number) {
+  async postProfessor(data: PostProfessorDataDTO, created_by: number) {
     const sql = `INSERT INTO usuario(
       nome,
       email, 

@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   ForbiddenException,
   Inject,
   Injectable,
@@ -7,19 +8,21 @@ import {
 } from "@nestjs/common";
 
 import { Role } from "src/common/enum/role.enum";
-import { TokenPayload } from "src/modules/auth/interfaces/auth.interface.";
+import { TokenPayload } from "src/modules/auth/interfaces/auth.interface";
 import { PutProfessorDataDTO } from "../dtos/putProfessorData.dto";
 import {
   ProfessorRepositoryPort,
   ProfessorRepositoryPortToken,
 } from "../application/ports/professor-repository.port";
-const argon2 = require("argon2");
+import { PasswordHasherPort, PasswordHasherPortToken } from "../../auth/application/ports/password-hasher.port";
 
 @Injectable()
 export class PutProfessorService {
   constructor(
     @Inject(ProfessorRepositoryPortToken)
-    private readonly repo: ProfessorRepositoryPort
+    private readonly repo: ProfessorRepositoryPort,
+    @Inject(PasswordHasherPortToken)
+    private readonly passwordHasher: PasswordHasherPort
   ) {}
 
   async execute(
@@ -28,6 +31,11 @@ export class PutProfessorService {
     id_usuario: number
   ) {
     try {
+
+      if (!data.nome && !data.email && !data.senha) {
+        throw new BadRequestException('Pelo menos um campo deve ser informado para atualização');
+      }
+
       if (user.tipo !== Role.ADM && user.id_usuario !== id_usuario) {
         throw new ForbiddenException(
           "Acesso negado: você só pode editar sua própria conta"
@@ -39,14 +47,12 @@ export class PutProfessorService {
       }
 
       await this.repo.putProfessor(
-        { ...data, senha: data.senha ? await this.hash(data.senha) : null },
+        { ...data, senha: data.senha ? await this.passwordHasher.hash(data.senha) : null },
         user.id_usuario,
         id_usuario
       );
     } catch (error) {
-      if (error instanceof NotFoundException) {
-        throw error;
-      } else if (error instanceof ForbiddenException) {
+      if (error instanceof NotFoundException || error instanceof ForbiddenException || error instanceof BadRequestException) {
         throw error;
       }
       throw new InternalServerErrorException(
@@ -55,12 +61,4 @@ export class PutProfessorService {
     }
   }
 
-  async hash(senha: string) {
-    return await argon2.hash(senha, {
-      type: argon2.argon2id,
-      memoryCost: 2 ** 16,
-      timeCost: 3,
-      parallelism: 1,
-    });
-  }
 }

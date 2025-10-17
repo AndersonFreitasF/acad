@@ -29,7 +29,7 @@ export class ProfessorRepositoryAdapter implements ProfessorRepositoryPort {
   }
 
   async postUsuario(data: PostProfessorDataDTO, createdBy: number): Promise<void> {
-    await this.postRepo.postUsuario(data, createdBy);
+    await this.postRepo.postProfessor(data, createdBy);
     return;
   }
 

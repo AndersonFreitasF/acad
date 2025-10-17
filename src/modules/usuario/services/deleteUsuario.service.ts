@@ -4,10 +4,11 @@ import {
   Injectable,
   InternalServerErrorException,
   NotFoundException,
+  BadRequestException,
 } from "@nestjs/common";
 
 import { Role } from "src/common/enum/role.enum";
-import { TokenPayload } from "src/modules/auth/interfaces/auth.interface.";
+import { TokenPayload } from "src/modules/auth/interfaces/auth.interface";
 import {
   UsuarioRepositoryPort,
   UsuarioRepositoryPortToken,
@@ -22,11 +23,12 @@ export class DeleteUsuarioService {
 
   async execute(user: TokenPayload, id_usuario: number) {
     try {
-    if (user.tipo !== Role.ADM && user.id_usuario !== id_usuario) {
-      throw new ForbiddenException(
-        "Acesso negado: você só pode apagar sua própria conta"
-      );
-    }
+
+      if (user.tipo !== Role.ADM && user.id_usuario !== id_usuario) {
+        throw new ForbiddenException(
+          "Acesso negado: você só pode apagar sua própria conta"
+        );
+      }
 
       const existing = await this.repo.findUsuario(id_usuario);
       if (!existing) {
@@ -38,13 +40,10 @@ export class DeleteUsuarioService {
         id_usuario
       );
     } catch (error) {
-if (error instanceof NotFoundException) {
-        throw error;
-      }else if (error instanceof ForbiddenException) {
+      if (error instanceof NotFoundException || error instanceof ForbiddenException || error instanceof BadRequestException) {
         throw error;
       }
-      throw new InternalServerErrorException(       "Não foi possível deletar o usuário"
-      );
+      throw new InternalServerErrorException("Não foi possível deletar o usuário");
     }
   }
 }

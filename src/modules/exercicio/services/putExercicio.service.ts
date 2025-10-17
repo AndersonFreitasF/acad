@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Inject,
   Injectable,
   InternalServerErrorException,
@@ -9,7 +10,7 @@ import {
   ExercicioRepositoryPort,
   ExercicioRepositoryPortToken,
 } from "../application/ports/exercicio-repository.port";
-import { TokenPayload } from "src/modules/auth/interfaces/auth.interface.";
+import { TokenPayload } from "src/modules/auth/interfaces/auth.interface";
 
 @Injectable()
 export class PutExercicioService {
@@ -24,6 +25,11 @@ export class PutExercicioService {
     id_exercicio: number
   ) {
     try {
+
+      if (!data.nome && !data.descricao) {
+        throw new BadRequestException('Pelo menos um campo deve ser informado para atualização');
+      }
+
       const exercicioExists = await this.repo.findExercicio(id_exercicio);
 
       if (!exercicioExists) {
@@ -32,7 +38,7 @@ export class PutExercicioService {
 
       await this.repo.putExercicio(data, user.id_usuario, id_exercicio);
     } catch (error) {
-      if (error instanceof NotFoundException) {
+      if (error instanceof NotFoundException || error instanceof BadRequestException) {
         throw error;
       }
       throw new InternalServerErrorException(

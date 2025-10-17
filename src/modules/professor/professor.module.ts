@@ -9,12 +9,13 @@ import { GetProfessorService } from "./services/getProfessor.service";
 import { PostProfessorService } from "./services/postProfessor.service";
 import { PutProfessorService } from "./services/putProfessor.service";
 import { DeleteProfessorService } from "./services/deleteProfessor.service";
+import { AuthModule } from "../auth/auth.module";
 
 import { ProfessorRepositoryPortToken } from "./application/ports/professor-repository.port";
 import { ProfessorRepositoryAdapter } from "./adapters/repositories/professor.repository.adapter";
 
 @Module({
-  imports: [DatabaseModule],
+  imports: [DatabaseModule, AuthModule],
   controllers: [ProfessorController],
   providers: [
     GetProfessorRepository,

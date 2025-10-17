@@ -4,19 +4,21 @@ import {
   ProfessorRepositoryPort,
   ProfessorRepositoryPortToken,
 } from "../application/ports/professor-repository.port";
-const argon2 = require("argon2");
+import { PasswordHasherPort, PasswordHasherPortToken } from "../../auth/application/ports/password-hasher.port";
 
 @Injectable()
 export class PostProfessorService {
   constructor(
     @Inject(ProfessorRepositoryPortToken)
-    private readonly repo: ProfessorRepositoryPort
+    private readonly repo: ProfessorRepositoryPort,
+    @Inject(PasswordHasherPortToken)
+    private readonly passwordHasher: PasswordHasherPort
   ) {}
 
   async execute(data: PostProfessorDataDTO, created_by: number) {
     try {
       await this.repo.postUsuario(
-        { ...data, senha: await this.hash(data.senha) },
+        { ...data, senha: await this.passwordHasher.hash(data.senha) },
         created_by
       );
     } catch (error) {
@@ -26,12 +28,4 @@ export class PostProfessorService {
     }
   }
 
-  async hash(senha: string) {
-    return await argon2.hash(senha, {
-      type: argon2.argon2id,
-      memoryCost: 2 ** 16,
-      timeCost: 3,
-      parallelism: 1,
-    });
-  }
 }

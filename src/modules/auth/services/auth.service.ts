@@ -1,6 +1,6 @@
 import { Inject, Injectable, UnauthorizedException } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
-import { TokenPayload } from "../interfaces/auth.interface.";
+import { TokenPayload } from "../interfaces/auth.interface";
 import { AuthRepositoryPort, AuthRepositoryPortToken } from "../application/ports/auth-repository.port";
 import { PasswordHasherPort, PasswordHasherPortToken } from "../application/ports/password-hasher.port";
 
