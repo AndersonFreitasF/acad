@@ -31,12 +31,7 @@ export class PutProfessorService {
     id_usuario: number
   ) {
     try {
-      // Validar ID positivo
-      if (id_usuario <= 0) {
-        throw new BadRequestException('ID de professor inválido');
-      }
-      
-      // Validar pelo menos um campo fornecido
+
       if (!data.nome && !data.email && !data.senha) {
         throw new BadRequestException('Pelo menos um campo deve ser informado para atualização');
       }

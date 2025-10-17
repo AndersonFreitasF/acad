@@ -1,9 +1,9 @@
 import {
-  BadRequestException,
   Inject,
   Injectable,
   InternalServerErrorException,
   NotFoundException,
+  BadRequestException,
 } from "@nestjs/common";
 import {
   ExercicioRepositoryPort,
@@ -20,10 +20,6 @@ export class DeleteExercicioService {
 
   async execute(user: TokenPayload, id_exercicio: number) {
     try {
-      // Validar ID positivo
-      if (id_exercicio <= 0) {
-        throw new BadRequestException('ID inválido');
-      }
 
       const exercicioExists = await this.repo.findExercicio(id_exercicio);
 

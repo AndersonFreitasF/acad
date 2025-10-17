@@ -1,10 +1,10 @@
 import {
-  BadRequestException,
   ForbiddenException,
   Inject,
   Injectable,
   InternalServerErrorException,
   NotFoundException,
+  BadRequestException,
 } from "@nestjs/common";
 
 import { Role } from "src/common/enum/role.enum";
@@ -23,10 +23,6 @@ export class DeleteUsuarioService {
 
   async execute(user: TokenPayload, id_usuario: number) {
     try {
-      // Validar ID positivo
-      if (id_usuario <= 0) {
-        throw new BadRequestException('ID inválido');
-      }
 
       if (user.tipo !== Role.ADM && user.id_usuario !== id_usuario) {
         throw new ForbiddenException(

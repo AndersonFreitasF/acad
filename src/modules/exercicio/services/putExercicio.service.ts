@@ -25,12 +25,7 @@ export class PutExercicioService {
     id_exercicio: number
   ) {
     try {
-      // Validar ID positivo
-      if (id_exercicio <= 0) {
-        throw new BadRequestException('ID de exercício inválido');
-      }
-      
-      // Validar pelo menos um campo fornecido
+
       if (!data.nome && !data.descricao) {
         throw new BadRequestException('Pelo menos um campo deve ser informado para atualização');
       }
