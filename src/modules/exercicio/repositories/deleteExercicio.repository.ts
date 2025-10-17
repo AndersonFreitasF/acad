@@ -5,23 +5,19 @@ import { DatabaseService } from "src/modules/database/services/database.service"
 export class DeleteExercicioRepository {
   constructor(private readonly dataBaseService: DatabaseService) {}
 
-  async findExercicio(id_exercicio: number): Promise<boolean> {
-    const sql = `SELECT 1 FROM exercicio WHERE id_exercicio = $1 AND deleted_by IS NULL LIMIT 1`;
-    const binds = [id_exercicio];
+  async findExercicio(id: number): Promise<boolean> {
+    const sql = `SELECT 1 FROM exercicio WHERE id = $1 LIMIT 1`;
+    const binds = [id];
 
     const result = await this.dataBaseService.query(sql, binds);
 
     return result.rows.length > 0;
   }
 
-  async deleteExercicio(executed_by: number, id_exercicio: number) {
-    const sql = `UPDATE exercicio 
-    SET 
-      deleted_by = $1,
-      deleted_at = NOW()
-    WHERE id_exercicio = $2`;
+  async deleteExercicio(executed_by: number, id: number) {
+    const sql = `DELETE FROM exercicio WHERE id = $1`;
 
-    const binds = [executed_by, id_exercicio];
+    const binds = [id];
 
     await this.dataBaseService.query(sql, binds);
   }
