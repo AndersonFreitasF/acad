@@ -5,7 +5,7 @@ import {
   ForbiddenException,
   InternalServerErrorException,
 } from "@nestjs/common";
-import { TokenPayload } from "src/modules/auth/interfaces/auth.interface.";
+import { TokenPayload } from "../../auth/interfaces/auth.interface";
 import { UsuarioRepositoryPort } from "../application/ports/usuario-repository.port";
 import { PasswordHasherPort } from "../../auth/application/ports/password-hasher.port";
 
