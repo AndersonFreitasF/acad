@@ -9,8 +9,8 @@ export class GetProfessorRepository {
   async countProfessores(data: GetProfessorDataDTO) {
     const sql = `SELECT COUNT(DISTINCT u.id_usuario) as total
         FROM usuario u
-        LEFT JOIN Professor_treino tt ON tt.id_professor = u.id_usuario
-        LEFT JOIN treino t ON t.id_treino = tt.id_treino
+        LEFT JOIN professor_treino tt ON tt.id_professor = u.id_usuario
+        LEFT JOIN treino t ON t.id = tt.id_treino
             WHERE u.tipo = 'PROFESSOR'
             AND u.deleted_by IS NULL
             AND ($1 = '' OR u.nome ILIKE $1)`;
@@ -26,19 +26,17 @@ export class GetProfessorRepository {
         u.id_usuario,
         u.nome, 
         u.email, 
-        ARRAY_AGG(t.id_treino) AS treinos
+        ARRAY_AGG(t.id) AS treinos
     FROM usuario u
     LEFT JOIN professor_treino tt ON tt.id_professor = u.id_usuario
-    LEFT JOIN treino t ON t.id_treino = tt.id_treino
+    LEFT JOIN treino t ON t.id = tt.id_treino
     WHERE u.tipo = 'PROFESSOR'
         AND u.deleted_by IS NULL
         AND ($1 = '' OR u.nome ILIKE $1)
-    GROUP BY u.id_usuario, u.nome, u.email
-    ORDER BY u.id_usuario
-    LIMIT $2
-    OFFSET $3
-    `;
-
+  GROUP BY u.id_usuario, u.nome, u.email
+  ORDER BY u.id_usuario
+  LIMIT $2
+  OFFSET $3`;
     const binds = [
       data.nome ? `%${data.nome}%` : "",
       data.size,

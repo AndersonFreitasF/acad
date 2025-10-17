@@ -7,39 +7,34 @@ export class GetExercicioRepository {
   constructor(private readonly dataBaseService: DatabaseService) {}
 
   async countExercicios(data: GetExercicioDataDTO) {
-    const sql = `SELECT COUNT(DISTINCT e.id_exercicio) as total
+    const sql = `SELECT COUNT(DISTINCT e.id) as total
         FROM exercicio e
-        WHERE e.deleted_by IS NULL
-        ${data.nome ? `AND e.nome ILIKE $1` : ""}`;
+        WHERE ($1 = '' OR e.nome ILIKE $1)`;
 
-    const binds = data.nome ? [`%${data.nome}%`] : [];
+    const binds = [data.nome ? `%${data.nome}%` : ""];
     const result = await this.dataBaseService.query(sql, binds);
     return result?.rows[0]?.total ?? 0;
   }
 
   async getExercicios(data: GetExercicioDataDTO) {
-    const page = data.page || 1;
-    const size = data.size || 10;
-    
     const sql = `
     SELECT 
-        e.id_exercicio,
+        e.id,
         e.nome, 
         e.descricao,
         e.created_by,
         e.created_at
     FROM exercicio e
-    WHERE e.deleted_by IS NULL
-        AND ($1 = '' OR e.nome ILIKE $1)
-    ORDER BY e.id_exercicio
+    WHERE ($1 = '' OR e.nome ILIKE $1)
+    ORDER BY e.id
     LIMIT $2
     OFFSET $3
     `;
 
     const binds = [
       data.nome ? `%${data.nome}%` : "",
-      size,
-      (page - 1) * size,
+      data.size,
+      (data.page - 1) * data.size,
     ];
 
     const result = await this.dataBaseService.query(sql, binds);
