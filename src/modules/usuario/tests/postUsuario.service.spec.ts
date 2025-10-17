@@ -2,10 +2,12 @@ import { describe, it, expect, beforeEach, vi, Mock } from "vitest";
 import { PostUsuarioService } from "../services/postUsuario.service";
 import { InternalServerErrorException } from "@nestjs/common";
 import { UsuarioRepositoryPort } from "../application/ports/usuario-repository.port";
+import { PasswordHasherPort } from "../../auth/application/ports/password-hasher.port";
 
 describe("PostUsuarioService", () => {
   let service: PostUsuarioService;
   let mockRepository: Record<keyof UsuarioRepositoryPort, Mock>;
+  let mockPasswordHasher: Record<keyof PasswordHasherPort, Mock>;
 
   const mockData = {
     nome: "Anderson",
@@ -25,17 +27,25 @@ describe("PostUsuarioService", () => {
       deleteUsuario: vi.fn(),
     };
 
-    service = new PostUsuarioService(mockRepository as UsuarioRepositoryPort);
+    mockPasswordHasher = {
+      hash: vi.fn(),
+      verify: vi.fn(),
+    };
+
+    service = new PostUsuarioService(
+      mockRepository as UsuarioRepositoryPort,
+      mockPasswordHasher as PasswordHasherPort
+    );
     vi.clearAllMocks();
   });
 
   it("deve criar um usuário com sucesso", async () => {
     const hashedSenha = "hashed_password";
-    vi.spyOn(service, "hash").mockResolvedValue(hashedSenha);
+    mockPasswordHasher.hash.mockResolvedValue(hashedSenha);
 
     await service.execute(mockData, createdBy);
 
-    expect(service.hash).toHaveBeenCalledWith(mockData.senha);
+    expect(mockPasswordHasher.hash).toHaveBeenCalledWith(mockData.senha);
     expect(mockRepository.postUsuario).toHaveBeenCalledWith(
       { ...mockData, senha: hashedSenha },
       createdBy
@@ -44,7 +54,7 @@ describe("PostUsuarioService", () => {
 
   it("deve lançar InternalServerErrorException se ocorrer um erro", async () => {
     const hashedSenha = "hashed_password";
-    vi.spyOn(service, "hash").mockResolvedValue(hashedSenha);
+    mockPasswordHasher.hash.mockResolvedValue(hashedSenha);
 
     mockRepository.postUsuario.mockRejectedValue(new Error("DB error"));
 

@@ -7,10 +7,12 @@ import {
 } from "@nestjs/common";
 import { TokenPayload } from "src/modules/auth/interfaces/auth.interface.";
 import { UsuarioRepositoryPort } from "../application/ports/usuario-repository.port";
+import { PasswordHasherPort } from "../../auth/application/ports/password-hasher.port";
 
 describe("PutUsuarioService", () => {
   let service: PutUsuarioService;
   let mockRepository: Record<keyof UsuarioRepositoryPort, Mock>;
+  let mockPasswordHasher: Record<keyof PasswordHasherPort, Mock>;
 
   const mockData = {
     nome: "Anderson",
@@ -33,18 +35,26 @@ describe("PutUsuarioService", () => {
       putUsuario: vi.fn(),
       deleteUsuario: vi.fn(),
     };
+
+    mockPasswordHasher = {
+      hash: vi.fn(),
+      verify: vi.fn(),
+    };
     
-    service = new PutUsuarioService(mockRepository as UsuarioRepositoryPort);
+    service = new PutUsuarioService(
+      mockRepository as UsuarioRepositoryPort,
+      mockPasswordHasher as PasswordHasherPort
+    );
     vi.clearAllMocks();
   });
 
   it("deve atualizar o usuário quando ADM", async () => {
-    vi.spyOn(service, "hash").mockResolvedValue("hashed_password");
+    mockPasswordHasher.hash.mockResolvedValue("hashed_password");
     mockRepository.findUsuario.mockResolvedValue(true);
 
     await service.execute(mockData, adminUser, targetUserId);
 
-    expect(service.hash).toHaveBeenCalledWith(mockData.senha);
+    expect(mockPasswordHasher.hash).toHaveBeenCalledWith(mockData.senha);
     expect(mockRepository.putUsuario).toHaveBeenCalledWith(
       { ...mockData, senha: "hashed_password" },
       adminUser.id_usuario,
@@ -53,12 +63,12 @@ describe("PutUsuarioService", () => {
   });
 
   it("deve atualizar o próprio usuário se não for ADM", async () => {
-    vi.spyOn(service, "hash").mockResolvedValue("hashed_password");
+    mockPasswordHasher.hash.mockResolvedValue("hashed_password");
     mockRepository.findUsuario.mockResolvedValue(true);
 
     await service.execute(mockData, regularUser, targetUserId);
 
-    expect(service.hash).toHaveBeenCalledWith(mockData.senha);
+    expect(mockPasswordHasher.hash).toHaveBeenCalledWith(mockData.senha);
     expect(mockRepository.putUsuario).toHaveBeenCalledWith(
       { ...mockData, senha: "hashed_password" },
       regularUser.id_usuario,
@@ -86,7 +96,7 @@ describe("PutUsuarioService", () => {
   });
 
   it("deve lançar InternalServerErrorException se ocorrer um erro", async () => {
-    vi.spyOn(service, "hash").mockResolvedValue("hashed_password");
+    mockPasswordHasher.hash.mockResolvedValue("hashed_password");
     mockRepository.findUsuario.mockRejectedValue(new Error("DB error"));
 
     await expect(
