@@ -30,8 +30,8 @@ export class PutUsuarioRepository {
   WHERE id_usuario = $5;`;
 
     const binds = [
-      data.nome.toUpperCase() ?? null,
-      data.email.toUpperCase() ?? null,
+      data.nome ? data.nome.toUpperCase() : null,
+      data.email ? data.email.toUpperCase() : null,
       data.senha ?? null,
       update_by,
       id_usuario,

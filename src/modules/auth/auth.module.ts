@@ -33,6 +33,6 @@ import { PasswordHasherPortToken } from "./application/ports/password-hasher.por
       useClass: Argon2PasswordHasherAdapter,
     },
   ],
-  exports: [AuthService],
+  exports: [AuthService, PasswordHasherPortToken],
 })
 export class AuthModule {}

@@ -39,9 +39,11 @@ export class GetUsuarioRepository {
   OFFSET $3
 `;
 
-    const binds = data.nome 
-      ? [`%${data.nome}%`, data.size, (data.page - 1) * data.size]
-      : ["", data.size, (data.page - 1) * data.size];
+    const binds = [
+      data.nome ? `%${data.nome}%` : "",
+      data.size,
+      (data.page - 1) * data.size
+    ];
 
     const result = await this.dataBaseService.query(sql, binds);
     return result?.rows ?? [];

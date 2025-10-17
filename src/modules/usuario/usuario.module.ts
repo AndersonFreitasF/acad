@@ -9,12 +9,13 @@ import { PutUsuarioService } from "./services/putUsuario.service";
 import { PutUsuarioRepository } from "./repositories/putUsuario.repository";
 import { DeleteUsuarioService } from "./services/deleteUsuario.service";
 import { DeleteUsuarioRepository } from "./repositories/deleteUsuario.repository";
+import { AuthModule } from "../auth/auth.module";
 
 import { UsuarioRepositoryPortToken } from "./application/ports/usuario-repository.port";
 import { UsuarioRepositoryAdapter } from "./adapters/repositories/usuario.repository.adapter";
 
 @Module({
-  imports: [DatabaseModule],
+  imports: [DatabaseModule, AuthModule],
   controllers: [UsuarioController],
   providers: [
     PostUsuarioRepository,

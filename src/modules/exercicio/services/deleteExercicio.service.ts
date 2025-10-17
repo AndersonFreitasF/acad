@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Inject,
   Injectable,
   InternalServerErrorException,
@@ -8,7 +9,7 @@ import {
   ExercicioRepositoryPort,
   ExercicioRepositoryPortToken,
 } from "../application/ports/exercicio-repository.port";
-import { TokenPayload } from "src/modules/auth/interfaces/auth.interface.";
+import { TokenPayload } from "src/modules/auth/interfaces/auth.interface";
 
 @Injectable()
 export class DeleteExercicioService {
@@ -19,6 +20,11 @@ export class DeleteExercicioService {
 
   async execute(user: TokenPayload, id_exercicio: number) {
     try {
+      // Validar ID positivo
+      if (id_exercicio <= 0) {
+        throw new BadRequestException('ID inválido');
+      }
+
       const exercicioExists = await this.repo.findExercicio(id_exercicio);
 
       if (!exercicioExists) {
@@ -27,7 +33,7 @@ export class DeleteExercicioService {
 
       await this.repo.deleteExercicio(user.id_usuario, id_exercicio);
     } catch (error) {
-      if (error instanceof NotFoundException) {
+      if (error instanceof NotFoundException || error instanceof BadRequestException) {
         throw error;
       }
       throw new InternalServerErrorException(

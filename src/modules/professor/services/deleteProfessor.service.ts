@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   ForbiddenException,
   Inject,
   Injectable,
@@ -7,7 +8,7 @@ import {
 } from "@nestjs/common";
 
 import { Role } from "src/common/enum/role.enum";
-import { TokenPayload } from "src/modules/auth/interfaces/auth.interface.";
+import { TokenPayload } from "src/modules/auth/interfaces/auth.interface";
 import {
   ProfessorRepositoryPort,
   ProfessorRepositoryPortToken,
@@ -22,6 +23,11 @@ export class DeleteProfessorService {
 
   async execute(user: TokenPayload, id_usuario: number) {
     try {
+      // Validar ID positivo
+      if (id_usuario <= 0) {
+        throw new BadRequestException('ID inválido');
+      }
+
       if (user.tipo !== Role.ADM) {
         throw new ForbiddenException(
           "Acesso negado: você só pode apagar sua própria conta"
@@ -37,9 +43,7 @@ export class DeleteProfessorService {
         id_usuario
       );
     } catch (error) {
-      if (error instanceof NotFoundException) {
-        throw error;
-      } else if (error instanceof ForbiddenException) {
+      if (error instanceof NotFoundException || error instanceof ForbiddenException || error instanceof BadRequestException) {
         throw error;
       }
       throw new InternalServerErrorException(
