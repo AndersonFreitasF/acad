@@ -5,7 +5,7 @@ import {
   NotFoundException,
 } from "@nestjs/common";
 import { ExercicioRepositoryPort } from "../application/ports/exercicio-repository.port";
-import { TokenPayload } from "src/modules/auth/interfaces/auth.interface.";
+import { TokenPayload } from "../../auth/interfaces/auth.interface";
 
 describe("PutExercicioService", () => {
   let service: PutExercicioService;
