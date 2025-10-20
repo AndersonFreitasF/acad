@@ -1,0 +1,45 @@
+import { Injectable } from "@nestjs/common";
+import { DatabaseService } from "src/modules/database/services/database.service";
+import { GetTreinoDataDTO } from "../dtos/getTreinoData.dto";
+
+@Injectable()
+export class GetTreinoRepository {
+  constructor(private readonly dataBaseService: DatabaseService) {}
+
+  async countTreinos(data: GetTreinoDataDTO) {
+    const sql = `SELECT COUNT(DISTINCT t.id) as total
+        FROM treino t
+        WHERE ($1 = '' OR t.titulo ILIKE $1)`;
+
+    const binds = [data.titulo ? `%${data.titulo}%` : ""];
+    const result = await this.dataBaseService.query(sql, binds);
+    return result?.rows[0]?.total ?? 0;
+  }
+
+  async getTreinos(data: GetTreinoDataDTO) {
+    const sql = `
+    SELECT 
+        t.id,
+        t.titulo, 
+        t.descricao,
+        t.id_professor,
+        t.publico,
+        t.created_at
+    FROM treino t
+    WHERE ($1 = '' OR t.titulo ILIKE $1)
+    ORDER BY t.id
+    LIMIT $2
+    OFFSET $3
+    `;
+
+    const binds = [
+      data.titulo ? `%${data.titulo}%` : "",
+      data.size,
+      (data.page - 1) * data.size,
+    ];
+
+    const result = await this.dataBaseService.query(sql, binds);
+    return result?.rows ?? [];
+  }
+}
+
