@@ -11,5 +11,9 @@ export class PostUsuarioDataDTO {
 
   @IsString()
   @IsNotEmpty()
+  cpf: string;
+
+  @IsString()
+  @IsNotEmpty()
   senha: string;
 }

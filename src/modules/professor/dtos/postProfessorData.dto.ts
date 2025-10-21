@@ -11,5 +11,9 @@ export class PostProfessorDataDTO {
 
   @IsString()
   @IsNotEmpty()
+  cpf: string;
+
+  @IsString()
+  @IsNotEmpty()
   senha: string;
 }

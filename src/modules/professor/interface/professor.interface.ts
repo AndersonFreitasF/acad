@@ -7,6 +7,8 @@ export class Professor implements IUsuario {
 
   email: string;
 
+  cpf: string;
+
   senha: string;
 
   tipo: string;

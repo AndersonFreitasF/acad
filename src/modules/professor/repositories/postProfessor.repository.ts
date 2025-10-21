@@ -13,16 +13,18 @@ export class PostProfessorRepository {
       email, 
       senha,
       tipo,
+      cpf,
       created_by,
       created_at
       ) 
-      VALUES($1, $2, $3, 'PROFESSOR' ,$4, NOW())
+      VALUES($1, $2, $3, 'PROFESSOR' ,$4 , $5, NOW())
       `;
 
     const binds = [
       data.nome.toUpperCase(),
       data.email.toUpperCase(),
       data.senha,
+      data.cpf,
       created_by,
     ];
     await this.dataBaseService.query(sql, binds);
