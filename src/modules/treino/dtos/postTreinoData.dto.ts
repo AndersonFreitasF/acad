@@ -1,22 +1,8 @@
 import { IsNotEmpty, IsString, IsOptional, IsArray, ValidateNested, MinLength } from "class-validator";
 import { Type } from "class-transformer";
+import { ExercicioTreinoDTO } from "./exercicioTreinoData.dto";
 
-export class ExercicioTreinoDTO {
-  @IsNotEmpty()
-  id_exercicio: number;
 
-  @IsOptional()
-  @IsString()
-  series_repeticoes?: string;
-
-  @IsOptional()
-  @IsString()
-  carga?: string;
-
-  @IsOptional()
-  @IsString()
-  observacoes?: string;
-}
 
 export class PostTreinoDataDTO {
   @IsString()

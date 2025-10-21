@@ -8,6 +8,7 @@ import { GetTreinoRepository } from "../../repositories/getTreino.repository";
 import { PostTreinoRepository } from "../../repositories/postTreino.repository";
 import { PutTreinoRepository } from "../../repositories/putTreino.repository";
 import { DeleteTreinoRepository } from "../../repositories/deleteTreino.repository";
+import { ExercicioTreinoDTO } from "../../dtos/exercicioTreinoData.dto";
 
 @Injectable()
 export class TreinoRepositoryAdapter implements TreinoRepositoryPort {
@@ -48,7 +49,7 @@ export class TreinoRepositoryAdapter implements TreinoRepositoryPort {
     return;
   }
 
-  async addExercicio(exercicio: any, treino_id: number, ordem: number): Promise<void> {
+  async addExercicio(exercicio: ExercicioTreinoDTO, treino_id: number, ordem: number): Promise<void> {
     await this.putRepo.addExercicio(exercicio, treino_id, ordem);
     return;
   }

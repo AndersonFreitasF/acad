@@ -1,6 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { DatabaseService } from "src/modules/database/services/database.service";
 import { PutTreinoDataDTO } from "../dtos/putTreinoData.dto";
+import { ExercicioTreinoDTO } from "../dtos/exercicioTreinoData.dto";
 
 @Injectable()
 export class PutTreinoRepository {
@@ -44,7 +45,7 @@ export class PutTreinoRepository {
     await this.dataBaseService.query(sql, binds);
   }
 
-  async addExercicio(exercicio: any, treino_id: number, ordem: number) {
+  async addExercicio(exercicio: ExercicioTreinoDTO, treino_id: number, ordem: number) {
     const sql = `INSERT INTO treino_exercicios(
       treino_id,
       exercicio_id,
