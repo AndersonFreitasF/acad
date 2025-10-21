@@ -47,6 +47,7 @@ src/
 ## Módulos Implementados
 
 ### Auth Module
+
 - **Funcionalidade**: Autenticação e autorização
 - **Endpoints**:
   - `POST /auth/login` - Login de usuários
@@ -54,6 +55,7 @@ src/
 - **Guards**: JwtAuthGuard para proteção de rotas
 
 ### Usuario Module
+
 - **Funcionalidade**: Gestão completa de usuários
 - **Endpoints**:
   - `POST /usuario` - Criar usuário (ADM)
@@ -64,6 +66,7 @@ src/
 - **Campos**: nome, email, senha, tipo, perfilAtivo
 
 ### Professor Module
+
 - **Funcionalidade**: Gestão específica de professores
 - **Endpoints**:
   - `POST /professor` - Criar professor (ADM)
@@ -73,6 +76,7 @@ src/
 - **Permissões**: Apenas ADM pode criar/deletar professores
 
 ### Exercicio Module
+
 - **Funcionalidade**: Cadastro e gerenciamento de exercícios
 - **Endpoints**:
   - `POST /exercicio` - Criar exercício (PROFESSOR)
@@ -82,12 +86,14 @@ src/
 - **Campos**: nome, descrição
 
 ### Database Module
+
 - **Funcionalidade**: Conexão e operações com PostgreSQL
 - **Features**: Pool de conexões, health check, operações CRUD genéricas
 
 ## Módulos Planejados (A Implementar)
 
 ### Treino Module
+
 - **Funcionalidade**: Criação e gerenciamento de treinos para alunos
 - **Endpoints Planejados**:
   - `POST /treino` - Criar treino (PROFESSOR)
@@ -100,6 +106,7 @@ src/
   - Histórico de treinos por aluno
 
 ### Pagamento Module
+
 - **Funcionalidade**: Integração com API externa para processamento de pagamentos
 - **Endpoints Planejados**:
   - `POST /pagamento` - Processar pagamento
@@ -112,6 +119,7 @@ src/
   - Notificações de pagamento
 
 ### Microserviço de Desativação
+
 - **Funcionalidade**: Serviço automatizado para desativar perfis inativos
 - **Características**:
   - Análise de tempo de inatividade dos usuários
@@ -123,6 +131,7 @@ src/
 ## Roles e Permissões
 
 ### ADM (Administrador)
+
 - **Acesso**: Completo ao sistema
 - **Permissões**:
   - Criar, listar, atualizar e deletar usuários
@@ -130,6 +139,7 @@ src/
   - Acesso a relatórios e métricas
 
 ### PROFESSOR
+
 - **Acesso**: Gerenciamento de exercícios e treinos
 - **Permissões**:
   - Criar, editar e deletar exercícios
@@ -137,6 +147,7 @@ src/
   - Visualizar alunos associados
 
 ### ALUNO
+
 - **Acesso**: Visualização de treinos e exercícios
 - **Permissões**:
   - Visualizar treinos atribuídos
@@ -146,11 +157,13 @@ src/
 ## Configuração e Execução
 
 ### Pré-requisitos
+
 - Node.js 20+
 - PostgreSQL
 - Docker (opcional)
 
 ### Variáveis de Ambiente
+
 Crie um arquivo `.env` na pasta `env/`:
 
 ```env
@@ -176,6 +189,7 @@ PORT=3000
 ### Instalação e Execução
 
 #### Desenvolvimento
+
 ```bash
 # Instalar dependências
 npm install
@@ -191,6 +205,7 @@ npm run test:cov
 ```
 
 #### Produção com Docker
+
 ```bash
 # Build da imagem
 npm run docker:build
@@ -203,6 +218,7 @@ docker-compose up
 ```
 
 ### Scripts Disponíveis
+
 - `npm run build` - Build da aplicação
 - `npm run start` - Iniciar aplicação
 - `npm run start:dev` - Iniciar em modo desenvolvimento
@@ -218,6 +234,7 @@ docker-compose up
 O projeto utiliza **Vitest** para testes unitários com cobertura de código.
 
 ### Executar Testes
+
 ```bash
 # Todos os testes
 npm test
@@ -233,6 +250,7 @@ npm run test:debug
 ```
 
 ### Estrutura de Testes
+
 ```
 src/modules/[module]/tests/
 ├── [service].service.spec.ts
@@ -241,6 +259,7 @@ src/modules/[module]/tests/
 ## Status do Projeto
 
 ### Implementado
+
 - [x] Autenticação e autorização
 - [x] Gestão de usuários
 - [x] Gestão de professores
@@ -251,45 +270,52 @@ src/modules/[module]/tests/
 - [x] Gestão de treinos
 
 ### Em Desenvolvimento
+
 - [ ] Módulo de pagamentos
 - [ ] Microserviço de desativação
 
 ### Planejado
+
 - [ ] API de relatórios
 - [ ] Notificações por email
 - [ ] Dashboard administrativo
 - [ ] API de métricas
+- [ ] Frontend em React
 
 ## API Endpoints
 
 ### Autenticação
-| Método | Endpoint | Descrição | Roles |
-|--------|----------|-----------|-------|
-| POST | `/auth/login` | Login de usuário | Todos |
+
+| Método | Endpoint      | Descrição        | Roles |
+| ------ | ------------- | ---------------- | ----- |
+| POST   | `/auth/login` | Login de usuário | Todos |
 
 ### Usuários
-| Método | Endpoint | Descrição | Roles |
-|--------|----------|-----------|-------|
-| POST | `/usuario` | Criar usuário | ADM |
-| GET | `/usuario` | Listar usuários | ADM |
-| PUT | `/usuario/update/:id` | Atualizar usuário | ALUNO, ADM |
-| DELETE | `/usuario/delete/:id` | Deletar usuário | ADM, ALUNO |
+
+| Método | Endpoint              | Descrição         | Roles      |
+| ------ | --------------------- | ----------------- | ---------- |
+| POST   | `/usuario`            | Criar usuário     | ADM        |
+| GET    | `/usuario`            | Listar usuários   | ADM        |
+| PUT    | `/usuario/update/:id` | Atualizar usuário | ALUNO, ADM |
+| DELETE | `/usuario/delete/:id` | Deletar usuário   | ADM, ALUNO |
 
 ### Professores
-| Método | Endpoint | Descrição | Roles |
-|--------|----------|-----------|-------|
-| POST | `/professor` | Criar professor | ADM |
-| GET | `/professor` | Listar professores | ADM |
-| PUT | `/professor/update/:id` | Atualizar professor | ADM, PROFESSOR |
-| DELETE | `/professor/delete/:id` | Deletar professor | ADM |
+
+| Método | Endpoint                | Descrição           | Roles          |
+| ------ | ----------------------- | ------------------- | -------------- |
+| POST   | `/professor`            | Criar professor     | ADM            |
+| GET    | `/professor`            | Listar professores  | ADM            |
+| PUT    | `/professor/update/:id` | Atualizar professor | ADM, PROFESSOR |
+| DELETE | `/professor/delete/:id` | Deletar professor   | ADM            |
 
 ### Exercícios
-| Método | Endpoint | Descrição | Roles |
-|--------|----------|-----------|-------|
-| POST | `/exercicio` | Criar exercício | PROFESSOR |
-| GET | `/exercicio` | Listar exercícios | PROFESSOR |
-| PUT | `/exercicio/update/:id` | Atualizar exercício | PROFESSOR |
-| DELETE | `/exercicio/delete/:id` | Deletar exercício | PROFESSOR |
+
+| Método | Endpoint                | Descrição           | Roles     |
+| ------ | ----------------------- | ------------------- | --------- |
+| POST   | `/exercicio`            | Criar exercício     | PROFESSOR |
+| GET    | `/exercicio`            | Listar exercícios   | PROFESSOR |
+| PUT    | `/exercicio/update/:id` | Atualizar exercício | PROFESSOR |
+| DELETE | `/exercicio/delete/:id` | Deletar exercício   | PROFESSOR |
 
 ## Contribuição
 
@@ -298,7 +324,6 @@ src/modules/[module]/tests/
 3. Commit suas mudanças (`git commit -m 'Criando uma feature'`)
 4. Push para a branch (`git push origin feature/Feature`)
 5. Abra um Pull Request
-
 
 ## Equipe
 
