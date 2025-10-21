@@ -1,6 +1,13 @@
-import { IsOptional, IsString, IsBoolean, IsArray, ValidateNested, MinLength } from "class-validator";
+import {
+  IsOptional,
+  IsString,
+  IsBoolean,
+  IsArray,
+  ValidateNested,
+  MinLength,
+} from "class-validator";
 import { Type } from "class-transformer";
-import { ExercicioTreinoDTO } from "./postTreinoData.dto";
+import { ExercicioTreinoDTO } from "./exercicioTreinoData.dto";
 
 export class PutTreinoDataDTO {
   @IsString()
@@ -22,4 +29,3 @@ export class PutTreinoDataDTO {
   @Type(() => ExercicioTreinoDTO)
   exercicios?: ExercicioTreinoDTO[];
 }
-
