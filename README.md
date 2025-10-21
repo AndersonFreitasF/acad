@@ -159,14 +159,14 @@ DB_HOST=localhost
 DB_PORT=5432
 DB_NAME=acad_db
 DB_USER=postgres
-DB_PASSWORD=your_password
+DB_PASSWORD=sua_senha
 DB_SSL=false
 DB_POOL_MAX=20
 DB_IDLE_TIMEOUT=30000
 DB_CONNECTION_TIMEOUT=2000
 
 # JWT
-JWT_SECRET=your-super-secret-jwt-key
+JWT_SECRET=sua_senha_jwt
 
 # Server
 NODE_ENV=development
@@ -236,7 +236,6 @@ npm run test:debug
 ```
 src/modules/[module]/tests/
 ├── [service].service.spec.ts
-└── [repository].repository.spec.ts
 ```
 
 ## Status do Projeto
@@ -249,9 +248,9 @@ src/modules/[module]/tests/
 - [x] Configuração de banco de dados
 - [x] Testes unitários
 - [x] Dockerização
+- [x] Gestão de treinos
 
 ### Em Desenvolvimento
-- [ ] Módulo de treinos
 - [ ] Módulo de pagamentos
 - [ ] Microserviço de desativação
 
@@ -295,19 +294,16 @@ src/modules/[module]/tests/
 ## Contribuição
 
 1. Fork o projeto
-2. Crie uma branch para sua feature (`git checkout -b feature/AmazingFeature`)
-3. Commit suas mudanças (`git commit -m 'Add some AmazingFeature'`)
-4. Push para a branch (`git push origin feature/AmazingFeature`)
+2. Crie uma branch para sua feature (`git checkout -b feature/Feature`)
+3. Commit suas mudanças (`git commit -m 'Criando uma feature'`)
+4. Push para a branch (`git push origin feature/Feature`)
 5. Abra um Pull Request
 
-## Licença
-
-Este projeto está sob a licença MIT. Veja o arquivo `LICENSE` para mais detalhes.
 
 ## Equipe
 
-- **Desenvolvedor Principal**: [Seu Nome]
-- **Email**: [seu.email@exemplo.com]
+- **Desenvolvedor Principal**: [Anderson Freires de Freitas]
+- **Email**: [andffreires@gmail.com]
 
 ---
 
