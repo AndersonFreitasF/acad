@@ -6,7 +6,7 @@ import {
 import { CreateCostumerAsaasDTO } from "../dtos/CreateCostumerAsaasData.dto";
 
 @Injectable()
-export class PostPagamentoService {
+export class PostCostumerAsaasService {
   constructor(
     @Inject(PagamentoRepositoryPortToken)
     private readonly pagamentoRepository: PagamentoRepositoryPort

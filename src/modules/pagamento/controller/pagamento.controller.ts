@@ -1,12 +1,14 @@
 import { Body, Controller, Post } from "@nestjs/common";
-import { PostPagamentoService } from "../services/postPagamento.service";
+import { PostCostumerAsaasService } from "../services/postCostumerAsaas.service";
 import { CreateCostumerAsaasDTO } from "../dtos/CreateCostumerAsaasData.dto";
 
 @Controller("pagamento")
 export class PagamentoController {
-  constructor(private readonly postPagamentoService: PostPagamentoService) {}
+  constructor(
+    private readonly postCostumerAsaasService: PostCostumerAsaasService
+  ) {}
   @Post("cliente")
   async postCliente(@Body() data: CreateCostumerAsaasDTO) {
-    return await this.postPagamentoService.postCostumer(data);
+    return await this.postCostumerAsaasService.postCostumer(data);
   }
 }

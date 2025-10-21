@@ -17,4 +17,3 @@ export interface UsuarioRepositoryPort {
   ): Promise<void>;
   deleteUsuario(executedBy: number, idUsuario: number): Promise<void>;
 }
-

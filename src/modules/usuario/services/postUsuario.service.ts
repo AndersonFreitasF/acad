@@ -1,11 +1,17 @@
-import { Inject, Injectable, InternalServerErrorException } from "@nestjs/common";
+import {
+  Inject,
+  Injectable,
+  InternalServerErrorException,
+} from "@nestjs/common";
 import { PostUsuarioDataDTO } from "../dtos/postUsuarioData.dto";
 import {
   UsuarioRepositoryPort,
   UsuarioRepositoryPortToken,
 } from "../application/ports/usuario-repository.port";
-import { PasswordHasherPort, PasswordHasherPortToken } from "../../auth/application/ports/password-hasher.port";
-
+import {
+  PasswordHasherPort,
+  PasswordHasherPortToken,
+} from "../../auth/application/ports/password-hasher.port";
 @Injectable()
 export class PostUsuarioService {
   constructor(
@@ -27,5 +33,4 @@ export class PostUsuarioService {
       );
     }
   }
-
 }
