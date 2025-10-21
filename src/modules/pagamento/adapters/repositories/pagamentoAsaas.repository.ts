@@ -23,7 +23,7 @@ export class PagamentoRepositoryAdapter implements PagamentoRepositoryPort {
 
   async getDadosUsuario(
     id_usuario: number
-  ): Promise<{ name: string; CpfCnpj: string; email: string }> {
+  ): Promise<{ name: string; cpfCnpj: string; email: string }> {
     return await this.postCostumerRepo.getDadosUsuario(id_usuario);
   }
 }

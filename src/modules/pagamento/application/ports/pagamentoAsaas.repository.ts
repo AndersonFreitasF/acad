@@ -5,5 +5,5 @@ export interface PagamentoRepositoryPort {
   postCustomer(data: CreateCostumerAsaasDTO): Promise<any>;
   getDadosUsuario(
     id_usuario: number
-  ): Promise<{ name: string; CpfCnpj: string; email: string }>;
+  ): Promise<{ name: string; cpfCnpj: string; email: string }>;
 }

@@ -7,10 +7,10 @@ export class postCostumerAsaasRepository {
 
   async getDadosUsuario(
     id_usuario: number
-  ): Promise<{ name: string; CpfCnpj: string; email: string }> {
+  ): Promise<{ name: string; cpfCnpj: string; email: string }> {
     const sql = `SELECT NOME as name
         email,
-        cpf as CpfCnpj
+        cpf as cpfCnpj
         FROM usuario where id_usuario = $1`;
     const binds = [id_usuario];
 

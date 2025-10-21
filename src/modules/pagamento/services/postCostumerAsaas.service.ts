@@ -12,11 +12,14 @@ export class PostCostumerAsaasService {
     private readonly pagamentoRepository: PagamentoRepositoryPort
   ) {}
 
-  async postCostumer(data: CreateCostumerAsaasDTO, id_usuario: number) {
+  async postCostumer(id_usuario: number) {
     const dadosUsuario =
       await this.pagamentoRepository.getDadosUsuario(id_usuario);
-    ((data.email = dadosUsuario.email), (data.cpfCnpj = dadosUsuario.CpfCnpj));
-    data.name = dadosUsuario.name;
+    const data: CreateCostumerAsaasDTO = {
+      email: dadosUsuario.email,
+      cpfCnpj: dadosUsuario.cpfCnpj,
+      name: dadosUsuario.name,
+    };
 
     return await this.pagamentoRepository.postCustomer(data);
   }
