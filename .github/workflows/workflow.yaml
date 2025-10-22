@@ -1,32 +1,40 @@
 name: CI
 
-
 on:
   push:
-    branches: [ main ]
 
 jobs:
-  test:
-
+  compiling:
     runs-on: ubuntu-latest
-    
-    steps:
 
+    permissions:
+      contents: write
+
+    steps:
       - name: Get code
         uses: actions/checkout@v4
-      
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Setup Node.js
         uses: actions/setup-node@v5
-        with: 
+        with:
           node-version: 22
-  
+
       - name: Install packages
-        run: npm install
-      
-    
+        run: npm ci
+
       - name: Build project
         run: npm run build
-  
+
       - name: Run tests
         run: npm run test
+
+      - name: Run ESLint with auto fix
+        run: npx eslint "src/**/*.{ts,tsx}" --fix
+
+      - name: Commit & Push changes
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore: auto-fix lint issues"
+          branch: ${{ github.ref_name }}
