@@ -18,3 +18,8 @@ export interface AsaasCustomerData {
   cpfCnpj: string;
 }
 
+export interface AsaasPaymentResponse {
+  id: string;
+  status: string;
+}
+
