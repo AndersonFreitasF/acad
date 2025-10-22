@@ -23,11 +23,22 @@ export class PostPagamentoAsaasService {
       );
     }
 
-    return this.pagamentoRepository.postPagamento({
+    const Pagamento = await this.pagamentoRepository.postPagamento({
       customerId,
       value: data.value,
       billingType: data.billingType,
       description: data.description ?? "Pagamento gerado pelo sistema",
     });
+
+  
+    await this.pagamentoRepository.savePagamento(
+      id_usuario,
+      Pagamento.id,
+      data.value,
+      data.billingType,
+      Pagamento.status
+    );
+
+    return Pagamento;
   }
 }
