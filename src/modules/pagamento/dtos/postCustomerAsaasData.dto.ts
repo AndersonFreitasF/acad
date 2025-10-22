@@ -1,12 +1,11 @@
 import {
   IsEmail,
   IsNotEmpty,
-  IsOptional,
   IsString,
   Length,
 } from "class-validator";
 
-export class CreateCostumerAsaasDTO {
+export class PostCustomerAsaasDataDTO {
   @IsNotEmpty()
   @IsString()
   name: string;
@@ -17,8 +16,5 @@ export class CreateCostumerAsaasDTO {
   @IsNotEmpty()
   @Length(11, 14)
   cpfCnpj: string;
-
-  @IsOptional()
-  @IsString()
-  phone?: string;
 }
+
