@@ -4,6 +4,7 @@ import { PostCustomerAsaasDataDTO } from "../../dtos/postCustomerAsaasData.dto";
 import {
   AsaasCustomerResponse,
   AsaasCustomerData,
+  AsaasPaymentResponse,
 } from "../../interface/asaas.interface";
 import { PostCustomerAsaasRepository } from "../../repositories/postCustomerAsaas.repository";
 import { PostPagamentoAsaasRepository } from "../../repositories/postPagamentoAsaas.repository";
@@ -53,7 +54,7 @@ export class PagamentoRepositoryAdapter implements PagamentoRepositoryPort {
   }
 
   // --- Criar pagamento ---
-  async postPagamento(data: PostPagamentoAsaasDataDTO): Promise<any> {
+  async postPagamento(data: PostPagamentoAsaasDataDTO): Promise<AsaasPaymentResponse> {
     try {
       const response = await fetch(`${this.asaasApiUrl}/payments`, {
         method: "POST",
@@ -78,7 +79,13 @@ export class PagamentoRepositoryAdapter implements PagamentoRepositoryPort {
         );
       }
 
-      return await response.json();
+      const asaasResponse = await response.json();
+      
+      // Return structured response with id and status as "PENDENTE"
+      return {
+        id: asaasResponse.id,
+        status: "PENDENTE"
+      };
     } catch (error) {
       if (error instanceof HttpException) throw error;
       throw new HttpException(
