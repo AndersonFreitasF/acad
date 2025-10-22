@@ -1,20 +1,22 @@
 import { Injectable } from "@nestjs/common";
 import { DatabaseService } from "src/modules/database/services/database.service";
+import { AsaasCustomerData } from "../interface/asaas.interface";
 
 @Injectable()
-export class postCostumerAsaasRepository {
+export class PostCustomerAsaasRepository {
   constructor(private readonly dataBaseService: DatabaseService) {}
 
   async getDadosUsuario(
     id_usuario: number
-  ): Promise<{ name: string; cpfCnpj: string; email: string }> {
-    const sql = `SELECT NOME as name
+  ): Promise<AsaasCustomerData | null> {
+    const sql = `SELECT nome AS name,
         email,
-        cpf as cpfCnpj
-        FROM usuario where id_usuario = $1`;
+        cpf AS cpfCnpj
+        FROM usuario WHERE id_usuario = $1`;
     const binds = [id_usuario];
 
     const result = await this.dataBaseService.query(sql, binds);
-    return result?.rows[0] ?? [];
+    return result?.rows[0] ?? null;
   }
 }
+
