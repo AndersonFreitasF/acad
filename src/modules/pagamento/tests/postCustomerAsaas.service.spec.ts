@@ -1,5 +1,8 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
-import { NotFoundException, InternalServerErrorException } from "@nestjs/common";
+import {
+  NotFoundException,
+  InternalServerErrorException,
+} from "@nestjs/common";
 import { PostCustomerAsaasService } from "../services/postCustomerAsaas.service";
 import { PagamentoRepositoryPort } from "../application/ports/pagamento-repository.port";
 
@@ -11,6 +14,9 @@ describe("PostCustomerAsaasService", () => {
     mockRepo = {
       getDadosUsuario: vi.fn(),
       postCustomer: vi.fn(),
+      vincularCustomerId: vi.fn(),
+      postPagamento: vi.fn(),
+      savePagamento: vi.fn(),
     };
 
     service = new PostCustomerAsaasService(mockRepo);
@@ -50,7 +56,9 @@ describe("PostCustomerAsaasService", () => {
       vi.spyOn(mockRepo, "getDadosUsuario").mockResolvedValue(null);
 
       await expect(service.execute(999)).rejects.toThrow(NotFoundException);
-      await expect(service.execute(999)).rejects.toThrow("Usuário não encontrado");
+      await expect(service.execute(999)).rejects.toThrow(
+        "Usuário não encontrado"
+      );
 
       expect(mockRepo.getDadosUsuario).toHaveBeenCalledWith(999);
       expect(mockRepo.postCustomer).not.toHaveBeenCalled();
@@ -87,4 +95,3 @@ describe("PostCustomerAsaasService", () => {
     });
   });
 });
-
