@@ -1,13 +1,17 @@
 import { Module } from "@nestjs/common";
 import { PagamentoController } from "./controller/pagamento.controller";
-import { PostCostumerAsaasService } from "./services/postCostumerAsaas.service";
-import { PagamentoRepositoryAdapter } from "./adapters/repositories/pagamentoAsaas.repository";
-import { PagamentoRepositoryPortToken } from "./application/ports/pagamentoAsaas.repository";
+import { PostCustomerAsaasService } from "./services/postCustomerAsaas.service";
+import { PagamentoRepositoryAdapter } from "./adapters/repositories/pagamento.repository.adapter";
+import { PagamentoRepositoryPortToken } from "./application/ports/pagamento-repository.port";
+import { PostCustomerAsaasRepository } from "./repositories/postCustomerAsaas.repository";
+import { DatabaseModule } from "../database/database.module";
 
 @Module({
+  imports: [DatabaseModule],
   controllers: [PagamentoController],
   providers: [
-    PostCostumerAsaasService,
+    PostCustomerAsaasService,
+    PostCustomerAsaasRepository,
     {
       provide: PagamentoRepositoryPortToken,
       useClass: PagamentoRepositoryAdapter,
