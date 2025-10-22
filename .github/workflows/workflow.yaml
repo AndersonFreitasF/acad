@@ -6,6 +6,7 @@ on:
 jobs:
   compiling:
     runs-on: ubuntu-latest
+
     permissions:
       contents: write
 
@@ -20,7 +21,7 @@ jobs:
         with:
           node-version: 22
 
-      - name: Install dependencies
+      - name: Install packages
         run: npm ci
 
       - name: Build project
@@ -28,15 +29,3 @@ jobs:
 
       - name: Run tests
         run: npm run test
-
-      - name: Install remover
-        run: npm install -g ts-remove-unused-imports
-
-      - name: Remove unused imports
-        run: ts-remove-unused-imports "src/**/*.ts"
-
-      - name: Commit & Push changes
-        uses: stefanzweifel/git-auto-commit-action@v5
-        with:
-          commit_message: "chore: remove unused imports"
-          branch: ${{ github.ref_name }}
