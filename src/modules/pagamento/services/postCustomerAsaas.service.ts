@@ -1,4 +1,9 @@
-import { Inject, Injectable, InternalServerErrorException, NotFoundException } from "@nestjs/common";
+import {
+  Inject,
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from "@nestjs/common";
 import {
   PagamentoRepositoryPort,
   PagamentoRepositoryPortToken,
@@ -15,19 +20,24 @@ export class PostCustomerAsaasService {
 
   async execute(id_usuario: number): Promise<AsaasCustomerResponse> {
     try {
-      const dadosUsuario = await this.pagamentoRepository.getDadosUsuario(id_usuario);
-      
+      const dadosUsuario =
+        await this.pagamentoRepository.getDadosUsuario(id_usuario);
+
       if (!dadosUsuario) {
         throw new NotFoundException("Usuário não encontrado");
       }
 
-      const data: PostCustomerAsaasDataDTO = {
+      const Customer = await this.pagamentoRepository.postCustomer({
         email: dadosUsuario.email,
         cpfCnpj: dadosUsuario.cpfCnpj,
         name: dadosUsuario.name,
-      };
+      });
+      await this.pagamentoRepository.vincularCustomerId(
+        id_usuario,
+        Customer.id
+      );
 
-      return await this.pagamentoRepository.postCustomer(data);
+      return Customer;
     } catch (error) {
       if (error instanceof NotFoundException) {
         throw error;
@@ -38,4 +48,3 @@ export class PostCustomerAsaasService {
     }
   }
 }
-
