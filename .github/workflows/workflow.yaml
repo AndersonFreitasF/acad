@@ -21,7 +21,7 @@ jobs:
           node-version: 22
 
       - name: Install dependencies
-        run: npm ci
+        run: npm i
 
       - name: Build project
         run: npm run build
@@ -30,7 +30,9 @@ jobs:
         run: npm run test
 
       - name: Remove unused imports
-        run: npx ts-unused-exports tsconfig.json --remove-unused-imports
+        run: |
+          npm install -g ts-prune ts-prune-fix
+          npx ts-prune-fix
 
       - name: Commit & Push changes
         uses: stefanzweifel/git-auto-commit-action@v5
