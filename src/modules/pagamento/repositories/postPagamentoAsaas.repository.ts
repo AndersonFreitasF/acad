@@ -27,4 +27,17 @@ export class PostPagamentoAsaasRepository {
     const binds = [id_usuario, id_pagamento, valor, tipo, status];
     await this.databaseService.query(sql, binds);
   }
+
+  async getPagamentoById(id_pagamento: number): Promise<{ id_pagamento_asaas: string } | null> {
+    const sql = `SELECT id_pagamento_asaas FROM pagamento WHERE id = $1`;
+    const binds = [id_pagamento];
+    const result = await this.databaseService.query(sql, binds);
+    return result?.rows[0] ?? null;
+  }
+
+  async updatePagamentoStatus(id_pagamento: number, status: string): Promise<void> {
+    const sql = `UPDATE pagamento SET status = $1, updated_at = NOW() WHERE id = $2`;
+    const binds = [status, id_pagamento];
+    await this.databaseService.query(sql, binds);
+  }
 }
