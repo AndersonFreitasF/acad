@@ -23,3 +23,9 @@ export interface AsaasPaymentResponse {
   status: string;
 }
 
+export interface AsaasPixQrCodeResponse {
+  encodedImage: string;
+  payload: string;
+  expirationDate: string;
+}
+
