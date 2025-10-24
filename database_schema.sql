@@ -184,3 +184,4 @@ COMMENT ON COLUMN pagamento.tipo IS 'Payment method: BOLETO, PIX, or CREDIT_CARD
 COMMENT ON COLUMN pagamento.status IS 'Payment status: PENDENTE, PAGO, CANCELADO, etc.';
 
 
+
