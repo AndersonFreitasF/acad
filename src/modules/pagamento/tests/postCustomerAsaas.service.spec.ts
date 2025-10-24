@@ -17,6 +17,10 @@ describe("PostCustomerAsaasService", () => {
       vincularCustomerId: vi.fn(),
       postPagamento: vi.fn(),
       savePagamento: vi.fn(),
+      payPayment: vi.fn(),
+      getPagamentoById: vi.fn(),
+      updatePagamentoStatus: vi.fn(),
+      getPixQrCode: vi.fn(),
     };
 
     service = new PostCustomerAsaasService(mockRepo);
