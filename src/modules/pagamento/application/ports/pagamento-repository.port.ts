@@ -1,9 +1,11 @@
 import { PostCustomerAsaasDataDTO } from "../../dtos/postCustomerAsaasData.dto";
 import { PostPagamentoAsaasDataDTO } from "../../dtos/postPagamentoAsaasData.dto";
+import { PostPagarDataDTO } from "../../dtos/postPagarData.dto";
 import {
   AsaasCustomerResponse,
   AsaasCustomerData,
   AsaasPaymentResponse,
+  AsaasPixQrCodeResponse,
 } from "../../interface/asaas.interface";
 
 export const PagamentoRepositoryPortToken = "PagamentoRepositoryPort" as const;
@@ -20,4 +22,8 @@ export interface PagamentoRepositoryPort {
     tipo: string,
     status: string
   ): Promise<void>;
+  payPayment(data: PostPagarDataDTO): Promise<AsaasPaymentResponse>;
+  getPagamentoById(id_pagamento: number): Promise<{ id_pagamento_asaas: string } | null>;
+  updatePagamentoStatus(id_pagamento: number, status: string): Promise<void>;
+  getPixQrCode(id_pagamento_asaas: string): Promise<AsaasPixQrCodeResponse>;
 }
