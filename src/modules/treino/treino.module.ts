@@ -31,4 +31,3 @@ import { TreinoRepositoryPortToken } from "./application/ports/treino-repository
   ],
 })
 export class TreinoModule {}
-

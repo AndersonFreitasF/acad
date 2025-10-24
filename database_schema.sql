@@ -185,3 +185,19 @@ COMMENT ON COLUMN pagamento.status IS 'Payment status: PENDENTE, PAGO, CANCELADO
 
 
 
+-- ===========================================
+-- GETTING STARTED
+--============================================
+INSERT INTO usuario (
+    nome,
+    email,
+    senha ,
+    tipo, 
+    cpf 
+) VALUES(
+    ADMIN,
+    'admin@gmail.com',
+    '1234',
+    'ADMIN',
+    123
+);
