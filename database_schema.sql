@@ -108,6 +108,18 @@ CREATE TABLE pagamento (
 );
 
 -- =============================================
+-- 8. TREINO_PAGAMENTO TABLE (Join table between treino and pagamento)
+-- =============================================
+CREATE TABLE treino_pagamento (
+    id SERIAL PRIMARY KEY,
+    id_treino INTEGER NOT NULL REFERENCES treino(id) ON DELETE CASCADE,
+    id_pagamento INTEGER NOT NULL REFERENCES pagamento(id) ON DELETE CASCADE,
+    created_at TIMESTAMP DEFAULT NOW(),
+    UNIQUE(id_treino, id_pagamento)
+);
+
+
+-- =============================================
 -- INDEXES FOR PERFORMANCE
 -- =============================================
 
@@ -143,6 +155,9 @@ CREATE INDEX idx_pagamento_usuario ON pagamento(id_usuario);
 CREATE INDEX idx_pagamento_asaas_id ON pagamento(id_pagamento_asaas);
 CREATE INDEX idx_pagamento_status ON pagamento(status);
 CREATE INDEX idx_pagamento_created_at ON pagamento(created_at);
+
+CREATE INDEX idx_treino_pagamento_treino ON treino_pagamento(id_treino);
+CREATE INDEX idx_treino_pagamento_pagamento ON treino_pagamento(id_pagamento);
 
 -- =============================================
 -- TRIGGERS FOR UPDATED_AT TIMESTAMPS
