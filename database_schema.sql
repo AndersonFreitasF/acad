@@ -59,7 +59,7 @@ CREATE TABLE treino_exercicios (
     id SERIAL PRIMARY KEY,
     treino_id INTEGER NOT NULL REFERENCES treino(id) ON DELETE CASCADE,
     exercicio_id INTEGER NOT NULL REFERENCES exercicio(id),
-    series_repeticoes VARCHAR(100), -
+    series_repeticoes VARCHAR(100),
     carga DECIMAL(10,2),
     observacoes TEXT,
     ordem INTEGER NOT NULL, 
@@ -210,9 +210,9 @@ INSERT INTO usuario (
     tipo, 
     cpf 
 ) VALUES(
-    ADMIN,
-    'admin@gmail.com',
-    '1234',
-    'ADMIN',
-    123
+    'Administrator',
+    'admin@example.com',
+    'changeme',
+    'ADM',
+    '00000000000'
 );

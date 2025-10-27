@@ -3,6 +3,7 @@ import {
   OnModuleInit,
   OnModuleDestroy,
   Inject,
+  Logger,
 } from "@nestjs/common";
 import { ConfigType } from "@nestjs/config";
 import { Pool, PoolClient, QueryResult } from "pg";
@@ -17,6 +18,7 @@ export class DatabaseService
   private client: PoolClient | null = null;
   private transactionClient: PoolClient | null = null;
   private isTransaction: boolean = false;
+  private readonly logger = new Logger(DatabaseService.name);
 
   constructor(
     @Inject(databaseConfig.KEY)
@@ -54,11 +56,11 @@ export class DatabaseService
       const result = await client.query(
         "SELECT NOW() as current_time, current_database() as database_name"
       );
-      console.log("Database conectada com sucesso!");
-      console.log("Database:", result.rows[0].database_name);
-      console.log("Server time:", result.rows[0].current_time);
+      this.logger.log("Database conectada com sucesso!");
+      this.logger.debug(`Database: ${result.rows[0].database_name}`);
+      this.logger.debug(`Server time: ${result.rows[0].current_time}`);
     } catch (error) {
-      console.error("Falha ao conectar na database:", error);
+      this.logger.error("Falha ao conectar na database:", error as any);
       throw error;
     } finally {
       if (client) {
@@ -98,13 +100,15 @@ export class DatabaseService
         client = await this.connect();
       }
 
-      console.log("Executando query:", sql);
-      console.log("Parametros:", params);
+      if (process.env.NODE_ENV !== "production") {
+        this.logger.debug(`Executando query: ${sql}`);
+        this.logger.debug(`Parametros: ${JSON.stringify(params)}`);
+      }
 
       const result = await client.query(sql, params);
       return result;
     } catch (error) {
-      console.error("Erro na query:", error);
+      this.logger.error("Erro na query:", error as any);
       throw error;
     } finally {
       if (!this.isTransaction && client && client !== this.transactionClient) {
@@ -122,17 +126,17 @@ export class DatabaseService
       this.isTransaction = true;
       this.transactionClient = client;
 
-      console.log("Transacao iniciada");
+      this.logger.debug("Transacao iniciada");
 
       const result = await callback(this);
 
       await client.query("COMMIT");
-      console.log("Transacao commitada");
+      this.logger.debug("Transacao commitada");
 
       return result;
     } catch (error) {
       await client.query("ROLLBACK");
-      console.error("Transacao deu rollback:", error);
+      this.logger.error("Transacao deu rollback:", error as any);
       throw error;
     } finally {
       this.isTransaction = false;
@@ -149,7 +153,7 @@ export class DatabaseService
     this.transactionClient = await this.pool.connect();
     await this.transactionClient.query("BEGIN");
     this.isTransaction = true;
-    console.log("Transacao iniciada manualmente");
+    this.logger.debug("Transacao iniciada manualmente");
   }
 
   async commit(): Promise<void> {
@@ -161,7 +165,7 @@ export class DatabaseService
     this.transactionClient.release();
     this.transactionClient = null;
     this.isTransaction = false;
-    console.log("Transacao commitada manualmente");
+    this.logger.debug("Transacao commitada manualmente");
   }
 
   async rollback(): Promise<void> {
@@ -173,7 +177,7 @@ export class DatabaseService
     this.transactionClient.release();
     this.transactionClient = null;
     this.isTransaction = false;
-    console.log("Transacao feita rollback manualmente");
+    this.logger.debug("Transacao feita rollback manualmente");
   }
 
   async findOne(
