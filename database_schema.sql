@@ -45,7 +45,6 @@ CREATE TABLE treino (
     titulo VARCHAR(255) NOT NULL,
     descricao TEXT,
     id_professor INTEGER NOT NULL REFERENCES usuario(id_usuario),
-    publico BOOLEAN DEFAULT false,
     created_at TIMESTAMP DEFAULT NOW(),
     updated_at TIMESTAMP,
     deleted_by INTEGER REFERENCES usuario(id_usuario),
@@ -60,7 +59,7 @@ CREATE TABLE treino_exercicios (
     treino_id INTEGER NOT NULL REFERENCES treino(id) ON DELETE CASCADE,
     exercicio_id INTEGER NOT NULL REFERENCES exercicio(id),
     series_repeticoes VARCHAR(100),
-    carga DECIMAL(10,2),
+    carga VARCHAR(100),
     observacoes TEXT,
     ordem INTEGER NOT NULL, 
     created_at TIMESTAMP DEFAULT NOW(),
@@ -101,7 +100,7 @@ CREATE TABLE pagamento (
     id_usuario INTEGER NOT NULL REFERENCES usuario(id_usuario),
     id_pagamento_asaas VARCHAR(255) NOT NULL,
     valor DECIMAL(10,2) NOT NULL,
-    tipo VARCHAR(50) NOT NULL CHECK (tipo IN ('BOLETO', 'PIX', 'CREDIT_CARD')),
+    tipo VARCHAR(50) NOT NULL CHECK (tipo IN ('PIX', 'CREDIT_CARD')),
     status VARCHAR(50) NOT NULL DEFAULT 'PENDENTE',
     created_at TIMESTAMP DEFAULT NOW(),
     updated_at TIMESTAMP
@@ -211,8 +210,8 @@ INSERT INTO usuario (
     cpf 
 ) VALUES(
     'Administrator',
-    'admin@example.com',
-    'changeme',
+    'admin@gmail.com',
+    'supersenha',
     'ADM',
     '00000000000'
 );
