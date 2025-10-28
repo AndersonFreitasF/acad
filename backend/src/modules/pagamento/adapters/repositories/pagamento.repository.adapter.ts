@@ -156,4 +156,8 @@ export class PagamentoRepositoryAdapter implements PagamentoRepositoryPort {
 
     return await response.json();
   }
+
+  async getPagamentoByAsaasId(id_pagamento_asaas: string) {
+    return this.postPagamentoRepo.getPagamentoByAsaasId(id_pagamento_asaas);
+  }
 }

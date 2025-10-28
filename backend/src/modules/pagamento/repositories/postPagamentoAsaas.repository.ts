@@ -52,4 +52,14 @@ export class PostPagamentoAsaasRepository {
     const sql = `UPDATE pagamento SET status = $1, updated_at = NOW() WHERE id = $2`;
     await this.databaseService.query(sql, [status, id_pagamento]);
   }
+
+  async getPagamentoByAsaasId(id_pagamento_asaas: string) {
+    const sql = `
+    SELECT id, status
+    FROM pagamento
+    WHERE id_pagamento_asaas = $1
+  `;
+    const result = await this.databaseService.query(sql, [id_pagamento_asaas]);
+    return result?.rows[0] ?? null;
+  }
 }

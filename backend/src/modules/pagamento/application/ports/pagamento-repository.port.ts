@@ -33,4 +33,7 @@ export interface PagamentoRepositoryPort {
     status: InternalPaymentStatus
   ): Promise<void>;
   getPixQrCode(id_pagamento_asaas: string): Promise<AsaasPixQrCodeResponse>;
+  getPagamentoByAsaasId(
+    id_pagamento_asaas: string
+  ): Promise<{ id: number; status: InternalPaymentStatus } | null>;
 }
