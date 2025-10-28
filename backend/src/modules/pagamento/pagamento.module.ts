@@ -10,6 +10,7 @@ import { PostCustomerAsaasRepository } from "./repositories/postCustomerAsaas.re
 import { PostPagamentoAsaasRepository } from "./repositories/postPagamentoAsaas.repository";
 import { DatabaseModule } from "../database/database.module";
 import { PostPagamentoAsaasService } from "./services/postPagamentoAsaas.service";
+import { PostPagamentoWebhookService } from "./services/postPagamentoWebhook.service";
 
 @Module({
   imports: [DatabaseModule],
@@ -21,6 +22,7 @@ import { PostPagamentoAsaasService } from "./services/postPagamentoAsaas.service
     PostCustomerAsaasRepository,
     PostPagamentoAsaasRepository,
     PostPagamentoAsaasService,
+    PostPagamentoWebhookService,
     {
       provide: PagamentoRepositoryPortToken,
       useClass: PagamentoRepositoryAdapter,
