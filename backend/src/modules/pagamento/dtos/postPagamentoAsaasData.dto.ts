@@ -15,4 +15,8 @@ export class PostPagamentoAsaasDataDTO {
   @IsOptional()
   @IsString()
   description?: string;
+
+  @IsNotEmpty()
+  @IsNumber()
+  id_usuario: number;
 }
