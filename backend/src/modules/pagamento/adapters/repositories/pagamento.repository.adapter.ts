@@ -6,11 +6,13 @@ import {
   AsaasCustomerData,
   AsaasPaymentResponse,
   AsaasPixQrCodeResponse,
+  InternalPaymentStatus,
 } from "../../interface/asaas.interface";
 import { PostCustomerAsaasRepository } from "../../repositories/postCustomerAsaas.repository";
 import { PostPagamentoAsaasRepository } from "../../repositories/postPagamentoAsaas.repository";
 import { PostPagamentoAsaasDataDTO } from "../../dtos/postPagamentoAsaasData.dto";
 import { PostPagarDataDTO } from "../../dtos/postPagarData.dto";
+import { mapAsaasStatus } from "../../interface/assas-status.mapper";
 
 @Injectable()
 export class PagamentoRepositoryAdapter implements PagamentoRepositoryPort {
@@ -19,79 +21,58 @@ export class PagamentoRepositoryAdapter implements PagamentoRepositoryPort {
     private readonly postPagamentoRepo: PostPagamentoAsaasRepository
   ) {}
 
-  private readonly asaasApiUrl =
-    process.env.ASAAS_API_URL || "https://sandbox.asaas.com/api/v3";
-  private readonly asaasApiKey = process.env.ASAAS_API_KEY || "";
-
   async postCustomer(
     data: PostCustomerAsaasDataDTO
   ): Promise<AsaasCustomerResponse> {
-    try {
-      const response = await fetch(`${this.asaasApiUrl}/customers`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          access_token: this.asaasApiKey,
-        },
-        body: JSON.stringify(data),
-      });
+    const response = await fetch(`${process.env.ASAAS_API_URL}/customers`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        access_token: process.env.ASAAS_API_KEY,
+      },
+      body: JSON.stringify(data),
+    });
 
-      if (!response.ok) {
-        const error = await response.json();
-        throw new HttpException(
-          error.errors || "Erro ao criar cliente no Asaas",
-          response.status
-        );
-      }
-
-      return await response.json();
-    } catch (error) {
-      if (error instanceof HttpException) throw error;
-      throw new HttpException(
-        "Erro ao comunicar com API Asaas",
-        HttpStatus.INTERNAL_SERVER_ERROR
-      );
+    if (!response.ok) {
+      throw new HttpException(await response.json(), response.status);
     }
+
+    return await response.json();
   }
 
-  async postPagamento(data: PostPagamentoAsaasDataDTO): Promise<AsaasPaymentResponse> {
-    try {
-      const response = await fetch(`${this.asaasApiUrl}/payments`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          access_token: this.asaasApiKey,
-        },
-        body: JSON.stringify({
-          customer: data.customerId,
-          value: data.value,
-          billingType: data.billingType,
-          description: data.description ?? "Pagamento gerado pelo sistema",
-          dueDate: new Date().toISOString().split("T")[0],
-        }),
-      });
+  async postPagamento(
+    data: PostPagamentoAsaasDataDTO
+  ): Promise<AsaasPaymentResponse> {
+    const response = await fetch(`${process.env.ASAAS_API_URL}/payments`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        access_token: process.env.ASAAS_API_KEY,
+      },
+      body: JSON.stringify({
+        customer: data.customerId,
+        value: data.value,
+        billingType: data.billingType,
+        description: data.description ?? "Pagamento gerado pelo sistema",
+        dueDate: new Date().toISOString().split("T")[0],
+      }),
+    });
 
-      if (!response.ok) {
-        const error = await response.json();
-        throw new HttpException(
-          error.errors || "Erro ao criar pagamento no Asaas",
-          response.status
-        );
-      }
-
-      const asaasResponse = await response.json();
-      
-      return {
-        id: asaasResponse.id,
-        status: "PENDENTE"
-      };
-    } catch (error) {
-      if (error instanceof HttpException) throw error;
-      throw new HttpException(
-        "Erro ao comunicar com API Asaas",
-        HttpStatus.INTERNAL_SERVER_ERROR
-      );
+    if (!response.ok) {
+      throw new HttpException(await response.json(), response.status);
     }
+
+    const asa = await response.json();
+
+    await this.savePagamento(
+      data.customerId,
+      asa.id,
+      data.value,
+      data.billingType,
+      InternalPaymentStatus.PENDING
+    );
+
+    return { id: asa.id, status: InternalPaymentStatus.PENDING };
   }
 
   async getDadosUsuario(id_usuario: number): Promise<AsaasCustomerData | null> {
@@ -110,7 +91,7 @@ export class PagamentoRepositoryAdapter implements PagamentoRepositoryPort {
     id_pagamento: string,
     valor: number,
     tipo: string,
-    status: string
+    status: InternalPaymentStatus
   ): Promise<void> {
     return this.postPagamentoRepo.savePagamento(
       id_usuario,
@@ -122,113 +103,57 @@ export class PagamentoRepositoryAdapter implements PagamentoRepositoryPort {
   }
 
   async payPayment(data: PostPagarDataDTO): Promise<AsaasPaymentResponse> {
-    try {
-      const pagamento = await this.getPagamentoById(data.id_pagamento);
-      if (!pagamento) {
-        throw new HttpException(
-          "Pagamento não encontrado",
-          HttpStatus.NOT_FOUND
-        );
+    const pagamento = await this.getPagamentoById(data.id_pagamento);
+
+    if (!pagamento) throw new HttpException("Pagamento não encontrado", 404);
+
+    const response = await fetch(
+      `${process.env.ASAAS_API_URL}/payments/${pagamento.id_pagamento_asaas}/payWithCreditCard`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          access_token: process.env.ASAAS_API_KEY,
+        },
+        body: JSON.stringify(data),
       }
+    );
 
-      const response = await fetch(
-        `${this.asaasApiUrl}/payments/${pagamento.id_pagamento_asaas}/payWithCreditCard`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            access_token: this.asaasApiKey,
-          },
-          body: JSON.stringify({
-            creditCard: {
-              holderName: data.creditCard.holderName,
-              number: data.creditCard.number,
-              expiryMonth: data.creditCard.expiryMonth,
-              expiryYear: data.creditCard.expiryYear,
-              ccv: data.creditCard.ccv,
-            },
-            creditCardHolderInfo: {
-              name: data.creditCardHolderInfo.name,
-              email: data.creditCardHolderInfo.email,
-              cpfCnpj: data.creditCardHolderInfo.cpfCnpj,
-              postalCode: data.creditCardHolderInfo.postalCode,
-              addressNumber: data.creditCardHolderInfo.addressNumber,
-              addressComplement: data.creditCardHolderInfo.addressComplement,
-              phone: data.creditCardHolderInfo.phone,
-              mobilePhone: data.creditCardHolderInfo.mobilePhone,
-            },
-            remoteIp: data.remoteIp || "127.0.0.1",
-          }),
-        }
-      );
-
-      if (!response.ok) {
-        const error = await response.json();
-        throw new HttpException(
-          error.errors || "Erro ao processar pagamento no Asaas",
-          response.status
-        );
-      }
-
-      const asaasResponse = await response.json();
-      
-      await this.updatePagamentoStatus(data.id_pagamento, "PAGO");
-
-      return {
-        id: asaasResponse.id,
-        status: asaasResponse.status || "PAGO"
-      };
-    } catch (error) {
-      if (error instanceof HttpException) throw error;
-      throw new HttpException(
-        "Erro ao comunicar com API Asaas",
-        HttpStatus.INTERNAL_SERVER_ERROR
-      );
+    if (!response.ok) {
+      throw new HttpException(await response.json(), response.status);
     }
+
+    const asa = await response.json();
+    const mapped = mapAsaasStatus(asa.status);
+
+    await this.updatePagamentoStatus(data.id_pagamento, mapped);
+
+    return { id: asa.id, status: mapped };
   }
 
-  async getPagamentoById(id_pagamento: number): Promise<{ id_pagamento_asaas: string } | null> {
+  async getPagamentoById(id_pagamento: number) {
     return this.postPagamentoRepo.getPagamentoById(id_pagamento);
   }
 
-  async updatePagamentoStatus(id_pagamento: number, status: string): Promise<void> {
+  async updatePagamentoStatus(
+    id_pagamento: number,
+    status: InternalPaymentStatus
+  ): Promise<void> {
     return this.postPagamentoRepo.updatePagamentoStatus(id_pagamento, status);
   }
 
-  async getPixQrCode(id_pagamento_asaas: string): Promise<AsaasPixQrCodeResponse> {
-    try {
-      const response = await fetch(
-        `${this.asaasApiUrl}/payments/${id_pagamento_asaas}/pixQrCode`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            access_token: this.asaasApiKey,
-          },
-        }
-      );
+  async getPixQrCode(
+    id_pagamento_asaas: string
+  ): Promise<AsaasPixQrCodeResponse> {
+    const response = await fetch(
+      `${process.env.ASAAS_API_URL}/payments/${id_pagamento_asaas}/pixQrCode`,
+      { method: "GET", headers: { access_token: process.env.ASAAS_API_KEY } }
+    );
 
-      if (!response.ok) {
-        const error = await response.json();
-        throw new HttpException(
-          error.errors || "Erro ao obter QR Code PIX do Asaas",
-          response.status
-        );
-      }
-
-      const asaasResponse = await response.json();
-      
-      return {
-        encodedImage: asaasResponse.encodedImage,
-        payload: asaasResponse.payload,
-        expirationDate: asaasResponse.expirationDate
-      };
-    } catch (error) {
-      if (error instanceof HttpException) throw error;
-      throw new HttpException(
-        "Erro ao comunicar com API Asaas para obter QR Code PIX",
-        HttpStatus.INTERNAL_SERVER_ERROR
-      );
+    if (!response.ok) {
+      throw new HttpException(await response.json(), response.status);
     }
+
+    return await response.json();
   }
 }

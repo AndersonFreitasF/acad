@@ -29,3 +29,9 @@ export interface AsaasPixQrCodeResponse {
   expirationDate: string;
 }
 
+export enum InternalPaymentStatus {
+  PENDING = "PENDING",
+  PAID = "PAID",
+  FAILED = "FAILED",
+  CANCELED = "CANCELED",
+}

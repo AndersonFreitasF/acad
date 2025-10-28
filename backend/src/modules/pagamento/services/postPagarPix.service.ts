@@ -1,9 +1,15 @@
-import { Inject, Injectable, NotFoundException } from "@nestjs/common";
+import {
+  Inject,
+  Injectable,
+  BadRequestException,
+  NotFoundException,
+} from "@nestjs/common";
 import {
   PagamentoRepositoryPort,
   PagamentoRepositoryPortToken,
 } from "../application/ports/pagamento-repository.port";
 import { PostPagarPixDataDTO } from "../dtos/postPagarPixData.dto";
+import { InternalPaymentStatus } from "../interface/asaas.interface";
 
 @Injectable()
 export class PostPagarPixService {
@@ -13,28 +19,32 @@ export class PostPagarPixService {
   ) {}
 
   async execute(data: PostPagarPixDataDTO) {
-    try {
-      const pagamento = await this.pagamentoRepository.getPagamentoById(data.id_pagamento);
-      if (!pagamento) {
-        throw new NotFoundException("Pagamento não encontrado");
-      }
+    const pagamento = await this.pagamentoRepository.getPagamentoById(
+      data.id_pagamento
+    );
+    if (!pagamento) throw new NotFoundException("Pagamento não encontrado");
 
-      const qrCodeData = await this.pagamentoRepository.getPixQrCode(pagamento.id_pagamento_asaas);
-
-      return {
-        success: true,
-        message: "QR Code PIX gerado com sucesso",
-        qrCode: {
-          encodedImage: qrCodeData.encodedImage,
-          payload: qrCodeData.payload,
-          expirationDate: qrCodeData.expirationDate,
-        },
-      };
-    } catch (error) {
-      if (error instanceof NotFoundException) {
-        throw new NotFoundException("Pagamento não encontrado");
-      }
-      throw error;
+    if (pagamento.status === InternalPaymentStatus.PAID) {
+      throw new BadRequestException("Pagamento já realizado");
     }
+
+    const qrCodeData = await this.pagamentoRepository.getPixQrCode(
+      pagamento.id_pagamento_asaas
+    );
+
+    await this.pagamentoRepository.updatePagamentoStatus(
+      data.id_pagamento,
+      InternalPaymentStatus.PENDING
+    );
+
+    return {
+      success: true,
+      message: "QR Code PIX gerado com sucesso",
+      qrCode: {
+        encodedImage: qrCodeData.encodedImage,
+        payload: qrCodeData.payload,
+        expirationDate: qrCodeData.expirationDate,
+      },
+    };
   }
 }

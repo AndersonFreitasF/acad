@@ -2,8 +2,8 @@ import { IsNotEmpty, IsNumber, IsString, IsOptional } from "class-validator";
 
 export class PostPagamentoAsaasDataDTO {
   @IsNotEmpty()
-  @IsString()
-  customerId: string;
+  @IsNumber()
+  customerId: number;
 
   @IsNotEmpty()
   @IsNumber()
