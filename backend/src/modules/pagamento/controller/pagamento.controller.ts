@@ -13,6 +13,8 @@ import { PostPagarPixService } from "../services/postPagarPix.service";
 import { PostPagamentoAsaasDataDTO } from "../dtos/postPagamentoAsaasData.dto";
 import { PostPagarDataDTO } from "../dtos/postPagarData.dto";
 import { PostPagarPixDataDTO } from "../dtos/postPagarPixData.dto";
+import { PostPagamentoWebhookService } from "../services/postPagamentoWebhook.service";
+import { AsaasWebhookDTO } from "../dtos/asaasWebhook.dto";
 
 @Controller("pagamento")
 @UseGuards(JwtAuthGuard)
@@ -21,7 +23,8 @@ export class PagamentoController {
     private readonly postCustomerAsaasService: PostCustomerAsaasService,
     private readonly postPagamentoAsaasService: PostPagamentoAsaasService,
     private readonly postPagarCreditCardService: PostPagarCreditCardService,
-    private readonly postPagarPixService: PostPagarPixService
+    private readonly postPagarPixService: PostPagarPixService,
+    private readonly postPagamentoWebhookService: PostPagamentoWebhookService
   ) {}
 
   @Post("cliente")
@@ -49,5 +52,10 @@ export class PagamentoController {
   @Roles(Role.ALUNO, Role.PROFESSOR, Role.ADM)
   async pagarPagamentoPix(@Body() data: PostPagarPixDataDTO) {
     return this.postPagarPixService.execute(data);
+  }
+
+  @Post("webhook")
+  async webhook(@Body() data: AsaasWebhookDTO) {
+    return this.postPagamentoWebhookService.execute(data);
   }
 }
