@@ -41,15 +41,6 @@ export class PagamentoRepositoryAdapter implements PagamentoRepositoryPort {
     }
 
     const asa = await response.json();
-
-    await this.savePagamento(
-      data.customerId,
-      asa.id,
-      data.value,
-      data.billingType,
-      InternalPaymentStatus.PENDING
-    );
-
     return { id: asa.id, status: InternalPaymentStatus.PENDING };
   }
 
