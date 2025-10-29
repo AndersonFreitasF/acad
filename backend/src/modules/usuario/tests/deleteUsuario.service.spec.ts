@@ -18,6 +18,9 @@ describe("DeleteUsuarioService", () => {
 
   beforeEach(() => {
     mockRepository = {
+      postCustomer: vi.fn(),
+      vincularCustomerId: vi.fn(),
+      getDadosUsuario: vi.fn(),
       countUsuarios: vi.fn(),
       getUsuarios: vi.fn(),
       postUsuario: vi.fn(),
@@ -49,7 +52,9 @@ describe("DeleteUsuarioService", () => {
 
     await service.execute(mockRegularUser, mockRegularUser.id_usuario);
 
-    expect(mockRepository.findUsuario).toHaveBeenCalledWith(mockRegularUser.id_usuario);
+    expect(mockRepository.findUsuario).toHaveBeenCalledWith(
+      mockRegularUser.id_usuario
+    );
     expect(mockRepository.deleteUsuario).toHaveBeenCalledWith(
       mockRegularUser.id_usuario,
       mockRegularUser.id_usuario
@@ -59,9 +64,9 @@ describe("DeleteUsuarioService", () => {
   it("deve lançar ForbiddenException quando usuário tenta deletar conta de outro", async () => {
     const differentUserId = 3;
 
-    await expect(service.execute(mockRegularUser, differentUserId)).rejects.toThrow(
-      ForbiddenException
-    );
+    await expect(
+      service.execute(mockRegularUser, differentUserId)
+    ).rejects.toThrow(ForbiddenException);
 
     expect(mockRepository.findUsuario).not.toHaveBeenCalled();
     expect(mockRepository.deleteUsuario).not.toHaveBeenCalled();

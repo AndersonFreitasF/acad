@@ -28,6 +28,9 @@ describe("PutUsuarioService", () => {
 
   beforeEach(() => {
     mockRepository = {
+      postCustomer: vi.fn(),
+      vincularCustomerId: vi.fn(),
+      getDadosUsuario: vi.fn(),
       countUsuarios: vi.fn(),
       getUsuarios: vi.fn(),
       postUsuario: vi.fn(),
@@ -40,7 +43,7 @@ describe("PutUsuarioService", () => {
       hash: vi.fn(),
       verify: vi.fn(),
     };
-    
+
     service = new PutUsuarioService(
       mockRepository as UsuarioRepositoryPort,
       mockPasswordHasher as PasswordHasherPort

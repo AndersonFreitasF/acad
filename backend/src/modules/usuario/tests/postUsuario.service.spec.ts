@@ -20,6 +20,9 @@ describe("PostUsuarioService", () => {
 
   beforeEach(() => {
     mockRepository = {
+      postCustomer: vi.fn(),
+      vincularCustomerId: vi.fn(),
+      getDadosUsuario: vi.fn(),
       countUsuarios: vi.fn(),
       getUsuarios: vi.fn(),
       postUsuario: vi.fn(),
