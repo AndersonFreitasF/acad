@@ -18,7 +18,6 @@ export interface PagamentoRepositoryPort {
     tipo: string,
     status: InternalPaymentStatus
   ): Promise<void>;
-  payPayment(data: PostPagarDataDTO): Promise<AsaasPaymentResponse>;
   getPagamentoById(id_pagamento: number): Promise<{
     id_pagamento_asaas: string;
     status: InternalPaymentStatus;
