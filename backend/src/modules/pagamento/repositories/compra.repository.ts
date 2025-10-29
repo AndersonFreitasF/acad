@@ -55,7 +55,7 @@ export class CompraRepository {
     LIMIT 1`;
     const selectBinds = [id_pagamento_asaas];
     const result = await this.dataBaseService.query(selectSql, selectBinds);
-    return result.rows[0]?.id as number;
+    return result.rows[0]?.id;
   }
 
   async vincularTreinoPagamento(id_treino: number, id_pagamento: number): Promise<void> {

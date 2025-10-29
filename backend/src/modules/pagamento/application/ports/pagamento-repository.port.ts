@@ -11,6 +11,7 @@ export const PagamentoRepositoryPortToken = "PagamentoRepositoryPort" as const;
 
 export interface PagamentoRepositoryPort {
   postPagamento(data: PostPagamentoAsaasDataDTO): Promise<AsaasPaymentResponse>;
+  payPayment(data: PostPagarDataDTO): Promise<AsaasPaymentResponse>;
   savePagamento(
     id_usuario: number,
     id_pagamento: string,
