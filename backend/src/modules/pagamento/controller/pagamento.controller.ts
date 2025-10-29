@@ -1,4 +1,4 @@
-import { Body, Controller, Post, UseGuards } from "@nestjs/common";
+import { Body, Controller, Get, Param, Post, UseGuards } from "@nestjs/common";
 import { TokenPayload } from "src/modules/auth/interfaces/auth.interface";
 import { User } from "src/common/decorators/user.decorator";
 import { JwtAuthGuard } from "src/common/guards/jwt-auth.guard";
@@ -15,6 +15,7 @@ import { PostPagarDataDTO } from "../dtos/postPagarData.dto";
 import { PostPagarPixDataDTO } from "../dtos/postPagarPixData.dto";
 import { PostPagamentoWebhookService } from "../services/postPagamentoWebhook.service";
 import { AsaasWebhookDTO } from "../dtos/asaasWebhook.dto";
+import { CheckPagamentoService } from "../services/getPagamentoStatus.service";
 
 @Controller("pagamento")
 @UseGuards(JwtAuthGuard)
@@ -24,7 +25,8 @@ export class PagamentoController {
     private readonly postPagamentoAsaasService: PostPagamentoAsaasService,
     private readonly postPagarCreditCardService: PostPagarCreditCardService,
     private readonly postPagarPixService: PostPagarPixService,
-    private readonly postPagamentoWebhookService: PostPagamentoWebhookService
+    private readonly postPagamentoWebhookService: PostPagamentoWebhookService,
+    private readonly checkPagamentoService: CheckPagamentoService
   ) {}
 
   @Post("cliente")
@@ -57,5 +59,10 @@ export class PagamentoController {
   @Post("webhook")
   async webhook(@Body() data: AsaasWebhookDTO) {
     return this.postPagamentoWebhookService.execute(data);
+  }
+
+  @Get(":id/status")
+  async checkStatus(@Param("id") id: number) {
+    return this.checkPagamentoService.execute(id);
   }
 }

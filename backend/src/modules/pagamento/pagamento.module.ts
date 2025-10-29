@@ -11,6 +11,7 @@ import { PostPagamentoAsaasRepository } from "./repositories/postPagamentoAsaas.
 import { DatabaseModule } from "../database/database.module";
 import { PostPagamentoAsaasService } from "./services/postPagamentoAsaas.service";
 import { PostPagamentoWebhookService } from "./services/postPagamentoWebhook.service";
+import { CheckPagamentoService } from "./services/getPagamentoStatus.service";
 
 @Module({
   imports: [DatabaseModule],
@@ -23,6 +24,7 @@ import { PostPagamentoWebhookService } from "./services/postPagamentoWebhook.ser
     PostPagamentoAsaasRepository,
     PostPagamentoAsaasService,
     PostPagamentoWebhookService,
+    CheckPagamentoService,
     {
       provide: PagamentoRepositoryPortToken,
       useClass: PagamentoRepositoryAdapter,
