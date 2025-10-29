@@ -5,7 +5,6 @@ import { JwtAuthGuard } from "src/common/guards/jwt-auth.guard";
 import { Roles } from "src/common/decorators/role.decorator";
 import { Role } from "src/common/enum/role.enum";
 
-import { PostCustomerAsaasService } from "../services/postCustomerAsaas.service";
 import { PostPagamentoAsaasService } from "../services/postPagamentoAsaas.service";
 import { PostPagarCreditCardService } from "../services/postPagarCreditCard.service";
 import { PostPagarPixService } from "../services/postPagarPix.service";
@@ -21,19 +20,12 @@ import { CheckPagamentoService } from "../services/getPagamentoStatus.service";
 @UseGuards(JwtAuthGuard)
 export class PagamentoController {
   constructor(
-    private readonly postCustomerAsaasService: PostCustomerAsaasService,
     private readonly postPagamentoAsaasService: PostPagamentoAsaasService,
     private readonly postPagarCreditCardService: PostPagarCreditCardService,
     private readonly postPagarPixService: PostPagarPixService,
     private readonly postPagamentoWebhookService: PostPagamentoWebhookService,
     private readonly checkPagamentoService: CheckPagamentoService
   ) {}
-
-  @Post("cliente")
-  @Roles(Role.ALUNO, Role.PROFESSOR, Role.ADM)
-  async postCliente(@User() user: TokenPayload) {
-    return this.postCustomerAsaasService.execute(user.id_usuario);
-  }
 
   @Post("gerar-credito")
   @Roles(Role.ALUNO, Role.PROFESSOR, Role.ADM)

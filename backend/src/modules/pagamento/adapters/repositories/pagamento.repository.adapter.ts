@@ -1,14 +1,12 @@
 import { Injectable, HttpException, HttpStatus } from "@nestjs/common";
 import { PagamentoRepositoryPort } from "../../application/ports/pagamento-repository.port";
-import { PostCustomerAsaasDataDTO } from "../../dtos/postCustomerAsaasData.dto";
+import { PostCustomerAsaasDataDTO } from "../../../usuario/dtos/postCustomerAsaasData.dto";
 import {
-  AsaasCustomerResponse,
-  AsaasCustomerData,
   AsaasPaymentResponse,
   AsaasPixQrCodeResponse,
   InternalPaymentStatus,
 } from "../../interface/asaas.interface";
-import { PostCustomerAsaasRepository } from "../../repositories/postCustomerAsaas.repository";
+
 import { PostPagamentoAsaasRepository } from "../../repositories/postPagamentoAsaas.repository";
 import { PostPagamentoAsaasDataDTO } from "../../dtos/postPagamentoAsaasData.dto";
 import { PostPagarDataDTO } from "../../dtos/postPagarData.dto";
@@ -17,28 +15,8 @@ import { mapAsaasStatus } from "../../interface/assas-status.mapper";
 @Injectable()
 export class PagamentoRepositoryAdapter implements PagamentoRepositoryPort {
   constructor(
-    private readonly postCustomerRepo: PostCustomerAsaasRepository,
     private readonly postPagamentoRepo: PostPagamentoAsaasRepository
   ) {}
-
-  async postCustomer(
-    data: PostCustomerAsaasDataDTO
-  ): Promise<AsaasCustomerResponse> {
-    const response = await fetch(`${process.env.ASAAS_API_URL}/customers`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        access_token: process.env.ASAAS_API_KEY,
-      },
-      body: JSON.stringify(data),
-    });
-
-    if (!response.ok) {
-      throw new HttpException(await response.json(), response.status);
-    }
-
-    return await response.json();
-  }
 
   async postPagamento(
     data: PostPagamentoAsaasDataDTO
@@ -73,17 +51,6 @@ export class PagamentoRepositoryAdapter implements PagamentoRepositoryPort {
     );
 
     return { id: asa.id, status: InternalPaymentStatus.PENDING };
-  }
-
-  async getDadosUsuario(id_usuario: number): Promise<AsaasCustomerData | null> {
-    return this.postCustomerRepo.getDadosUsuario(id_usuario);
-  }
-
-  async vincularCustomerId(
-    id_usuario: number,
-    customerId: string
-  ): Promise<void> {
-    return this.postCustomerRepo.vincularCustomerId(id_usuario, customerId);
   }
 
   async savePagamento(

@@ -1,9 +1,7 @@
-import { PostCustomerAsaasDataDTO } from "../../dtos/postCustomerAsaasData.dto";
+import { PostCustomerAsaasDataDTO } from "../../../usuario/dtos/postCustomerAsaasData.dto";
 import { PostPagamentoAsaasDataDTO } from "../../dtos/postPagamentoAsaasData.dto";
 import { PostPagarDataDTO } from "../../dtos/postPagarData.dto";
 import {
-  AsaasCustomerResponse,
-  AsaasCustomerData,
   AsaasPaymentResponse,
   AsaasPixQrCodeResponse,
   InternalPaymentStatus,
@@ -12,9 +10,6 @@ import {
 export const PagamentoRepositoryPortToken = "PagamentoRepositoryPort" as const;
 
 export interface PagamentoRepositoryPort {
-  postCustomer(data: PostCustomerAsaasDataDTO): Promise<AsaasCustomerResponse>;
-  getDadosUsuario(id_usuario: number): Promise<AsaasCustomerData | null>;
-  vincularCustomerId(id_usuario: number, customerId: string): Promise<void>;
   postPagamento(data: PostPagamentoAsaasDataDTO): Promise<AsaasPaymentResponse>;
   savePagamento(
     id_usuario: number,
