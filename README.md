@@ -181,6 +181,11 @@ DB_CONNECTION_TIMEOUT=2000
 # JWT
 JWT_SECRET=sua_senha_jwt
 
+# Asaas Payment Gateway
+ASAAS_API_URL=https://sandbox.asaas.com/api/v3
+ASAAS_API_KEY=sua_chave_api_asaas
+ASAAS_WEBHOOK_SECRET=4f73b3a3b0f6e4d0b8b4a2d9f1e6c7a5d4b2c1e0f9a8b7c6d5e4f3a2b1c0d9e8
+
 # Server
 NODE_ENV=development
 PORT=3000
