@@ -7,6 +7,11 @@ async function bootstrap() {
     bodyParser: false 
   });
 
+  app.enableCors({
+    origin: ['http://localhost:5173', 'http://localhost:5174', 'http://localhost:5175'],
+    credentials: true,
+  });
+
   app.use(bodyParser.json({
     verify: (req: any, res, buf) => {
       req.rawBody = buf.toString('utf8');
