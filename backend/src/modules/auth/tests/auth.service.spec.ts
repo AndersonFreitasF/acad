@@ -36,7 +36,6 @@ describe("AuthService", () => {
     it("should validate user successfully with correct credentials", async () => {
       const mockUser: AuthUser = {
         id_usuario: 1,
-        nome: "Test User",
         email: "TEST@EXAMPLE.COM",
         senha: "hashedPassword",
         tipo: "ALUNO",
@@ -69,7 +68,6 @@ describe("AuthService", () => {
     it("should throw UnauthorizedException when password is incorrect", async () => {
       const mockUser: AuthUser = {
         id_usuario: 1,
-        nome: "Test User",
         email: "TEST@EXAMPLE.COM",
         senha: "hashedPassword",
         tipo: "ALUNO",
@@ -91,7 +89,6 @@ describe("AuthService", () => {
     it("should return access token and user data on successful login", async () => {
       const mockUser: AuthUser = {
         id_usuario: 1,
-        nome: "Test User",
         email: "TEST@EXAMPLE.COM",
         senha: "hashedPassword",
         tipo: "ALUNO",
@@ -110,7 +107,6 @@ describe("AuthService", () => {
         expiresIn: 14400,
         user: {
           id_usuario: 1,
-          nome: "Test User",
           email: "TEST@EXAMPLE.COM",
           tipo: "ALUNO",
         },
