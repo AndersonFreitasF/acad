@@ -1,14 +1,14 @@
 import { Type } from "class-transformer";
-import { IsNumber, IsOptional } from "class-validator";
+import { IsNumber, IsNotEmpty } from "class-validator";
 
 export class PaginationDTO {
   @Type(() => Number)
   @IsNumber()
-  @IsOptional()
-  page: number = 1;
+  @IsNotEmpty()
+  page: number;
 
   @Type(() => Number)
   @IsNumber()
-  @IsOptional()
-  size: number = 10;
+  @IsNotEmpty()
+  size: number;
 }
