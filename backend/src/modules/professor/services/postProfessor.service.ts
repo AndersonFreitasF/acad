@@ -17,7 +17,7 @@ export class PostProfessorService {
 
   async execute(data: PostProfessorDataDTO, created_by: number) {
     try {
-      await this.repo.postProfessor(
+      await this.repo.postUsuario(
         { ...data, senha: await this.passwordHasher.hash(data.senha) },
         created_by
       );
