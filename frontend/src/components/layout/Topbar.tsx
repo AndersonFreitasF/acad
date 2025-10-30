@@ -17,7 +17,7 @@ export function Topbar() {
     <header className="bg-white border-b border-gray-200 px-6 py-4">
       <div className="flex items-center justify-between">
         <h2 className="text-xl font-semibold text-gray-800">
-          Bem-vindo, {user?.nome}
+          Bem-vindo, {user?.email}
         </h2>
 
         <div className="relative">
@@ -26,7 +26,7 @@ export function Topbar() {
             className="flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-gray-100 transition-colors"
           >
             <User size={20} />
-            <span className="hidden md:inline">{user?.nome}</span>
+            <span className="hidden md:inline">{user?.email}</span>
           </button>
 
           {showDropdown && (
