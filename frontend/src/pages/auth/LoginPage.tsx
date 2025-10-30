@@ -22,9 +22,9 @@ export function LoginPage() {
 
     try {
       const response = await api.post('/auth/login', { email, senha });
-      const { access_token, user } = response.data;
+      const { accessToken, user } = response.data;
       
-      login(user, access_token);
+      login(user, accessToken);
       
       switch (user.tipo) {
         case 'ALUNO':
