@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsString, IsOptional, IsArray, ValidateNested, MinLength } from "class-validator";
+import { IsNotEmpty, IsString, IsOptional, IsArray, ValidateNested, MinLength,IsNumber } from "class-validator";
 import { Type } from "class-transformer";
 import { ExercicioTreinoDTO } from "./exercicioTreinoData.dto";
 
@@ -16,8 +16,9 @@ export class PostTreinoDataDTO {
   @IsNotEmpty()
   id_professor: number;
 
-  @IsOptional()
-  publico?: boolean;
+  @IsNumber()
+  @IsNotEmpty()
+  preco: number;
 
   @IsNotEmpty()
   @IsArray()

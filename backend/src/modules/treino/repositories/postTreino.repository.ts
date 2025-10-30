@@ -12,18 +12,18 @@ export class PostTreinoRepository {
       titulo,
       descricao,
       id_professor,
-      publico,
+      preco,
       created_at
     ) 
     VALUES($1, $2, $3, $4, NOW())
-    RETURNING id, titulo, descricao, id_professor, publico, created_at
+    RETURNING id, titulo, descricao, id_professor, preco, created_at
     `;
 
     const binds = [
       data.titulo.toUpperCase(),
       data.descricao.toUpperCase(),
       data.id_professor,
-      data.publico || false,
+      data.preco || 0,
     ];
     
     const result = await this.dataBaseService.query(sql, binds);

@@ -27,6 +27,7 @@ export class GetTreinoRepository {
         t.titulo, 
         t.descricao,
         t.id_professor,
+        t.preco,
         t.created_at
     FROM treino t
     WHERE ($1 = '' OR t.titulo ILIKE $1)

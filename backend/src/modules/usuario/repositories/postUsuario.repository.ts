@@ -17,7 +17,7 @@ export class PostUsuarioRepository {
       created_by,
       created_at
       ) 
-      VALUES($1, $2, $3, 'ALUNO' ,$4, $5, NOW())
+      VALUES($1, $2, $3, 'ALUNO', $4, $5, NOW())
       `;
 
     const binds = [
