@@ -4,6 +4,7 @@ import { User } from "src/common/decorators/user.decorator";
 import { JwtAuthGuard } from "src/common/guards/jwt-auth.guard";
 import { Roles } from "src/common/decorators/role.decorator";
 import { Role } from "src/common/enum/role.enum";
+import { Public } from "src/common/decorators/public.decorator";
 
 import { PostPagamentoAsaasService } from "../services/postPagamentoAsaas.service";
 
@@ -35,6 +36,7 @@ export class PagamentoController {
   }
 
   @Post("webhook")
+  @Public()
   async webhook(@Req() req: any, @Body() data: AsaasWebhookDTO, @Headers("x-signature") signature?: string) {
     const rawBody = req.rawBody || JSON.stringify(data);
     return this.postPagamentoWebhookService.execute(data, rawBody, signature);
