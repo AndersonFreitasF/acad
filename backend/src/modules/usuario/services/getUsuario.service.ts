@@ -15,16 +15,21 @@ export class GetUsuarioService {
   async execute(data: GetUsuarioDataDTO) {
     try {
       const TotalUsuarios = await this.repo.countUsuarios(data);
+      console.log('Total usuarios:', TotalUsuarios);
 
       const DadosUsuario = await this.repo.getUsuarios(data);
+      console.log('Dados usuario:', DadosUsuario);
 
-      return {
-        Usuarios: DadosUsuario ?? [],
-        Total: TotalUsuarios ?? 0,
-        Pagina: data.page,
-        Tamanho_Pagina: data.size,
+      const response = {
+        data: DadosUsuario ?? [],
+        total: TotalUsuarios ?? 0,
+        page: data.page,
+        size: data.size,
       };
+      console.log('Response final:', response);
+      return response;
     } catch (error) {
+      console.error('Erro no GetUsuarioService:', error);
       throw new InternalServerErrorException(
         "Não foi possível buscar os usuários"
       );

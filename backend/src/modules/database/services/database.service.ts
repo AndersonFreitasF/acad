@@ -109,10 +109,22 @@ export class DatabaseService
       return result;
     } catch (error) {
       this.logger.error("Erro na query:", error as any);
+      if (!this.isTransaction && client && client !== this.transactionClient) {
+        try {
+          client.release();
+        } catch (releaseError) {
+          this.logger.warn("Erro ao liberar conexão:", releaseError);
+        }
+        this.client = null;
+      }
       throw error;
     } finally {
-      if (!this.isTransaction && client && client !== this.transactionClient) {
-        client.release();
+      if (!this.isTransaction && client && client !== this.transactionClient && this.client) {
+        try {
+          client.release();
+        } catch (releaseError) {
+          this.logger.warn("Erro ao liberar conexão no finally:", releaseError);
+        }
         this.client = null;
       }
     }

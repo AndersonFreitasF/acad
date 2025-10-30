@@ -24,13 +24,16 @@ export function Usuarios() {
   }, []);
 
   const loadUsuarios = async () => {
+    console.log('Carregando usuários...');
     try {
       const response = await api.get('/usuario', {
         params: { page: 1, size: 100 }
       });
-      setUsuarios(response.data.data);
+      console.log('Resposta:', response.data);
+      setUsuarios(response.data.data || []);
     } catch (error) {
       console.error('Erro ao carregar usuários:', error);
+      setUsuarios([]);
     } finally {
       setLoading(false);
     }
