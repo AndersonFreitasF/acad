@@ -41,6 +41,8 @@ export class PostUsuarioService {
   }
 
   async checkCpf(cpf: string): Promise<boolean> {
+    if (!cpf || cpf.length !== 11) return false;
+    
     const arrayCpf = cpf.split("").map((n) => parseInt(n, 10));
 
     let soma1 = 0;
