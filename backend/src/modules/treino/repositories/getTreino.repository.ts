@@ -9,9 +9,13 @@ export class GetTreinoRepository {
   async countTreinos(data: GetTreinoDataDTO) {
     const sql = `SELECT COUNT(DISTINCT t.id) as total
         FROM treino t
-        WHERE ($1 = '' OR t.titulo ILIKE $1)`;
+        WHERE ($1 = '' OR t.titulo ILIKE $1)
+        AND ($2::INTEGER IS NULL OR t.id_professor = $2)`;
 
-    const binds = [data.titulo ? `%${data.titulo}%` : ""];
+    const binds = [
+      data.titulo ? `%${data.titulo}%` : "",
+      data.id_professor ?? null
+    ];
     const result = await this.dataBaseService.query(sql, binds);
     return result?.rows[0]?.total ?? 0;
   }
@@ -23,17 +27,18 @@ export class GetTreinoRepository {
         t.titulo, 
         t.descricao,
         t.id_professor,
-        t.publico,
         t.created_at
     FROM treino t
     WHERE ($1 = '' OR t.titulo ILIKE $1)
+    AND ($2::INTEGER IS NULL OR t.id_professor = $2)
     ORDER BY t.id
-    LIMIT $2
-    OFFSET $3
+    LIMIT $3
+    OFFSET $4
     `;
 
     const binds = [
       data.titulo ? `%${data.titulo}%` : "",
+      data.id_professor ?? null,
       data.size,
       (data.page - 1) * data.size,
     ];
