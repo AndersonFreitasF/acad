@@ -25,7 +25,9 @@ export function Usuarios() {
 
   const loadUsuarios = async () => {
     try {
-      const response = await api.get('/usuario');
+      const response = await api.get('/usuario', {
+        params: { page: 1, size: 100 }
+      });
       setUsuarios(response.data.data);
     } catch (error) {
       console.error('Erro ao carregar usuários:', error);
