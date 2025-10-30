@@ -34,7 +34,10 @@ export class TreinoController {
 
   @Get("")
   @Roles(Role.PROFESSOR)
-  async getTreino(@Query() data: GetTreinoDataDTO) {
+  async getTreino(@Query() data: GetTreinoDataDTO, @User() user: TokenPayload) {
+    if (user.tipo === Role.PROFESSOR) {
+      data.id_professor = user.id_usuario;
+    }
     return await this.getTreinoService.execute(data);
   }
 
@@ -64,6 +67,12 @@ export class TreinoController {
     @User() user: TokenPayload
   ) {
     return await this.deleteTreinoService.execute(user, id_treino);
+  }
+
+  @Get("catalogo")
+  @Roles(Role.ALUNO, Role.PROFESSOR, Role.ADM)
+  async getCatalogo(@Query() data: GetTreinoDataDTO) {
+    return await this.getTreinoService.execute(data);
   }
 }
 
