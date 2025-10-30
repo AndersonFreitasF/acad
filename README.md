@@ -4,7 +4,8 @@ Este projeto é um sistema de gestão de treinos que permite o cadastro de usuá
 
 ## Tecnologias Utilizadas
 
-- **Backend**: NestJS (Node.js)
+### Backend
+- **Framework**: NestJS (Node.js)
 - **Banco de Dados**: PostgreSQL
 - **Autenticação**: JWT (JSON Web Tokens)
 - **Hash de Senhas**: Argon2
@@ -12,6 +13,17 @@ Este projeto é um sistema de gestão de treinos que permite o cadastro de usuá
 - **Testes**: Vitest
 - **Containerização**: Docker & Docker Compose
 - **Linguagem**: TypeScript
+- **Pagamentos**: Integração com Asaas (PIX e Cartão de Crédito)
+
+### Frontend
+- **Framework**: React 18 + TypeScript
+- **Build Tool**: Vite
+- **Estilização**: Tailwind CSS
+- **Roteamento**: React Router v6
+- **HTTP Client**: Axios
+- **Estado Global**: Zustand
+- **Validação**: React Hook Form + Zod
+- **Ícones**: Lucide React
 
 ## Arquitetura
 
@@ -192,7 +204,7 @@ PORT=3000
 
 ### Instalação e Execução
 
-#### Desenvolvimento
+#### Backend
 
 ```bash
 # Instalar dependências
@@ -207,6 +219,27 @@ npm test
 # Executar testes com cobertura
 npm run test:cov
 ```
+
+#### Frontend
+
+```bash
+# Acessar pasta do frontend
+cd frontend
+
+# Instalar dependências
+npm install
+
+# Criar arquivo .env
+echo "VITE_API_URL=http://localhost:3000" > .env
+
+# Executar em modo desenvolvimento
+npm run dev
+
+# Build para produção
+npm run build
+```
+
+O frontend estará disponível em `http://localhost:5173` (Vite dev server)
 
 #### Produção com Docker
 
@@ -264,27 +297,37 @@ src/modules/[module]/tests/
 
 ### Implementado
 
-- [x] Autenticação e autorização
-- [x] Gestão de usuários
-- [x] Gestão de professores
-- [x] Gestão de exercícios
+- [x] Autenticação e autorização (JWT)
+- [x] Gestão de usuários (CRUD completo)
+- [x] Gestão de professores (CRUD completo)
+- [x] Gestão de exercícios (CRUD completo)
+- [x] Gestão de treinos (CRUD completo)
+- [x] Módulo de pagamentos (Asaas PIX + Cartão)
+- [x] Webhooks de pagamento com HMAC
 - [x] Configuração de banco de dados
 - [x] Testes unitários
 - [x] Dockerização
-- [x] Gestão de treinos
+- [x] **Frontend React completo**:
+  - Sistema de autenticação com JWT
+  - Dashboard por papel (Aluno/Professor/Admin)
+  - Catálogo de treinos para alunos
+  - Compra de treinos (PIX com QR Code + Cartão)
+  - CRUD de exercícios (Professor)
+  - CRUD de treinos (Professor)
+  - CRUD de usuários (Admin)
+  - Layout responsivo com Tailwind CSS
 
 ### Em Desenvolvimento
 
-- [ ] Módulo de pagamentos
 - [ ] Microserviço de desativação
 
 ### Planejado
 
 - [ ] API de relatórios
 - [ ] Notificações por email
-- [ ] Dashboard administrativo
 - [ ] API de métricas
-- [ ] Frontend em React
+- [ ] Paginação completa
+- [ ] Melhorias de UX no frontend
 
 ## API Endpoints
 
@@ -320,6 +363,24 @@ src/modules/[module]/tests/
 | GET    | `/exercicio`            | Listar exercícios   | PROFESSOR |
 | PUT    | `/exercicio/update/:id` | Atualizar exercício | PROFESSOR |
 | DELETE | `/exercicio/delete/:id` | Deletar exercício   | PROFESSOR |
+
+### Treinos
+
+| Método | Endpoint                | Descrição           | Roles                |
+| ------ | ----------------------- | ------------------- | -------------------- |
+| POST   | `/treino`               | Criar treino        | PROFESSOR            |
+| GET    | `/treino`               | Listar treinos      | PROFESSOR, ADM       |
+| GET    | `/treino/catalogo`      | Catálogo de treinos | ALUNO, PROFESSOR, ADM|
+| PUT    | `/treino/update/:id`    | Atualizar treino    | PROFESSOR            |
+| DELETE | `/treino/delete/:id`    | Deletar treino      | PROFESSOR            |
+
+### Pagamentos
+
+| Método | Endpoint              | Descrição                | Roles  |
+| ------ | --------------------- | ------------------------ | ------ |
+| POST   | `/pagamento/compra`   | Comprar treino (PIX/Cartão) | ALUNO  |
+| POST   | `/pagamento/webhook`  | Webhook Asaas (público)  | -      |
+| GET    | `/pagamento/status/:id` | Status do pagamento    | ALUNO  |
 
 ## Contribuição
 

@@ -29,24 +29,29 @@ npm run dev
 - API client com interceptor JWT (`src/api/client.ts`)
 - Types TypeScript (`src/types/index.ts`)
 - Auth store Zustand (`src/store/authStore.ts`)
+- Componentes UI base (Button, Input, Card, Modal, Table)
+- Layout responsivo (Sidebar, Topbar)
+- Sistema de autenticação (Login, PrivateRoute)
+- **Páginas Aluno:**
+  - Dashboard
+  - Catálogo de treinos
+  - Modal de compra (PIX com QR Code + Cartão de Crédito)
+- **Páginas Professor:**
+  - Dashboard
+  - CRUD de Exercícios
+  - CRUD de Treinos (listagem/deleção)
+- **Páginas Admin:**
+  - Dashboard
+  - CRUD de Usuários
 
-🚧 **Próximos passos** (conforme plano em `/compra.plan.md`):
-1. Criar componentes UI base em `src/components/ui/`:
-   - Button.tsx
-   - Input.tsx
-   - Card.tsx
-   - Modal.tsx
-   - Table.tsx
-2. Criar layout em `src/components/layout/`:
-   - Sidebar.tsx
-   - Topbar.tsx
-   - BottomNav.tsx
-   - Layout.tsx
-3. Implementar login em `src/pages/auth/LoginPage.tsx`
-4. Criar PrivateRoute e routing com React Router
-5. Páginas Aluno (catálogo, compra, meus treinos)
-6. Páginas Professor (CRUD exercícios/treinos)
-7. Páginas Admin (CRUD usuários/professores)
+🚧 **Melhorias futuras:**
+- Meus Treinos para Aluno
+- Formulário completo de criação/edição de Treinos (Professor)
+- CRUD de Professores (Admin)
+- Paginação e filtros
+- Loading states melhorados
+- Toast notifications
+- Responsividade mobile (BottomNav)
 
 ## Estrutura de pastas
 ```
