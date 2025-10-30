@@ -3,7 +3,6 @@ import { api } from '../../api/client';
 import { Treino } from '../../types';
 import { Card } from '../../components/ui/Card';
 import { Button } from '../../components/ui/Button';
-import { Modal } from '../../components/ui/Modal';
 import { CompraModal } from '../../components/CompraModal';
 
 export function Catalogo() {
@@ -17,10 +16,13 @@ export function Catalogo() {
 
   const loadCatalogo = async () => {
     try {
-      const response = await api.get('/treino/catalogo');
-      setTreinos(response.data.data);
+      const response = await api.get('/treino/catalogo', {
+        params: { page: 1, size: 100 }
+      });
+      setTreinos(response.data.data || []);
     } catch (error) {
       console.error('Erro ao carregar catálogo:', error);
+      setTreinos([]);
     } finally {
       setLoading(false);
     }

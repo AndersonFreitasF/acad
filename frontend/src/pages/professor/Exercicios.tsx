@@ -20,10 +20,13 @@ export function Exercicios() {
 
   const loadExercicios = async () => {
     try {
-      const response = await api.get('/exercicio');
-      setExercicios(response.data.data);
+      const response = await api.get('/exercicio', {
+        params: { page: 1, size: 100 }
+      });
+      setExercicios(response.data.data || []);
     } catch (error) {
       console.error('Erro ao carregar exercícios:', error);
+      setExercicios([]);
     } finally {
       setLoading(false);
     }
