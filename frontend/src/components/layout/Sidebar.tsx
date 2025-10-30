@@ -8,10 +8,6 @@ export function Sidebar() {
   const getLinks = () => {
     if (!user) return [];
 
-    const baseClass = "flex items-center gap-3 px-4 py-3 rounded-lg transition-colors";
-    const activeClass = "bg-blue-500 text-white";
-    const inactiveClass = "text-gray-700 hover:bg-gray-100";
-
     switch (user.tipo) {
       case 'ALUNO':
         return [
