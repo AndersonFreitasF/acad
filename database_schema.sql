@@ -44,6 +44,7 @@ CREATE TABLE treino (
     id SERIAL PRIMARY KEY,
     titulo VARCHAR(255) NOT NULL,
     descricao TEXT,
+    preco DECIMAL(10,2) NOT NULL,
     id_professor INTEGER NOT NULL REFERENCES usuario(id_usuario),
     created_at TIMESTAMP DEFAULT NOW(),
     updated_at TIMESTAMP,
@@ -135,7 +136,6 @@ CREATE INDEX idx_exercicio_deleted_at ON exercicio(deleted_at);
 
 
 CREATE INDEX idx_treino_professor ON treino(id_professor);
-CREATE INDEX idx_treino_publico ON treino(publico);
 CREATE INDEX idx_treino_deleted_at ON treino(deleted_at);
 
 
