@@ -13,7 +13,7 @@ describe("PostProfessorService", () => {
     nome: "Professor Silva",
     email: "professor@example.com",
     senha: "123456",
-    cpf: "1234",
+    cpf: "29750912063",
   };
 
   const createdBy = 1;
