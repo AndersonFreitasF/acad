@@ -14,6 +14,7 @@ import { AuthModule } from "../auth/auth.module";
 import { UsuarioRepositoryPortToken } from "./application/ports/usuario-repository.port";
 import { UsuarioRepositoryAdapter } from "./adapters/repositories/usuario.repository.adapter";
 import { PostCustomerAsaasRepository } from "./repositories/postCustomerAsaas.repository";
+import { PostCustomerAsaasService } from "./services/postCustomerAsaas.service";
 
 @Module({
   imports: [DatabaseModule, AuthModule],
@@ -28,6 +29,7 @@ import { PostCustomerAsaasRepository } from "./repositories/postCustomerAsaas.re
     DeleteUsuarioRepository,
     DeleteUsuarioService,
     PostCustomerAsaasRepository,
+    PostCustomerAsaasService,
     {
       provide: UsuarioRepositoryPortToken,
       useClass: UsuarioRepositoryAdapter,

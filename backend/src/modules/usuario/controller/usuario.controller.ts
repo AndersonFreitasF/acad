@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Delete,
+  ForbiddenException,
   Get,
   Param,
   Post,
@@ -21,6 +22,7 @@ import { GetUsuarioService } from "../services/getUsuario.service";
 import { PutUsuarioDataDTO } from "../dtos/putUsuarioData.dto";
 import { PutUsuarioService } from "../services/putUsuario.service";
 import { DeleteUsuarioService } from "../services/deleteUsuario.service";
+import { PostCustomerAsaasService } from "../services/postCustomerAsaas.service";
 
 @Controller("usuario")
 @UseGuards(JwtAuthGuard)
@@ -29,7 +31,8 @@ export class UsuarioController {
     private readonly postUsuarioService: PostUsuarioService,
     private readonly getUsuarioService: GetUsuarioService,
     private readonly putUsuarioService: PutUsuarioService,
-    private readonly deleteUsuarioService: DeleteUsuarioService
+    private readonly deleteUsuarioService: DeleteUsuarioService,
+    private readonly postCustomerAsaasService: PostCustomerAsaasService
   ) {}
 
   @Post("/")
@@ -64,5 +67,20 @@ export class UsuarioController {
     @User() user: TokenPayload
   ) {
     return await this.deleteUsuarioService.execute(user, id_usuario);
+  }
+
+  @Post("/:id/customer-asaas")
+  @Roles(Role.ALUNO, Role.PROFESSOR, Role.ADM)
+  async createCustomerAsaas(
+    @Param("id") id_usuario: number,
+    @User() user: TokenPayload
+  ) {
+    const idParam = Number(id_usuario);
+    const idUser = Number(user.id_usuario);
+    
+    if (idUser !== idParam) {
+      throw new ForbiddenException("Você só pode criar customer para si mesmo");
+    }
+    return await this.postCustomerAsaasService.execute(idParam);
   }
 }

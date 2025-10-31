@@ -11,7 +11,7 @@ describe("PostTreinoService", () => {
     titulo: "TREINO FULL BODY",
     descricao: "Treino completo para corpo todo",
     id_professor: 1,
-    publico: true,
+   preco: 100,
     exercicios: [
       {
         id_exercicio: 1,
@@ -39,7 +39,7 @@ describe("PostTreinoService", () => {
     titulo: "TREINO FULL BODY",
     descricao: "TREINO COMPLETO PARA CORPO TODO",
     id_professor: 1,
-    publico: true,
+    preco: 100,
     created_at: new Date(),
   };
 
