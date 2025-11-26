@@ -17,7 +17,7 @@ export function Navbar() {
             to="/catalog"
             className="hover:underline decoration-2 underline-offset-4"
           >
-            CATALOG
+            CATALOGO
           </Link>
           <Link
             to="/dashboard"
@@ -37,7 +37,7 @@ export function Navbar() {
             </Button>
           </Link>
           <Button size="sm" className="bg-neo-blue text-white">
-            JOIN NOW
+            INSCREVER-SE
           </Button>
         </div>
       </div>

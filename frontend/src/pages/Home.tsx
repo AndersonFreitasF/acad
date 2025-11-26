@@ -58,9 +58,9 @@ export function Home() {
           transition={{ type: "spring", stiffness: 200, damping: 20 }}
           className="text-6xl md:text-8xl font-heading text-black drop-shadow-[4px_4px_0_rgba(0,0,0,1)] leading-[0.9]"
         >
-          PUSH <span className="text-neo-blue">LIMITS</span>
+          ULTRAPASSE <span className="text-neo-blue">LIMITES</span>
           <br />
-          BREAK <span className="text-neo-purple">RECORDS</span>
+          QUEBRE <span className="text-neo-purple">RECORDS</span>
         </motion.h1>
 
         <motion.p
@@ -69,7 +69,7 @@ export function Home() {
           transition={{ delay: 0.2, duration: 0.5 }}
           className="text-xl font-bold md:text-2xl"
         >
-          The most hardcore fitness management system for serious athletes.
+          Projeto de academia concluido!
         </motion.p>
 
         <motion.div
@@ -79,10 +79,10 @@ export function Home() {
           className="flex justify-center gap-4 pt-4"
         >
           <Button size="lg" className="text-lg bg-neo-green gap-2">
-            START TRAINING <Zap className="w-5 h-5 fill-current" />
+            Começar treino <Zap className="w-5 h-5 fill-current" />
           </Button>
           <Button size="lg" variant="outline" className="text-lg gap-2">
-            VIEW PLANS <ArrowRight className="w-5 h-5" />
+            VER PLANOS <ArrowRight className="w-5 h-5" />
           </Button>
         </motion.div>
       </section>
@@ -98,7 +98,7 @@ export function Home() {
             <CardHeader>
               <CardTitle>Member Access</CardTitle>
               <CardDescription>
-                Login to view your training schedule
+                Faça login para ver seu plano de treinos
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -119,7 +119,7 @@ export function Home() {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="password">Password</Label>
+                  <Label htmlFor="password">Senha</Label>
                   <Input
                     id="password"
                     type="password"
@@ -145,32 +145,32 @@ export function Home() {
           <Card className="bg-neo-yellow -rotate-1 hover:rotate-0 transition-transform duration-300">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                Plans <Trophy className="w-6 h-6" />
+                Planos <Trophy className="w-6 h-6" />
               </CardTitle>
               <CardDescription className="text-black/80">
-                Join the revolution today
+                Junte-se hoje
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="bg-white p-4 rounded-base border-3 border-black shadow-neo-sm">
                 <div className="flex justify-between items-start">
-                  <h3 className="font-heading text-lg">Pro Fighter</h3>
+                  <h3 className="font-heading text-lg">Plano starter</h3>
                   <span className="bg-black text-white px-2 py-0.5 text-xs font-bold rounded-sm">
                     POPULAR
                   </span>
                 </div>
                 <p className="text-4xl font-heading mt-2">
-                  $99<span className="text-base font-normal">/mo</span>
+                  R$99<span className="text-base font-normal">/mo</span>
                 </p>
                 <ul className="mt-4 space-y-2 text-sm font-bold">
                   <li>✓ All Access Gym</li>
                   <li>✓ Personal Trainer</li>
-                  <li>✓ Sauna & Spa Access</li>
-                  <li>✓ Nutrition Plan</li>
+                  <li>✓ Bate Papo com o treinador</li>
+                  <li>✓ Plano nutricional</li>
                 </ul>
               </div>
               <Button variant="secondary" className="w-full">
-                SUBSCRIBE NOW
+                Inscrever-se agora
               </Button>
             </CardContent>
           </Card>
