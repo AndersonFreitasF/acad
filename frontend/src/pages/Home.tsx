@@ -96,7 +96,7 @@ export function Home() {
         >
           <Card className="bg-white rotate-1 hover:rotate-0 transition-transform duration-300">
             <CardHeader>
-              <CardTitle>Member Access</CardTitle>
+              <CardTitle>Acesso para membros</CardTitle>
               <CardDescription>
                 Faça login para ver seu plano de treinos
               </CardDescription>
