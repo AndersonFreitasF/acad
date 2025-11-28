@@ -38,42 +38,46 @@ export function Dashboard() {
 
   return (
     <div className="space-y-8 py-8 max-w-6xl mx-auto px-4">
-      <h1 className="text-4xl font-heading">STUDENT DASHBOARD</h1>
+      <h1 className="text-4xl font-heading text-black dark:text-white">
+        STUDENT DASHBOARD
+      </h1>
 
       <div className="grid md:grid-cols-3 gap-6">
-        <Card className="bg-neo-blue text-white">
+        <Card className="bg-neo-blue dark:bg-neo-blue text-white border-black dark:border-gray-700">
           <CardHeader>
-            <CardTitle>Active Plan</CardTitle>
+            <CardTitle className="text-white">Active Plan</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-3xl font-heading">PRO FIGHTER</p>
+            <p className="text-3xl font-heading text-white">PRO FIGHTER</p>
             <p className="text-sm mt-2 opacity-90">Valid until Dec 31, 2025</p>
           </CardContent>
         </Card>
 
-        <Card className="bg-neo-pink text-white">
+        <Card className="bg-neo-pink dark:bg-neo-pink text-white border-black dark:border-gray-700">
           <CardHeader>
-            <CardTitle>Next Workout</CardTitle>
+            <CardTitle className="text-white">Next Workout</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-3xl font-heading">LEG DAY</p>
+            <p className="text-3xl font-heading text-white">LEG DAY</p>
             <Button className="mt-4 bg-white text-black border-2 border-black shadow-neo-sm hover:translate-x-[-2px] hover:translate-y-[-2px]">
               START NOW
             </Button>
           </CardContent>
         </Card>
 
-        <Card className="bg-white">
+        <Card className="bg-white dark:bg-gray-800 border-black dark:border-gray-600">
           <CardHeader>
-            <CardTitle>Progress</CardTitle>
+            <CardTitle className="text-black dark:text-white">
+              Progress
+            </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-2">
-              <div className="flex justify-between text-sm font-bold">
+              <div className="flex justify-between text-sm font-bold text-black dark:text-white">
                 <span>Weekly Goal</span>
                 <span>3/5</span>
               </div>
-              <div className="h-4 w-full bg-gray-200 rounded-full border-2 border-black overflow-hidden">
+              <div className="h-4 w-full bg-gray-200 dark:bg-gray-700 rounded-full border-2 border-black dark:border-gray-600 overflow-hidden">
                 <div className="h-full bg-neo-green w-[60%]" />
               </div>
             </div>
@@ -82,24 +86,30 @@ export function Dashboard() {
       </div>
 
       <section className="space-y-4">
-        <h2 className="text-2xl font-heading">MY TRAININGS</h2>
+        <h2 className="text-2xl font-heading text-black dark:text-white">
+          MY TRAININGS
+        </h2>
         {loading ? (
           <div className="flex justify-center py-10">
-            <Loader2 className="w-8 h-8 animate-spin" />
+            <Loader2 className="w-8 h-8 animate-spin text-neo-blue" />
           </div>
         ) : (
           <div className="grid gap-4">
             {myTrainings.length === 0 ? (
-              <p className="text-muted-foreground">No trainings found.</p>
+              <p className="text-muted-foreground dark:text-gray-400">
+                No trainings found.
+              </p>
             ) : (
               myTrainings.map((training) => (
                 <div
                   key={training.id}
-                  className="bg-white p-4 border-3 border-black rounded-base shadow-neo flex justify-between items-center"
+                  className="bg-white dark:bg-gray-800 p-4 border-3 border-black dark:border-gray-600 rounded-base shadow-neo flex justify-between items-center"
                 >
                   <div>
-                    <h3 className="font-bold text-lg">{training.titulo}</h3>
-                    <p className="text-sm text-gray-600">
+                    <h3 className="font-bold text-lg text-black dark:text-white">
+                      {training.titulo}
+                    </h3>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">
                       {training.descricao}
                     </p>
                   </div>

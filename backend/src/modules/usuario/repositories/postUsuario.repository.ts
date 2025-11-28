@@ -25,7 +25,7 @@ export class PostUsuarioRepository {
       data.email.toUpperCase(),
       data.senha,
       data.cpf,
-      created_by,
+      created_by === 0 ? null : created_by,
     ];
     await this.dataBaseService.query(sql, binds);
   }

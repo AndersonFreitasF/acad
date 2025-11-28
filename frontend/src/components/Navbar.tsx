@@ -1,9 +1,44 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "./ui/button";
+import { Moon, Sun, LogOut } from "lucide-react";
+import { useEffect, useState } from "react";
+import { authService } from "../services/auth";
 
 export function Navbar() {
+  const navigate = useNavigate();
+  const [darkMode, setDarkMode] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  useEffect(() => {
+    const isDark = localStorage.getItem("darkMode") === "true";
+    setDarkMode(isDark);
+    if (isDark) {
+      document.documentElement.classList.add("dark");
+    }
+
+    setIsAuthenticated(authService.isAuthenticated());
+  }, []);
+
+  const toggleDarkMode = () => {
+    const newDarkMode = !darkMode;
+    setDarkMode(newDarkMode);
+    localStorage.setItem("darkMode", String(newDarkMode));
+
+    if (newDarkMode) {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+  };
+
+  const handleLogout = () => {
+    authService.logout();
+    setIsAuthenticated(false);
+    navigate("/");
+  };
+
   return (
-    <nav className="border-b-3 border-black bg-white py-4 px-6 md:px-12 flex items-center justify-between sticky top-0 z-50">
+    <nav className="border-b-3 border-black dark:border-gray-700 bg-white dark:bg-neo-dark py-4 px-6 md:px-12 flex items-center justify-between sticky top-0 z-50">
       <Link
         to="/"
         className="text-2xl font-heading uppercase tracking-tighter hover:text-neo-blue transition-colors"
@@ -17,28 +52,59 @@ export function Navbar() {
             to="/catalog"
             className="hover:underline decoration-2 underline-offset-4"
           >
-            CATALOGO
+            CATALOG
           </Link>
-          <Link
-            to="/dashboard"
-            className="hover:underline decoration-2 underline-offset-4"
-          >
-            DASHBOARD
-          </Link>
+          {isAuthenticated && (
+            <Link
+              to="/dashboard"
+              className="hover:underline decoration-2 underline-offset-4"
+            >
+              DASHBOARD
+            </Link>
+          )}
         </div>
         <div className="flex items-center gap-4">
-          <Link to="/login">
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={toggleDarkMode}
+            className="rounded-full"
+          >
+            {darkMode ? (
+              <Sun className="h-5 w-5" />
+            ) : (
+              <Moon className="h-5 w-5" />
+            )}
+          </Button>
+
+          {isAuthenticated ? (
             <Button
               variant="outline"
               size="sm"
-              className="hidden md:inline-flex"
+              onClick={handleLogout}
+              className="gap-2"
             >
-              LOGIN
+              <LogOut className="h-4 w-4" />
+              SAIR
             </Button>
-          </Link>
-          <Button size="sm" className="bg-neo-blue text-white">
-            INSCREVER-SE
-          </Button>
+          ) : (
+            <>
+              <Link to="/login">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="hidden md:inline-flex"
+                >
+                  LOGIN
+                </Button>
+              </Link>
+              <Link to="/register">
+                <Button size="sm" className="bg-neo-blue text-white">
+                  CADASTRAR
+                </Button>
+              </Link>
+            </>
+          )}
         </div>
       </div>
     </nav>

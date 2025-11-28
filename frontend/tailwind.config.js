@@ -1,5 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 export default {
+  darkMode: "class",
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
@@ -37,7 +38,6 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        // Neo-brutalist specific palette
         neo: {
           yellow: "#FFDE59",
           blue: "#5471FF",
@@ -53,13 +53,13 @@ export default {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
-        base: "5px", // Standard radius for brutalist elements if not sharp
+        base: "5px",
       },
       boxShadow: {
         neo: "4px 4px 0px 0px rgba(0,0,0,1)",
         "neo-sm": "2px 2px 0px 0px rgba(0,0,0,1)",
         "neo-lg": "6px 6px 0px 0px rgba(0,0,0,1)",
-        "neo-hover": "2px 2px 0px 0px rgba(0,0,0,1)", // Click effect
+        "neo-hover": "2px 2px 0px 0px rgba(0,0,0,1)",
       },
       fontWeight: {
         base: "500",

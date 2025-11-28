@@ -23,6 +23,7 @@ import { PutUsuarioDataDTO } from "../dtos/putUsuarioData.dto";
 import { PutUsuarioService } from "../services/putUsuario.service";
 import { DeleteUsuarioService } from "../services/deleteUsuario.service";
 import { PostCustomerAsaasService } from "../services/postCustomerAsaas.service";
+import { Public } from "src/common/decorators/public.decorator";
 
 @Controller("usuario")
 @UseGuards(JwtAuthGuard)
@@ -34,6 +35,12 @@ export class UsuarioController {
     private readonly deleteUsuarioService: DeleteUsuarioService,
     private readonly postCustomerAsaasService: PostCustomerAsaasService
   ) {}
+
+  @Post("/register")
+  @Public()
+  async register(@Body() data: PostUsuarioDataDTO) {
+    return await this.postUsuarioService.execute(data, null);
+  }
 
   @Post("/")
   @Roles(Role.ADM)
@@ -77,7 +84,7 @@ export class UsuarioController {
   ) {
     const idParam = Number(id_usuario);
     const idUser = Number(user.id_usuario);
-    
+
     if (idUser !== idParam) {
       throw new ForbiddenException("Você só pode criar customer para si mesmo");
     }

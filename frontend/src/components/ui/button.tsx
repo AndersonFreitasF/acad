@@ -4,20 +4,22 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "../../lib/utils";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center whitespace-nowrap rounded-base text-sm font-heading ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border-3 border-black shadow-neo hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-neo-lg active:translate-x-[2px] active:translate-y-[2px] active:shadow-neo-sm",
+  "inline-flex items-center justify-center whitespace-nowrap rounded-base text-sm font-heading ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border-3 border-black dark:border-gray-600 shadow-neo hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-neo-lg active:translate-x-[2px] active:translate-y-[2px] active:shadow-neo-sm",
   {
     variants: {
       variant: {
-        default: "bg-neo-blue text-white",
+        default: "bg-neo-blue text-white dark:bg-neo-blue dark:text-white",
         destructive:
           "bg-destructive text-destructive-foreground hover:bg-destructive/90",
-        outline: "bg-white text-black hover:bg-neo-light",
-        secondary: "bg-neo-purple text-white",
+        outline:
+          "bg-white dark:bg-gray-800 text-black dark:text-white hover:bg-neo-light dark:hover:bg-gray-700",
+        secondary:
+          "bg-neo-purple text-white dark:bg-neo-purple dark:text-white",
         ghost:
-          "shadow-none border-transparent hover:bg-accent hover:text-accent-foreground hover:shadow-none hover:translate-x-0 hover:translate-y-0",
+          "shadow-none border-transparent hover:bg-accent hover:text-accent-foreground hover:shadow-none hover:translate-x-0 hover:translate-y-0 dark:hover:bg-gray-800",
         link: "text-primary underline-offset-4 hover:underline shadow-none border-none hover:translate-x-0 hover:translate-y-0",
-        brutal: "bg-neo-yellow text-black",
-        success: "bg-neo-green text-black",
+        brutal: "bg-neo-yellow text-black dark:bg-neo-yellow dark:text-black",
+        success: "bg-neo-green text-black dark:bg-neo-green dark:text-black",
       },
       size: {
         default: "h-12 px-6 py-2",

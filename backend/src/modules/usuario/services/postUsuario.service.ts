@@ -13,6 +13,7 @@ import {
   PasswordHasherPort,
   PasswordHasherPortToken,
 } from "../../auth/application/ports/password-hasher.port";
+
 @Injectable()
 export class PostUsuarioService {
   constructor(
@@ -22,18 +23,23 @@ export class PostUsuarioService {
     private readonly passwordHasher: PasswordHasherPort
   ) {}
 
-  async execute(data: PostUsuarioDataDTO, created_by: number) {
+  async execute(data: PostUsuarioDataDTO, created_by: number | null) {
+    const cpfValido = await this.checkCpf(data.cpf);
+    if (!cpfValido) {
+      throw new BadRequestException("CPF inválido");
+    }
+
     try {
-      const cpfValido = await this.checkCpf(data.cpf);
-      if (cpfValido == true) {
-        await this.repo.postUsuario(
-          { ...data, senha: await this.passwordHasher.hash(data.senha) },
-          created_by
-        );
-      } else {
-        throw new BadRequestException("CPF invalido");
-      }
+      const createdById = created_by === null ? 0 : created_by;
+
+      await this.repo.postUsuario(
+        { ...data, senha: await this.passwordHasher.hash(data.senha) },
+        createdById
+      );
+
+      return { message: "Usuário criado com sucesso" };
     } catch (error) {
+      console.error("Erro ao criar usuário:", error);
       throw new InternalServerErrorException(
         "Não foi possível criar o usuário"
       );
@@ -42,7 +48,7 @@ export class PostUsuarioService {
 
   async checkCpf(cpf: string): Promise<boolean> {
     if (!cpf || cpf.length !== 11) return false;
-    
+
     const arrayCpf = cpf.split("").map((n) => parseInt(n, 10));
 
     let soma1 = 0;

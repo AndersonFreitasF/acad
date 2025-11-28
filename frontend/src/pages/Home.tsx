@@ -38,25 +38,24 @@ export function Home() {
   return (
     <div className="space-y-12 py-12 overflow-hidden">
       <section className="text-center space-y-6 max-w-2xl mx-auto px-4 relative">
-        {/* Background decoration */}
         <motion.div
           initial={{ opacity: 0, scale: 0.5 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.8 }}
-          className="absolute -top-20 -left-20 w-40 h-40 bg-neo-yellow rounded-full blur-3xl -z-10 opacity-50"
+          className="absolute -top-20 -left-20 w-40 h-40 bg-neo-yellow rounded-full blur-3xl -z-10 opacity-50 dark:opacity-40"
         />
         <motion.div
           initial={{ opacity: 0, scale: 0.5 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.8, delay: 0.2 }}
-          className="absolute top-10 -right-20 w-60 h-60 bg-neo-purple rounded-full blur-3xl -z-10 opacity-50"
+          className="absolute top-10 -right-20 w-60 h-60 bg-neo-purple rounded-full blur-3xl -z-10 opacity-50 dark:opacity-40"
         />
 
         <motion.h1
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ type: "spring", stiffness: 200, damping: 20 }}
-          className="text-6xl md:text-8xl font-heading text-black drop-shadow-[4px_4px_0_rgba(0,0,0,1)] leading-[0.9]"
+          className="text-6xl md:text-8xl font-heading leading-[0.9] drop-shadow-none text-black dark:text-white"
         >
           ULTRAPASSE <span className="text-neo-blue">LIMITES</span>
           <br />
@@ -67,7 +66,7 @@ export function Home() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2, duration: 0.5 }}
-          className="text-xl font-bold md:text-2xl"
+          className="text-xl font-bold md:text-2xl text-black dark:text-white"
         >
           Projeto de academia concluido!
         </motion.p>
@@ -78,10 +77,17 @@ export function Home() {
           transition={{ delay: 0.4, type: "spring" }}
           className="flex justify-center gap-4 pt-4"
         >
-          <Button size="lg" className="text-lg bg-neo-green gap-2">
+          <Button
+            size="lg"
+            className="text-lg bg-neo-green gap-2 text-black dark:text-black"
+          >
             Começar treino <Zap className="w-5 h-5 fill-current" />
           </Button>
-          <Button size="lg" variant="outline" className="text-lg gap-2">
+          <Button
+            size="lg"
+            variant="outline"
+            className="text-lg gap-2 border-black dark:border-white text-black dark:text-white"
+          >
             VER PLANOS <ArrowRight className="w-5 h-5" />
           </Button>
         </motion.div>
@@ -94,40 +100,53 @@ export function Home() {
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-          <Card className="bg-white rotate-1 hover:rotate-0 transition-transform duration-300">
+          <Card className="bg-white dark:bg-neutral-900 rotate-1 hover:rotate-0 transition-transform duration-300 border border-black dark:border-white">
             <CardHeader>
-              <CardTitle>Acesso para membros</CardTitle>
-              <CardDescription>
+              <CardTitle className="text-black dark:text-white">
+                Acesso para membros
+              </CardTitle>
+              <CardDescription className="text-black/80 dark:text-white/70">
                 Faça login para ver seu plano de treinos
               </CardDescription>
             </CardHeader>
             <CardContent>
               <form onSubmit={handleLogin} className="space-y-4">
                 {error && (
-                  <div className="bg-destructive/10 text-destructive text-sm p-2 rounded-sm font-bold">
+                  <div className="bg-red-500/10 text-red-500 text-sm p-2 rounded-sm font-bold">
                     {error}
                   </div>
                 )}
                 <div className="space-y-2">
-                  <Label htmlFor="email">Email</Label>
+                  <Label htmlFor="email" className="text-black dark:text-white">
+                    Email
+                  </Label>
                   <Input
                     id="email"
                     placeholder="fit@neo.gym"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     disabled={loading}
+                    className="bg-white dark:bg-neutral-800 text-black dark:text-white"
                   />
                 </div>
+
                 <div className="space-y-2">
-                  <Label htmlFor="password">Senha</Label>
+                  <Label
+                    htmlFor="password"
+                    className="text-black dark:text-white"
+                  >
+                    Senha
+                  </Label>
                   <Input
                     id="password"
                     type="password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     disabled={loading}
+                    className="bg-white dark:bg-neutral-800 text-black dark:text-white"
                   />
                 </div>
+
                 <Button className="w-full" disabled={loading}>
                   {loading ? "LOGGING IN..." : "ENTER SYSTEM"}
                 </Button>
@@ -136,40 +155,46 @@ export function Home() {
           </Card>
         </motion.div>
 
+        {/* Plans card */}
         <motion.div
           initial={{ opacity: 0, x: 50 }}
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.2 }}
         >
-          <Card className="bg-neo-yellow -rotate-1 hover:rotate-0 transition-transform duration-300">
+          <Card className="bg-neo-yellow dark:bg-neo-yellow -rotate-1 hover:rotate-0 transition-transform duration-300 border border-black">
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
+              <CardTitle className="flex items-center gap-2 text-black dark:text-black">
                 Planos <Trophy className="w-6 h-6" />
               </CardTitle>
-              <CardDescription className="text-black/80">
+              <CardDescription className="text-black/80 dark:text-black/80">
                 Junte-se hoje
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="bg-white p-4 rounded-base border-3 border-black shadow-neo-sm">
+              <div className="bg-white dark:bg-white p-4 rounded-base border-3 border-black shadow-neo-sm">
                 <div className="flex justify-between items-start">
-                  <h3 className="font-heading text-lg">Plano starter</h3>
+                  <h3 className="font-heading text-lg text-black">
+                    Plano starter
+                  </h3>
                   <span className="bg-black text-white px-2 py-0.5 text-xs font-bold rounded-sm">
                     POPULAR
                   </span>
                 </div>
-                <p className="text-4xl font-heading mt-2">
+                <p className="text-4xl font-heading mt-2 text-black">
                   R$99<span className="text-base font-normal">/mo</span>
                 </p>
-                <ul className="mt-4 space-y-2 text-sm font-bold">
+                <ul className="mt-4 space-y-2 text-sm font-bold text-black">
                   <li>✓ All Access Gym</li>
                   <li>✓ Personal Trainer</li>
                   <li>✓ Bate Papo com o treinador</li>
                   <li>✓ Plano nutricional</li>
                 </ul>
               </div>
-              <Button variant="secondary" className="w-full">
+              <Button
+                variant="secondary"
+                className="w-full text-black dark:text-black"
+              >
                 Inscrever-se agora
               </Button>
             </CardContent>
