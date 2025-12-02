@@ -6,13 +6,15 @@ import {
 } from "../application/ports/pagamento-repository.port";
 import { CompraTreinoRequestDto, CompraTreinoCardResponseDto, CompraTreinoPixResponseDto } from "../dtos/compraTreino.dto";
 import { InternalPaymentStatus } from "../interface/asaas.interface";
+import { PostCustomerAsaasService } from "../../usuario/services/postCustomerAsaas.service";
 
 @Injectable()
 export class CompraTreinoService {
   constructor(
     private readonly compraRepo: CompraRepository,
     @Inject(PagamentoRepositoryPortToken)
-    private readonly pagamentoRepo: PagamentoRepositoryPort
+    private readonly pagamentoRepo: PagamentoRepositoryPort,
+    private readonly postCustomerAsaasService: PostCustomerAsaasService
   ) {}
 
   async comprar(id_usuario: number, data: CompraTreinoRequestDto): Promise<CompraTreinoPixResponseDto | CompraTreinoCardResponseDto> {
@@ -26,8 +28,17 @@ export class CompraTreinoService {
       throw new ConflictException("Usuário já possui acesso a este treino");
     }
 
-    const customerId = await this.compraRepo.getAsaasCustomerId(id_usuario);
-    if (!customerId) throw new BadRequestException("Customer Asaas não encontrado para o usuário");
+    let customerId = await this.compraRepo.getAsaasCustomerId(id_usuario);
+    
+    // Create ASAAS customer on-demand if not found
+    if (!customerId) {
+      try {
+        const customer = await this.postCustomerAsaasService.execute(id_usuario);
+        customerId = customer.id;
+      } catch (error) {
+        throw new BadRequestException("Falha ao criar cliente no sistema de pagamentos. Tente novamente mais tarde.");
+      }
+    }
 
     const payment = await this.pagamentoRepo.postPagamento({
       customerId: customerId as any,

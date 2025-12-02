@@ -35,5 +35,6 @@ import { PostCustomerAsaasService } from "./services/postCustomerAsaas.service";
       useClass: UsuarioRepositoryAdapter,
     },
   ],
+  exports: [PostCustomerAsaasService],
 })
 export class UsuarioModule {}
