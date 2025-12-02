@@ -30,7 +30,7 @@ export function Login() {
       await authService.login(email, password);
       navigate("/dashboard");
     } catch (err: any) {
-      console.error("Login error:", err);
+      console.error("Erro no login:", err);
       setError(
         err.response?.data?.message || "Credenciais inválidas. Tente novamente."
       );
@@ -41,11 +41,11 @@ export function Login() {
 
   return (
     <div className="min-h-[calc(100vh-180px)] flex items-center justify-center p-4">
-      <Card className="w-full max-w-md">
+      <Card className="w-full max-w-md border-3 shadow-neo">
         <CardHeader className="space-y-1">
-          <CardTitle className="text-3xl font-heading">LOGIN</CardTitle>
+          <CardTitle className="text-3xl font-heading">ENTRAR</CardTitle>
           <CardDescription>
-            Entre com suas credenciais para acessar sua conta
+            Digite suas credenciais para acessar o sistema
           </CardDescription>
         </CardHeader>
         <CardContent>

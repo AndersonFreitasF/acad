@@ -5,6 +5,12 @@ import { Catalog } from "./pages/Catalog";
 import { Dashboard } from "./pages/Dashboard";
 import { Login } from "./pages/Login";
 import { Register } from "./pages/Register";
+import { Users } from "./pages/Users";
+import { Professors } from "./pages/Professors";
+import { Exercises } from "./pages/Exercises";
+import { Trainings } from "./pages/Trainings";
+import { Checkout } from "./pages/Checkout";
+import { MyTrainings } from "./pages/MyTrainings";
 
 function App() {
   return (
@@ -18,6 +24,15 @@ function App() {
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/my-trainings" element={<MyTrainings />} />
+            {/* Management Routes */}
+            <Route path="/users" element={<Users />} />
+            <Route path="/professors" element={<Professors />} />
+            <Route path="/exercises" element={<Exercises />} />
+            <Route path="/trainings" element={<Trainings />} />
+
+            <Route path="/checkout/:id" element={<Checkout />} />
+
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </main>

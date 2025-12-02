@@ -52,13 +52,10 @@ export function Register() {
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault(); // IMPORTANTE: Prevenir submit padrão
+    e.preventDefault();
     setLoading(true);
     setError("");
 
-    console.log("🚀 Iniciando cadastro..."); // DEBUG
-
-    // Validações
     if (formData.senha !== formData.confirmSenha) {
       setError("As senhas não coincidem");
       setLoading(false);
@@ -85,20 +82,14 @@ export function Register() {
       senha: formData.senha,
     };
 
-    console.log("📤 Payload:", payload); // DEBUG
-
     try {
-      const response = await userService.register(payload);
-      console.log("✅ Sucesso:", response); // DEBUG
-
+      await userService.register(payload);
       setSuccess(true);
       setTimeout(() => {
         navigate("/login");
       }, 2000);
     } catch (err: any) {
-      console.error("❌ Erro completo:", err); // DEBUG
-      console.error("❌ Response:", err.response?.data); // DEBUG
-
+      console.error("Erro completo:", err);
       setError(
         err.response?.data?.message || "Erro ao criar conta. Tente novamente."
       );
@@ -220,7 +211,7 @@ export function Register() {
           <div className="text-sm text-center text-muted-foreground">
             Já tem uma conta?{" "}
             <Link
-              to="/register"
+              to="/login"
               className="text-neo-blue font-bold hover:underline"
             >
               Faça login aqui

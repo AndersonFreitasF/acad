@@ -3,11 +3,13 @@ import { Button } from "./ui/button";
 import { Moon, Sun, LogOut } from "lucide-react";
 import { useEffect, useState } from "react";
 import { authService } from "../services/auth";
+import { User } from "../services/user";
 
 export function Navbar() {
   const navigate = useNavigate();
   const [darkMode, setDarkMode] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
     const isDark = localStorage.getItem("darkMode") === "true";
@@ -16,8 +18,20 @@ export function Navbar() {
       document.documentElement.classList.add("dark");
     }
 
-    setIsAuthenticated(authService.isAuthenticated());
+    checkAuth();
+    window.addEventListener("storage", checkAuth);
+    return () => window.removeEventListener("storage", checkAuth);
   }, []);
+
+  const checkAuth = () => {
+    const isAuth = authService.isAuthenticated();
+    setIsAuthenticated(isAuth);
+    if (isAuth) {
+      setUser(authService.getUser());
+    } else {
+      setUser(null);
+    }
+  };
 
   const toggleDarkMode = () => {
     const newDarkMode = !darkMode;
@@ -34,6 +48,7 @@ export function Navbar() {
   const handleLogout = () => {
     authService.logout();
     setIsAuthenticated(false);
+    setUser(null);
     navigate("/");
   };
 
@@ -47,13 +62,14 @@ export function Navbar() {
       </Link>
 
       <div className="flex items-center gap-6">
-        <div className="hidden md:flex items-center gap-6 font-bold text-sm">
+        <div className="hidden lg:flex items-center gap-6 font-bold text-sm">
           <Link
             to="/catalog"
             className="hover:underline decoration-2 underline-offset-4"
           >
-            CATALOG
+            CATÁLOGO
           </Link>
+
           {isAuthenticated && (
             <Link
               to="/dashboard"
@@ -62,7 +78,42 @@ export function Navbar() {
               DASHBOARD
             </Link>
           )}
+
+          {isAuthenticated && user?.tipo === "ADM" && (
+            <>
+              <Link
+                to="/users"
+                className="hover:underline decoration-2 underline-offset-4 text-neo-blue"
+              >
+                USUÁRIOS
+              </Link>
+              <Link
+                to="/professors"
+                className="hover:underline decoration-2 underline-offset-4 text-neo-purple"
+              >
+                PROFESSORES
+              </Link>
+            </>
+          )}
+
+          {isAuthenticated && user?.tipo === "PROFESSOR" && (
+            <>
+              <Link
+                to="/exercises"
+                className="hover:underline decoration-2 underline-offset-4 text-neo-pink"
+              >
+                EXERCÍCIOS
+              </Link>
+              <Link
+                to="/trainings"
+                className="hover:underline decoration-2 underline-offset-4 text-neo-blue"
+              >
+                TREINOS
+              </Link>
+            </>
+          )}
         </div>
+
         <div className="flex items-center gap-4">
           <Button
             variant="ghost"
@@ -78,15 +129,20 @@ export function Navbar() {
           </Button>
 
           {isAuthenticated ? (
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={handleLogout}
-              className="gap-2"
-            >
-              <LogOut className="h-4 w-4" />
-              SAIR
-            </Button>
+            <div className="flex items-center gap-2">
+              <span className="hidden md:inline-block text-sm font-bold bg-gray-100 dark:bg-gray-800 px-3 py-1 rounded-full">
+                {user?.nome?.split(" ")[0]}
+              </span>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleLogout}
+                className="gap-2"
+              >
+                <LogOut className="h-4 w-4" />
+                SAIR
+              </Button>
+            </div>
           ) : (
             <>
               <Link to="/login">

@@ -10,6 +10,7 @@ import { motion } from "framer-motion";
 import { Zap, Activity, Dumbbell, Flower, Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Training, trainingService } from "../services/training";
+import { useNavigate } from "react-router-dom";
 
 const container = {
   hidden: { opacity: 0 },
@@ -29,6 +30,7 @@ const item = {
 export function Catalog() {
   const [trainings, setTrainings] = useState<Training[]>([]);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchTrainings = async () => {
@@ -36,7 +38,7 @@ export function Catalog() {
         const data = await trainingService.getCatalog();
         setTrainings(data);
       } catch (error) {
-        console.error("Failed to fetch catalog", error);
+        console.error("Erro ao buscar catálogo", error);
       } finally {
         setLoading(false);
       }
@@ -57,8 +59,8 @@ export function Catalog() {
   return (
     <div className="space-y-8 py-8 max-w-6xl mx-auto px-4">
       <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-        <h1 className="text-4xl font-heading">TRAINING CATALOG</h1>
-        <Button variant="outline">FILTER</Button>
+        <h1 className="text-4xl font-heading">CATÁLOGO DE TREINOS</h1>
+        <Button variant="outline">FILTRAR</Button>
       </div>
 
       {loading ? (
@@ -86,7 +88,7 @@ export function Catalog() {
                       {icon}
                     </div>
                     <p className="text-sm font-bold text-muted-foreground">
-                      Instructor ID: {treino.id_professor}
+                      ID Instrutor: {treino.id_professor}
                     </p>
                   </CardHeader>
                   <CardContent className="flex-1">
@@ -96,7 +98,16 @@ export function Catalog() {
                     <span className="text-2xl font-heading">
                       R$ {Number(treino.preco).toFixed(2)}
                     </span>
-                    <Button size="sm">BUY NOW</Button>
+                    <Button
+                      size="sm"
+                      onClick={() =>
+                        navigate(`/checkout/${treino.id}`, {
+                          state: { training: treino },
+                        })
+                      }
+                    >
+                      COMPRAR
+                    </Button>
                   </CardFooter>
                 </Card>
               </motion.div>
