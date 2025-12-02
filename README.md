@@ -1,183 +1,134 @@
-# Sistema de Gestão de Treinos
+# 🏋️ Sistema de Gestão de Treinos
 
-Este projeto é um sistema de gestão de treinos que permite o cadastro de usuários (administradores, professores e alunos), criação e gerenciamento de treinos, registro de exercícios e controle de pagamentos. O objetivo é facilitar a organização de treinos entre professores e alunos, além de manter o histórico de pagamentos e assinaturas.
+Sistema completo para gestão de treinos entre professores e alunos, com catálogo de treinos, exercícios, pagamentos via PIX/Cartão e dashboards por tipo de usuário.
 
-## Tecnologias Utilizadas
+![NestJS](https://img.shields.io/badge/NestJS-E0234E?style=for-the-badge&logo=nestjs&logoColor=white)
+![React](https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=react&logoColor=black)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
+
+## 📋 Índice
+
+- [Tecnologias](#-tecnologias)
+- [Arquitetura](#-arquitetura)
+- [Funcionalidades](#-funcionalidades)
+- [Instalação](#-instalação)
+- [Estrutura do Projeto](#-estrutura-do-projeto)
+- [API Endpoints](#-api-endpoints)
+- [Papéis e Permissões](#-papéis-e-permissões)
+- [Design System](#-design-system)
+
+---
+
+## 🛠 Tecnologias
 
 ### Backend
-- **Framework**: NestJS (Node.js)
-- **Banco de Dados**: PostgreSQL
-- **Autenticação**: JWT (JSON Web Tokens)
-- **Hash de Senhas**: Argon2
-- **Validação**: Class Validator
-- **Testes**: Vitest
-- **Containerização**: Docker & Docker Compose
-- **Linguagem**: TypeScript
-- **Pagamentos**: Integração com Asaas (PIX e Cartão de Crédito)
+| Tecnologia | Descrição |
+|------------|-----------|
+| **NestJS** | Framework Node.js para APIs escaláveis |
+| **PostgreSQL** | Banco de dados relacional |
+| **JWT** | Autenticação stateless |
+| **Argon2** | Hash seguro de senhas |
+| **Vitest** | Testes unitários |
+| **Docker** | Containerização |
+| **Asaas** | Gateway de pagamentos (PIX + Cartão) |
 
 ### Frontend
-- **Framework**: React 18 + TypeScript
-- **Build Tool**: Vite
-- **Estilização**: Tailwind CSS
-- **Roteamento**: React Router v6
-- **HTTP Client**: Axios
-- **Estado Global**: Zustand
-- **Validação**: React Hook Form + Zod
-- **Ícones**: Lucide React
+| Tecnologia | Descrição |
+|------------|-----------|
+| **React 18** | Biblioteca UI |
+| **TypeScript** | Tipagem estática |
+| **Vite** | Build tool ultra-rápido |
+| **Tailwind CSS** | Estilização utility-first |
+| **Framer Motion** | Animações fluidas |
+| **React Router v6** | Roteamento SPA |
+| **Axios** | HTTP client |
+| **Lucide React** | Ícones modernos |
 
-## Arquitetura
+---
 
-O projeto utiliza a **Arquitetura Hexagonal (Ports & Adapters)**, que separa a lógica de negócio da infraestrutura, facilitando a manutenção e testes.
+## 🏗 Arquitetura
 
-### Estrutura de Pastas
+O projeto utiliza **Arquitetura Hexagonal (Ports & Adapters)** no backend:
 
 ```
-src/
-├── common/                 # Componentes compartilhados
-│   ├── decorators/        # Decorators customizados
-│   ├── enum/             # Enums do sistema
-│   ├── guards/           # Guards de autenticação/autorização
-│   └── pagination/       # DTOs de paginação
-├── config/               # Configurações do sistema
-├── modules/              # Módulos da aplicação
-│   ├── auth/            # Autenticação
-│   ├── usuario/         # Gestão de usuários
-│   ├── professor/       # Gestão de professores
-│   ├── exercicio/       # Gestão de exercícios
-│   ├── treino/          # Gestão de treinos (planejado)
-│   └── database/        # Conexão com banco de dados
-└── main.ts              # Ponto de entrada da aplicação
+┌─────────────────────────────────────────────────────────────┐
+│                      CONTROLLERS                             │
+│              (Entrada HTTP - NestJS)                        │
+└─────────────────────┬───────────────────────────────────────┘
+                      │
+┌─────────────────────▼───────────────────────────────────────┐
+│                      SERVICES                                │
+│           (Lógica de Negócio - Use Cases)                   │
+└─────────────────────┬───────────────────────────────────────┘
+                      │
+┌─────────────────────▼───────────────────────────────────────┐
+│                   PORTS (Interfaces)                         │
+│        (Contratos - Inversão de Dependência)                │
+└─────────────────────┬───────────────────────────────────────┘
+                      │
+┌─────────────────────▼───────────────────────────────────────┐
+│               ADAPTERS (Implementations)                     │
+│             (Repositórios - Acesso a Dados)                 │
+└─────────────────────────────────────────────────────────────┘
 ```
 
-### Fluxo de Autenticação
+### Benefícios
+- ✅ Testabilidade (mocks fáceis via interfaces)
+- ✅ Baixo acoplamento
+- ✅ Troca de infraestrutura sem impacto na lógica
 
-1. Usuário faz login via `POST /auth/login`
-2. Sistema valida credenciais e retorna JWT
-3. Token JWT é usado para autenticar requisições subsequentes
-4. Guards verificam permissões baseadas no role do usuário
+---
 
-## Módulos Implementados
+## ✨ Funcionalidades
 
-### Auth Module
+### Implementado ✅
 
-- **Funcionalidade**: Autenticação e autorização
-- **Endpoints**:
-  - `POST /auth/login` - Login de usuários
-- **Tecnologias**: JWT, Argon2 para hash de senhas
-- **Guards**: JwtAuthGuard para proteção de rotas
+| Módulo | Funcionalidades |
+|--------|----------------|
+| **Auth** | Login JWT, Guards por role, Refresh token |
+| **Usuário** | CRUD completo, Soft delete, Validação CPF |
+| **Professor** | CRUD, Lista com treinos criados |
+| **Exercício** | CRUD por professores |
+| **Treino** | CRUD, Catálogo público, Associação de exercícios |
+| **Pagamento** | PIX com QR Code, Cartão de crédito, Webhooks Asaas |
+| **Frontend** | Dashboard por role, Compra de treinos, Profile editing |
 
-### Usuario Module
+### Em Desenvolvimento 🚧
 
-- **Funcionalidade**: Gestão completa de usuários
-- **Endpoints**:
-  - `POST /usuario` - Criar usuário (ADM)
-  - `GET /usuario` - Listar usuários (ADM)
-  - `PUT /usuario/update/:id` - Atualizar usuário (ALUNO/ADM)
-  - `DELETE /usuario/delete/:id` - Deletar usuário (ADM/ALUNO)
-- **Roles**: ADM, ALUNO, PROFESSOR
-- **Campos**: nome, email, senha, tipo, perfilAtivo
+- [ ] Microserviço de desativação automática
+- [ ] API de relatórios
+- [ ] Notificações por email
+- [ ] Paginação avançada com filtros
 
-### Professor Module
+---
 
-- **Funcionalidade**: Gestão específica de professores
-- **Endpoints**:
-  - `POST /professor` - Criar professor (ADM)
-  - `GET /professor` - Listar professores (ADM)
-  - `PUT /professor/update/:id` - Atualizar professor (ADM/PROFESSOR)
-  - `DELETE /professor/delete/:id` - Deletar professor (ADM)
-- **Permissões**: Apenas ADM pode criar/deletar professores
-
-### Exercicio Module
-
-- **Funcionalidade**: Cadastro e gerenciamento de exercícios
-- **Endpoints**:
-  - `POST /exercicio` - Criar exercício (PROFESSOR)
-  - `GET /exercicio` - Listar exercícios (PROFESSOR)
-  - `PUT /exercicio/update/:id` - Atualizar exercício (PROFESSOR)
-  - `DELETE /exercicio/delete/:id` - Deletar exercício (PROFESSOR)
-- **Campos**: nome, descrição
-
-### Database Module
-
-- **Funcionalidade**: Conexão e operações com PostgreSQL
-- **Features**: Pool de conexões, health check, operações CRUD genéricas
-
-## Módulos Planejados (A Implementar)
-
-### Treino Module
-
-- **Funcionalidade**: Criação e gerenciamento de treinos para alunos
-- **Endpoints Planejados**:
-  - `POST /treino` - Criar treino (PROFESSOR)
-  - `GET /treino` - Listar treinos (PROFESSOR/ALUNO)
-  - `PUT /treino/update/:id` - Atualizar treino (PROFESSOR)
-  - `DELETE /treino/delete/:id` - Deletar treino (PROFESSOR)
-- **Funcionalidades**:
-  - Associação de exercícios aos treinos
-  - Agendamento de treinos
-  - Histórico de treinos por aluno
-
-### Pagamento Module
-
-- **Funcionalidade**: Integração com API externa para processamento de pagamentos
-- **Endpoints Planejados**:
-  - `POST /pagamento` - Processar pagamento
-  - `GET /pagamento/historico` - Histórico de pagamentos
-  - `PUT /pagamento/status/:id` - Atualizar status do pagamento
-- **Funcionalidades**:
-  - Integração com gateway de pagamento externo
-  - Controle de assinaturas mensais
-  - Histórico financeiro
-  - Notificações de pagamento
-
-### Microserviço de Desativação
-
-- **Funcionalidade**: Serviço automatizado para desativar perfis inativos
-- **Características**:
-  - Análise de tempo de inatividade dos usuários
-  - Desativação automática de perfis inativos
-  - Notificações antes da desativação
-  - Possibilidade de reativação manual
-- **Tecnologia**: Microserviço separado (provavelmente Node.js/NestJS)
-
-## Roles e Permissões
-
-### ADM (Administrador)
-
-- **Acesso**: Completo ao sistema
-- **Permissões**:
-  - Criar, listar, atualizar e deletar usuários
-  - Gerenciar professores
-  - Acesso a relatórios e métricas
-
-### PROFESSOR
-
-- **Acesso**: Gerenciamento de exercícios e treinos
-- **Permissões**:
-  - Criar, editar e deletar exercícios
-  - Criar e gerenciar treinos para alunos
-  - Visualizar alunos associados
-
-### ALUNO
-
-- **Acesso**: Visualização de treinos e exercícios
-- **Permissões**:
-  - Visualizar treinos atribuídos
-  - Atualizar perfil próprio
-  - Acessar histórico de treinos
-
-## Configuração e Execução
+## 🚀 Instalação
 
 ### Pré-requisitos
-
 - Node.js 20+
-- PostgreSQL
+- PostgreSQL 14+
 - Docker (opcional)
 
-### Variáveis de Ambiente
+### 1. Clonar repositório
+```bash
+git clone <repo-url>
+cd projeto
+```
 
-Crie um arquivo `.env` na pasta `env/`:
+### 2. Configurar banco de dados
+```bash
+# Criar banco
+psql -U postgres -c "CREATE DATABASE acad_db;"
 
+# Executar schema
+psql -U postgres -d acad_db -f database_schema.sql
+```
+
+### 3. Configurar variáveis de ambiente
+
+**Backend (`backend/env/.env`):**
 ```env
 # Database
 DB_HOST=localhost
@@ -187,215 +138,212 @@ DB_USER=postgres
 DB_PASSWORD=sua_senha
 DB_SSL=false
 DB_POOL_MAX=20
-DB_IDLE_TIMEOUT=30000
-DB_CONNECTION_TIMEOUT=2000
 
 # JWT
-JWT_SECRET=sua_senha_jwt
+JWT_SECRET=sua_chave_secreta_muito_longa
 
-# Asaas Payment Gateway
+# Asaas (usar sandbox para testes)
 ASAAS_API_URL=https://sandbox.asaas.com/api/v3
-ASAAS_API_KEY=sua_chave_api_asaas
+ASAAS_API_KEY=sua_chave_asaas
+ASAAS_WEBHOOK_SECRET=secret_para_webhooks
 
 # Server
 NODE_ENV=development
 PORT=3000
 ```
 
-### Instalação e Execução
+**Frontend (`frontend/.env`):**
+```env
+VITE_API_URL=http://localhost:3000
+```
 
-#### Backend
+### 4. Iniciar serviços
 
 ```bash
-# Instalar dependências
+# Backend
+cd backend
 npm install
-
-# Executar em modo desenvolvimento
 npm run start:dev
 
-# Executar testes
-npm test
-
-# Executar testes com cobertura
-npm run test:cov
-```
-
-#### Frontend
-
-```bash
-# Acessar pasta do frontend
+# Frontend (outro terminal)
 cd frontend
-
-# Instalar dependências
 npm install
-
-# Criar arquivo .env
-echo "VITE_API_URL=http://localhost:3000" > .env
-
-# Executar em modo desenvolvimento
 npm run dev
-
-# Build para produção
-npm run build
 ```
 
-O frontend estará disponível em `http://localhost:5173` (Vite dev server)
+| Serviço | URL |
+|---------|-----|
+| Backend | http://localhost:3000 |
+| Frontend | http://localhost:5173 |
 
-#### Produção com Docker
-
+### Docker (Alternativo)
 ```bash
-# Build da imagem
-npm run docker:build
-
-# Executar container
-npm run docker:run
-
-# Ou usar Docker Compose
-docker-compose up
+docker-compose up -d
 ```
-
-### Scripts Disponíveis
-
-- `npm run build` - Build da aplicação
-- `npm run start` - Iniciar aplicação
-- `npm run start:dev` - Iniciar em modo desenvolvimento
-- `npm run start:debug` - Iniciar em modo debug
-- `npm run start:prod` - Iniciar em produção
-- `npm run test` - Executar testes
-- `npm run test:watch` - Executar testes em modo watch
-- `npm run lint` - Executar linter
-- `npm run format` - Formatar código
-
-## Testes
-
-O projeto utiliza **Vitest** para testes unitários com cobertura de código.
-
-### Executar Testes
-
-```bash
-# Todos os testes
-npm test
-
-# Testes em modo watch
-npm run test:watch
-
-# Testes com cobertura
-npm run test:cov
-
-# Testes em modo debug
-npm run test:debug
-```
-
-### Estrutura de Testes
-
-```
-src/modules/[module]/tests/
-├── [service].service.spec.ts
-```
-
-## Status do Projeto
-
-### Implementado
-
-- [x] Autenticação e autorização (JWT)
-- [x] Gestão de usuários (CRUD completo)
-- [x] Gestão de professores (CRUD completo)
-- [x] Gestão de exercícios (CRUD completo)
-- [x] Gestão de treinos (CRUD completo)
-- [x] Módulo de pagamentos (Asaas PIX + Cartão)
-- [x] Webhooks de pagamento com HMAC
-- [x] Configuração de banco de dados
-- [x] Testes unitários
-- [x] Dockerização
-- [x] **Frontend React completo**:
-  - Sistema de autenticação com JWT
-  - Dashboard por papel (Aluno/Professor/Admin)
-  - Catálogo de treinos para alunos
-  - Compra de treinos (PIX com QR Code + Cartão)
-  - CRUD de exercícios (Professor)
-  - CRUD de treinos (Professor)
-  - CRUD de usuários (Admin)
-  - Layout responsivo com Tailwind CSS
-
-### Em Desenvolvimento
-
-- [ ] Microserviço de desativação
-
-### Planejado
-
-- [ ] API de relatórios
-- [ ] Notificações por email
-- [ ] API de métricas
-- [ ] Paginação completa
-- [ ] Melhorias de UX no frontend
-
-## API Endpoints
-
-### Autenticação
-
-| Método | Endpoint      | Descrição        | Roles |
-| ------ | ------------- | ---------------- | ----- |
-| POST   | `/auth/login` | Login de usuário | Todos |
-
-### Usuários
-
-| Método | Endpoint              | Descrição         | Roles      |
-| ------ | --------------------- | ----------------- | ---------- |
-| POST   | `/usuario`            | Criar usuário     | ADM        |
-| GET    | `/usuario`            | Listar usuários   | ADM        |
-| PUT    | `/usuario/update/:id` | Atualizar usuário | ALUNO, ADM |
-| DELETE | `/usuario/delete/:id` | Deletar usuário   | ADM, ALUNO |
-
-### Professores
-
-| Método | Endpoint                | Descrição           | Roles          |
-| ------ | ----------------------- | ------------------- | -------------- |
-| POST   | `/professor`            | Criar professor     | ADM            |
-| GET    | `/professor`            | Listar professores  | ADM            |
-| PUT    | `/professor/update/:id` | Atualizar professor | ADM, PROFESSOR |
-| DELETE | `/professor/delete/:id` | Deletar professor   | ADM            |
-
-### Exercícios
-
-| Método | Endpoint                | Descrição           | Roles     |
-| ------ | ----------------------- | ------------------- | --------- |
-| POST   | `/exercicio`            | Criar exercício     | PROFESSOR |
-| GET    | `/exercicio`            | Listar exercícios   | PROFESSOR |
-| PUT    | `/exercicio/update/:id` | Atualizar exercício | PROFESSOR |
-| DELETE | `/exercicio/delete/:id` | Deletar exercício   | PROFESSOR |
-
-### Treinos
-
-| Método | Endpoint                | Descrição           | Roles                |
-| ------ | ----------------------- | ------------------- | -------------------- |
-| POST   | `/treino`               | Criar treino        | PROFESSOR            |
-| GET    | `/treino`               | Listar treinos      | PROFESSOR, ADM       |
-| GET    | `/treino/catalogo`      | Catálogo de treinos | ALUNO, PROFESSOR, ADM|
-| PUT    | `/treino/update/:id`    | Atualizar treino    | PROFESSOR            |
-| DELETE | `/treino/delete/:id`    | Deletar treino      | PROFESSOR            |
-
-### Pagamentos
-
-| Método | Endpoint              | Descrição                | Roles  |
-| ------ | --------------------- | ------------------------ | ------ |
-| POST   | `/pagamento/compra`   | Comprar treino (PIX/Cartão) | ALUNO  |
-| POST   | `/pagamento/webhook`  | Webhook Asaas (público)  | -      |
-| GET    | `/pagamento/status/:id` | Status do pagamento    | ALUNO  |
-
-## Contribuição
-
-1. Fork o projeto
-2. Crie uma branch para sua feature (`git checkout -b feature/Feature`)
-3. Commit suas mudanças (`git commit -m 'Criando uma feature'`)
-4. Push para a branch (`git push origin feature/Feature`)
-5. Abra um Pull Request
-
-## Equipe
-
-- **Desenvolvedor Principal**: [Anderson Freires de Freitas]
-- **Email**: [andffreires@gmail.com]
 
 ---
 
-**Versão**: 1.0.0  
-**Última Atualização**: 2024
+## 📁 Estrutura do Projeto
+
+```
+projeto/
+├── backend/
+│   └── src/
+│       ├── common/              # Shared utilities
+│       │   ├── decorators/      # @Roles, @User, @Public
+│       │   ├── enum/            # Role enum
+│       │   ├── guards/          # JwtAuthGuard, RoleGuard
+│       │   └── pagination/      # Pagination DTO
+│       ├── config/              # Database config
+│       └── modules/
+│           ├── auth/            # Authentication
+│           ├── database/        # DB connection
+│           ├── exercicio/       # Exercise CRUD
+│           ├── pagamento/       # Payments (Asaas)
+│           ├── professor/       # Professor CRUD
+│           ├── treino/          # Training CRUD
+│           └── usuario/         # User CRUD
+│
+├── frontend/
+│   └── src/
+│       ├── components/          # Navbar, UI components
+│       ├── lib/                 # API client, utilities
+│       ├── pages/               # Route pages
+│       └── services/            # API service layer
+│
+├── database_schema.sql          # Database DDL
+├── docker-compose.yml           # Docker orchestration
+└── README.md
+```
+
+---
+
+## 📡 API Endpoints
+
+### Autenticação
+| Método | Endpoint | Descrição | Auth |
+|--------|----------|-----------|------|
+| POST | `/auth/login` | Login | ❌ |
+
+### Usuários
+| Método | Endpoint | Descrição | Roles |
+|--------|----------|-----------|-------|
+| POST | `/usuario/register` | Auto-registro | ❌ |
+| POST | `/usuario` | Criar usuário | ADM |
+| GET | `/usuario` | Listar usuários | ADM |
+| PUT | `/usuario/update/:id` | Atualizar | ADM, ALUNO |
+| DELETE | `/usuario/delete/:id` | Soft delete | ADM, ALUNO |
+| POST | `/usuario/:id/customer-asaas` | Criar customer Asaas | ALL |
+
+### Professores
+| Método | Endpoint | Descrição | Roles |
+|--------|----------|-----------|-------|
+| POST | `/professor` | Criar professor | ADM |
+| GET | `/professor` | Listar (com treinos) | ADM |
+| PUT | `/professor/update/:id` | Atualizar | ADM, PROFESSOR |
+| DELETE | `/professor/delete/:id` | Soft delete | ADM |
+
+### Exercícios
+| Método | Endpoint | Descrição | Roles |
+|--------|----------|-----------|-------|
+| POST | `/exercicio` | Criar exercício | PROFESSOR |
+| GET | `/exercicio` | Listar exercícios | PROFESSOR |
+| PUT | `/exercicio/update/:id` | Atualizar | PROFESSOR |
+| DELETE | `/exercicio/delete/:id` | Soft delete | PROFESSOR |
+
+### Treinos
+| Método | Endpoint | Descrição | Roles |
+|--------|----------|-----------|-------|
+| POST | `/treino` | Criar treino | PROFESSOR |
+| GET | `/treino` | Listar treinos | PROFESSOR, ADM |
+| GET | `/treino/catalogo` | Catálogo público | ALL |
+| PUT | `/treino/update/:id` | Atualizar | PROFESSOR |
+| DELETE | `/treino/delete/:id` | Soft delete | PROFESSOR |
+
+### Pagamentos
+| Método | Endpoint | Descrição | Roles |
+|--------|----------|-----------|-------|
+| POST | `/pagamento/compra` | Comprar treino | ALUNO |
+| POST | `/pagamento/webhook` | Webhook Asaas | - |
+| GET | `/pagamento/:id/status` | Status pagamento | ALUNO |
+
+---
+
+## 👥 Papéis e Permissões
+
+| Papel | Descrição | Permissões |
+|-------|-----------|------------|
+| **ADM** | Administrador | Acesso total, CRUD usuários/professores |
+| **PROFESSOR** | Treinador | CRUD exercícios/treinos próprios |
+| **ALUNO** | Estudante | Ver catálogo, comprar treinos, editar perfil |
+
+---
+
+## 🎨 Design System
+
+O frontend utiliza **Neo-Brutalism** com:
+
+- **Fonts**: Archivo Black (headings), Space Grotesk (body)
+- **Colors**: Yellow (#FDE047), Blue (#3B82F6), Black (#000)
+- **Shadows**: Hard shadows com offset sólido
+- **Borders**: Bordas grossas (3-4px) em preto
+- **Animations**: Framer Motion para transições
+
+---
+
+## 🧪 Testes
+
+```bash
+# Backend
+cd backend
+npm test              # Rodar testes
+npm run test:watch    # Watch mode
+npm run test:cov      # Coverage report
+```
+
+---
+
+## 📦 Scripts Disponíveis
+
+### Backend
+| Script | Descrição |
+|--------|-----------|
+| `npm run start:dev` | Desenvolvimento com hot-reload |
+| `npm run build` | Build de produção |
+| `npm test` | Executar testes |
+| `npm run lint` | Verificar código |
+
+### Frontend
+| Script | Descrição |
+|--------|-----------|
+| `npm run dev` | Servidor de desenvolvimento |
+| `npm run build` | Build de produção |
+| `npm run preview` | Preview do build |
+
+---
+
+## 🤝 Contribuição
+
+1. Fork o projeto
+2. Crie sua branch (`git checkout -b feature/MinhaFeature`)
+3. Commit suas mudanças (`git commit -m 'feat: Adiciona MinhaFeature'`)
+4. Push para a branch (`git push origin feature/MinhaFeature`)
+5. Abra um Pull Request
+
+---
+
+## 👨‍💻 Autor
+
+**Anderson Freires de Freitas**  
+📧 andffreires@gmail.com
+
+---
+
+## 📄 Licença
+
+Este projeto está sob a licença MIT.
+
+---
+
+**Versão**: 2.0.0  
+**Última Atualização**: Dezembro 2025
