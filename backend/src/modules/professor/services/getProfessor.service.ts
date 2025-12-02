@@ -18,7 +18,7 @@ export class GetProfessorService {
       const DadosUsuario = await this.repo.getProfessores(data);
 
       return {
-        Usuarios: DadosUsuario ?? [],
+        Professores: DadosUsuario ?? [],
         Total: TotalUsuarios ?? 0,
         Pagina: data.page,
         Tamanho_Pagina: data.size,
