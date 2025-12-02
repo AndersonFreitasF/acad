@@ -32,12 +32,12 @@ export class PostUsuarioService {
     try {
       const createdById = created_by === null ? 0 : created_by;
 
-      await this.repo.postUsuario(
+      const id_usuario = await this.repo.postUsuario(
         { ...data, senha: await this.passwordHasher.hash(data.senha) },
         createdById
       );
 
-      return { message: "Usuário criado com sucesso" };
+      return { message: "Usuário criado com sucesso", id_usuario };
     } catch (error) {
       console.error("Erro ao criar usuário:", error);
       throw new InternalServerErrorException(

@@ -7,7 +7,7 @@ import { DatabaseService } from "src/modules/database/services/database.service"
 export class PostUsuarioRepository {
   constructor(private readonly dataBaseService: DatabaseService) {}
 
-  async postUsuario(data: PostUsuarioDataDTO, created_by: number) {
+  async postUsuario(data: PostUsuarioDataDTO, created_by: number): Promise<number> {
     const sql = `INSERT INTO usuario(
       nome,
       email,
@@ -18,6 +18,7 @@ export class PostUsuarioRepository {
       created_at
       ) 
       VALUES($1, $2, $3, 'ALUNO', $4, $5, NOW())
+      RETURNING id_usuario
       `;
 
     const binds = [
@@ -27,6 +28,7 @@ export class PostUsuarioRepository {
       data.cpf,
       created_by === 0 ? null : created_by,
     ];
-    await this.dataBaseService.query(sql, binds);
+    const result = await this.dataBaseService.query(sql, binds);
+    return result.rows[0].id_usuario;
   }
 }

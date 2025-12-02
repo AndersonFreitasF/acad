@@ -13,7 +13,7 @@ export const UsuarioRepositoryPortToken = "UsuarioRepositoryPort" as const;
 export interface UsuarioRepositoryPort {
   countUsuarios(params: GetUsuarioDataDTO): Promise<number>;
   getUsuarios(params: GetUsuarioDataDTO): Promise<IUsuario[]>;
-  postUsuario(data: PostUsuarioDataDTO, createdBy: number): Promise<void>;
+  postUsuario(data: PostUsuarioDataDTO, createdBy: number): Promise<number>;
   findUsuario(idUsuario: number): Promise<boolean>;
   putUsuario(
     data: PutUsuarioDataDTO,

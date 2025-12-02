@@ -37,9 +37,8 @@ export class UsuarioRepositoryAdapter implements UsuarioRepositoryPort {
   async postUsuario(
     data: PostUsuarioDataDTO,
     createdBy: number
-  ): Promise<void> {
-    await this.postRepo.postUsuario(data, createdBy);
-    return;
+  ): Promise<number> {
+    return this.postRepo.postUsuario(data, createdBy);
   }
 
   async findUsuario(idUsuario: number): Promise<boolean> {
