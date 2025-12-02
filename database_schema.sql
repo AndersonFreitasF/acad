@@ -81,20 +81,9 @@ CREATE TABLE usuario_treino (
     UNIQUE(id_usuario, id_treino) 
 );
 
--- =============================================
--- 6. PROFESSOR_TREINO TABLE 
--- =============================================
-CREATE TABLE professor_treino (
-    id SERIAL PRIMARY KEY,
-    id_professor INTEGER NOT NULL REFERENCES usuario(id_usuario) ON DELETE CASCADE,
-    id_treino INTEGER NOT NULL REFERENCES treino(id) ON DELETE CASCADE,
-    assigned_at TIMESTAMP DEFAULT NOW(),
-    
-    UNIQUE(id_professor, id_treino) 
-);
 
 -- =============================================
--- 7. PAGAMENTO TABLE (Payment records)
+-- 6. PAGAMENTO TABLE (Payment records)
 -- =============================================
 CREATE TABLE pagamento (
     id SERIAL PRIMARY KEY,
@@ -108,7 +97,7 @@ CREATE TABLE pagamento (
 );
 
 -- =============================================
--- 8. TREINO_PAGAMENTO TABLE (Join table between treino and pagamento)
+-- 7. TREINO_PAGAMENTO TABLE (Join table between treino and pagamento)
 -- =============================================
 CREATE TABLE treino_pagamento (
     id SERIAL PRIMARY KEY,
