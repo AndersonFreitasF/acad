@@ -43,7 +43,9 @@ export const userService = {
   },
 
   getAll: async (params?: GetUsersParams) => {
-    const { data } = await api.get<UserResponse>("/usuario", { params });
+    const { data } = await api.get<UserResponse>("/usuario", { 
+      params: { page: 1, size: 100, ...params } 
+    });
     return data;
   },
 

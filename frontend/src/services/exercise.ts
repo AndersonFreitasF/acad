@@ -32,7 +32,9 @@ export interface ExerciseResponse {
 
 export const exerciseService = {
   getAll: async (params?: GetExercisesParams) => {
-    const { data } = await api.get<ExerciseResponse>("/exercicio", { params });
+    const { data } = await api.get<ExerciseResponse>("/exercicio", { 
+      params: { page: 1, size: 100, ...params } 
+    });
     return data;
   },
 

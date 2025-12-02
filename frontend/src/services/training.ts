@@ -1,10 +1,10 @@
 import { api } from "../lib/api";
 
 export interface ExerciseTraining {
-  exercicio_id: number;
-  series: number;
-  repeticoes: number;
-  carga: number;
+  id_exercicio: number;
+  series_repeticoes: string;
+  carga: string;
+  observacoes?: string;
 }
 
 export interface Training {

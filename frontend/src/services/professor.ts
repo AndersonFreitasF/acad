@@ -1,11 +1,18 @@
 import { api } from "../lib/api";
 
+export interface ProfessorTreino {
+  id: number;
+  titulo: string;
+  preco: number;
+}
+
 export interface Professor {
   id_usuario: number;
   nome: string;
   email: string;
   cpf: string;
   tipo: string;
+  treinos: ProfessorTreino[];
 }
 
 export interface GetProfessorParams {
@@ -36,7 +43,9 @@ export interface ProfessorResponse {
 
 export const professorService = {
   getAll: async (params?: GetProfessorParams) => {
-    const { data } = await api.get<ProfessorResponse>("/professor", { params });
+    const { data } = await api.get<ProfessorResponse>("/professor", { 
+      params: { page: 1, size: 100, ...params } 
+    });
     return data;
   },
 
