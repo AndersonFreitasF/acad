@@ -6,7 +6,10 @@ import { Dashboard } from "./pages/Dashboard";
 import { Login } from "./pages/Login";
 import { Register } from "./pages/Register";
 import { Users } from "./pages/Users";
+import { CreateUser } from "./pages/CreateUser";
+import { Profile } from "./pages/Profile";
 import { Professors } from "./pages/Professors";
+import { CreateProfessor } from "./pages/CreateProfessor";
 import { Exercises } from "./pages/Exercises";
 import { Trainings } from "./pages/Trainings";
 import { Checkout } from "./pages/Checkout";
@@ -25,9 +28,13 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/my-trainings" element={<MyTrainings />} />
+            {/* Profile */}
+            <Route path="/profile" element={<Profile />} />
             {/* Management Routes */}
             <Route path="/users" element={<Users />} />
+            <Route path="/users/create" element={<CreateUser />} />
             <Route path="/professors" element={<Professors />} />
+            <Route path="/professors/create" element={<CreateProfessor />} />
             <Route path="/exercises" element={<Exercises />} />
             <Route path="/trainings" element={<Trainings />} />
 
@@ -36,8 +43,8 @@ function App() {
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </main>
-        <footer className="border-t-3 border-black dark:border-gray-700 bg-white dark:bg-neo-dark p-6 text-center font-bold transition-colors duration-300">
-          <p>© 2025 NEO GYM. NO PAIN NO GAIN.</p>
+        <footer className="border-t-4 border-black dark:border-white bg-neo-yellow dark:bg-neo-dark p-8 text-center font-bold transition-colors duration-300">
+          <p className="text-xl font-heading">© 2025 NEO GYM. NO PAIN NO GAIN.</p>
         </footer>
       </div>
     </BrowserRouter>
