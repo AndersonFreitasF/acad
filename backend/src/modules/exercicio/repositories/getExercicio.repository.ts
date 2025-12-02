@@ -19,7 +19,7 @@ export class GetExercicioRepository {
   async getExercicios(data: GetExercicioDataDTO) {
     const sql = `
     SELECT 
-        e.id,
+        e.id as id_exercicio,
         e.nome, 
         e.descricao,
         e.created_by,
@@ -31,10 +31,13 @@ export class GetExercicioRepository {
     OFFSET $3
     `;
 
+    const page = Number(data.page) || 1;
+    const size = Number(data.size) || 10;
+    
     const binds = [
       data.nome ? `%${data.nome}%` : "",
-      data.size,
-      (data.page - 1) * data.size,
+      size,
+      (page - 1) * size,
     ];
 
     const result = await this.dataBaseService.query(sql, binds);

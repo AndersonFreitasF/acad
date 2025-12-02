@@ -37,11 +37,14 @@ export class GetTreinoRepository {
     OFFSET $4
     `;
 
+    const page = Number(data.page) || 1;
+    const size = Number(data.size) || 10;
+    
     const binds = [
       data.titulo ? `%${data.titulo}%` : "",
       data.id_professor ?? null,
-      data.size,
-      (data.page - 1) * data.size,
+      size,
+      (page - 1) * size,
     ];
 
     const result = await this.dataBaseService.query(sql, binds);
