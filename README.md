@@ -1,4 +1,4 @@
-# 🏋️ Sistema de Gestão de Treinos
+# Sistema de Gestão de Treinos/Academia
 
 Sistema completo para gestão de treinos entre professores e alunos, com catálogo de treinos, exercícios, pagamentos via PIX/Cartão e dashboards por tipo de usuário.
 
